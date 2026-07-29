@@ -1,0 +1,894 @@
+﻿F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\runtime\bin\python\python_mcp.exe : == MCP 8.09 (data: 8.11, client: 1.6
+.4, server: 1.6.4) ==
+所在位置 行:2 字符: 139
++ ... \forge\mcp; F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\runtime\bi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (== MCP 8.09 (da...rver: 1.6.4) ==:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+"scalac" is not found on the PATH.  Scala files will not be recompiled
+# found ff, ff patches, srgs, name csvs, doc csvs, param csvs, astyle, astyle config, rg, ss
+== Recompiling client ==
+> Cleaning bin
+> Recompiling
+'"javac" -encoding UTF-8 -Xlint:-options -deprecation -g -source 1.6 -target 1.6 -classpath "jars\versions\1.6.4\1.6.4.
+jar;lib;lib\*;jars\libraries\net\java\jinput\jinput\2.0.5\jinput-2.0.5.jar;jars\libraries\org\lwjgl\lwjgl\lwjgl_util\2.
+9.0\lwjgl_util-2.9.0.jar;jars\libraries\com\paulscode\codecwav\20101023\codecwav-20101023.jar;jars\libraries\argo\argo\
+2.25_fixed\argo-2.25_fixed.jar;jars\libraries\com\paulscode\codecjorbis\20101023\codecjorbis-20101023.jar;jars\librarie
+s\org\bouncycastle\bcprov-jdk15on\1.47\bcprov-jdk15on-1.47.jar;jars\libraries\org\apache\commons\commons-lang3\3.1\comm
+ons-lang3-3.1.jar;jars\libraries\com\paulscode\soundsystem\20120107\soundsystem-20120107.jar;jars\libraries\org\lwjgl\l
+wjgl\lwjgl\2.9.0\lwjgl-2.9.0.jar;jars\libraries\commons-io\commons-io\2.4\commons-io-2.4.jar;jars\libraries\com\paulsco
+de\libraryjavasound\20101123\libraryjavasound-20101123.jar;jars\libraries\net\sf\jopt-simple\jopt-simple\4.5\jopt-simpl
+e-4.5.jar;jars\libraries\com\paulscode\librarylwjglopenal\20100824\librarylwjglopenal-20100824.jar;jars\libraries\com\g
+oogle\guava\guava\14.0\guava-14.0.jar;jars\libraries\com\google\code\gson\gson\2.2.2\gson-2.2.2.jar;jars\libraries\net\
+java\jutils\jutils\1.0.0\jutils-1.0.0.jar" -sourcepath src\minecraft -d bin\minecraft @"c:\users\yuanqi~1\appdata\local
+\temp\java_src_path_f5gdwj.txt"' failed : 1
+
+== ERRORS FOUND in JAVA CODE ==
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:2
+5: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+import net.minecraft.src.BaseMod;
+                        ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderHelper.java:32: ���
+�: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+import net.minecraft.src.BaseMod;
+                        ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\GameRegistry.java:60: ����: [
+deprecation] Mod�е�Block�ѹ�ʱ
+import cpw.mods.fml.common.Mod.Block;
+                              ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\entity\player\EntityPlayer.java:252: ����: �
+Ҳ�������
+        FMLCommonHandler.instance().onPlayerPreTick(this);
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� EntityPlayer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\entity\player\EntityPlayer.java:376: ����: �
+Ҳ�������
+        FMLCommonHandler.instance().onPlayerPostTick(this);
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� EntityPlayer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\entity\player\EntityPlayer.java:2252: ����: 
+�Ҳ�������
+        FMLNetworkHandler.openGui(this, mod, modGuiId, world, x, y, z);
+        ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� EntityPlayer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\crash\CrashReport.java:55: ����: �Ҳ�������
+        FMLCommonHandler.instance().enhanceCrashReport(this, this.field_85061_c);
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� CrashReport
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\util\ChatMessageComponent.java:268: ����: ��
+�һ������ʹ���˲�׼ȷ�ı������͵� varargs �����ķ� varargs ����; 
+                var7.append(StatCollector.translateToLocalFormatted(this.translationKey, var13));
+                                                                                         ^
+
+  ���� varargs ����, Ӧʹ�� Object
+  ���ڷ� varargs ����, Ӧʹ�� Object[], ����Ҳ�������ƴ˾���
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:60: ����: �Ҳ�������
+                biomesForWorldType = base11Biomes;
+                                     ^
+
+  ����:   ���� base11Biomes
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:63: ����: �Ҳ�������
+                biomesForWorldType = base12Biomes;
+                                     ^
+
+  ����:   ���� base12Biomes
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:149: ����: �Ҳ�������
+            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.createFlatGeneratorFromString(world.getWorldInfo().
+getGeneratorOptions());
+            ^
+
+  ����:   �� FlatGeneratorInfo
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:149: ����: �Ҳ�������
+            FlatGeneratorInfo flatgeneratorinfo = FlatGeneratorInfo.createFlatGeneratorFromString(world.getWorldInfo().
+getGeneratorOptions());
+                                                  ^
+
+  ����:   ���� FlatGeneratorInfo
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:150: ����: �Ҳ�������
+            return new WorldChunkManagerHell(BiomeGenBase.biomeList[flatgeneratorinfo.getBiome()], 0.5F, 0.5F);
+                       ^
+
+  ����:   �� WorldChunkManagerHell
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:160: ����: �Ҳ�������
+        return (this == FLAT ? new ChunkProviderFlat(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(
+), generatorOptions) : new ChunkProviderGenerate(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled()));
+                                   ^
+
+  ����:   �� ChunkProviderFlat
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:160: ����: �Ҳ�������
+        return (this == FLAT ? new ChunkProviderFlat(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(
+), generatorOptions) : new ChunkProviderGenerate(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled()));
+                                                                                                                       
+                           ^
+
+  ����:   �� ChunkProviderGenerate
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:189: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+        ^
+
+  ����:   �� Set
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:189: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+                                                                    ^
+
+  ����:   ���� Arrays
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:189: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+                                              ^
+
+  ����:   ���� Sets
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:196: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+        ^
+
+  ����:   �� Set
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:196: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+                                                                    ^
+
+  ����:   ���� Arrays
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\world\WorldType.java:196: ����: �Ҳ�������
+        Set<BiomeGenBase> newBiomesForWorld = Sets.newLinkedHashSet(Arrays.asList(biomesForWorldType));
+                                              ^
+
+  ����:   ���� Sets
+  λ��: �� WorldType
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:487: ����: �Ҳ���
+����
+                FMLCommonHandler.instance().handleServerStopping();
+                ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:526: ����: �Ҳ���
+����
+                if (FMLCommonHandler.instance().shouldServerBeKilledQuietly())
+                    ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:539: ����: �Ҳ���
+����
+                FMLCommonHandler.instance().handleServerStopped();
+                ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:613: ����: �Ҳ���
+����
+        FMLCommonHandler.instance().onPostServerTick();
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:665: ����: �Ҳ���
+����
+                FMLCommonHandler.instance().onPostWorldTick(worldserver);
+                                                            ^
+
+  ����:   ���� worldserver
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:665: ����: �Ҳ���
+����
+                FMLCommonHandler.instance().onPostWorldTick(worldserver);
+                ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\MinecraftServer.java:832: ����: �Ҳ���
+����
+        return FMLCommonHandler.instance().getModName();
+               ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� MinecraftServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\management\ServerConfigurationManager
+.java:279: ����: �Ҳ�������
+        GameRegistry.onPlayerLogout(par1EntityPlayerMP);
+        ^
+
+  ����:   ���� GameRegistry
+  λ��: �� ServerConfigurationManager
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\management\ServerConfigurationManager
+.java:474: ����: �Ҳ�������
+        GameRegistry.onPlayerChangedDimension(par1EntityPlayerMP);
+        ^
+
+  ����:   ���� GameRegistry
+  λ��: �� ServerConfigurationManager
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:453: ����: �Ҳ�������
+        FMLClientHandler.instance().beginMinecraftLoading(this, this.defaultResourcePacks, this.mcResourceManager);
+        ^
+
+  ����:   ���� FMLClientHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:489: ����: �Ҳ�������
+        FMLClientHandler.instance().finishMinecraftLoading();
+        ^
+
+  ����:   ���� FMLClientHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:508: ����: �Ҳ�������
+        FMLClientHandler.instance().onInitializationComplete();
+        ^
+
+  ����:   ���� FMLClientHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:915: ����: �Ҳ�������
+                FMLCommonHandler.instance().onRenderTickStart(this.timer.renderPartialTicks);
+                ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:919: ����: �Ҳ�������
+                FMLCommonHandler.instance().onRenderTickEnd(this.timer.renderPartialTicks);
+                ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1473: ����: �Ҳ�������
+        FMLCommonHandler.instance().rescheduleTicks(Side.CLIENT);
+                                                    ^
+
+  ����:   ���� Side
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1473: ����: �Ҳ�������
+        FMLCommonHandler.instance().rescheduleTicks(Side.CLIENT);
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1480: ����: �Ҳ�������
+        FMLCommonHandler.instance().onPreClientTick();
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1937: ����: �Ҳ�������
+        FMLCommonHandler.instance().onPostClientTick();
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1966: ����: �Ҳ�������
+        GameData.initializeServerGate(2);
+        ^
+
+  ����:   ���� GameData
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1971: ����: �Ҳ�������
+        MapDifference<Integer, ItemData> idDifferences = GameData.gateWorldLoadingForValidation();
+        ^
+
+  ����:   �� MapDifference
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1971: ����: �Ҳ�������
+        MapDifference<Integer, ItemData> idDifferences = GameData.gateWorldLoadingForValidation();
+                               ^
+
+  ����:   �� ItemData
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1971: ����: �Ҳ�������
+        MapDifference<Integer, ItemData> idDifferences = GameData.gateWorldLoadingForValidation();
+                                                         ^
+
+  ����:   ���� GameData
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1974: ����: �Ҳ�������
+            FMLClientHandler.instance().warnIDMismatch(idDifferences, true);
+            ^
+
+  ����:   ���� FMLClientHandler
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\Minecraft.java:1978: ����: �Ҳ�������
+            GameData.releaseGate(true);
+            ^
+
+  ����:   ���� GameData
+  λ��: �� Minecraft
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\settings\GameSettings.java:791: ����:
+ �Ҳ�������
+        if (FMLClientHandler.instance().isLoading()) return;
+            ^
+
+  ����:   ���� FMLClientHandler
+  λ��: �� GameSettings
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\gui\LoadingScreenRenderer.java:52: ��
+��: running��Minecraft�в��ǹ�����; �޷����ⲿ������ж�����з���
+        if (!this.mc.running)
+                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\gui\LoadingScreenRenderer.java:77: ��
+��: running��Minecraft�в��ǹ�����; �޷����ⲿ������ж�����з���
+        if (!this.mc.running)
+                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\gui\LoadingScreenRenderer.java:98: ��
+��: running��Minecraft�в��ǹ�����; �޷����ⲿ������ж�����з���
+        if (!this.mc.running)
+                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\integrated\IntegratedServer.java:119:
+ ����: �Ҳ�������
+        if (!FMLCommonHandler.instance().handleServerAboutToStart(this)) { return false; }
+             ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� IntegratedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\integrated\IntegratedServer.java:122:
+ ����: �Ҳ�������
+        return FMLCommonHandler.instance().handleServerStarting(this);
+               ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� IntegratedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:243
+: ����: �Ҳ�������
+        FMLNetworkHandler.onClientConnectionToIntegratedServer(this, par2IntegratedServer, this.netManager);
+        ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:327
+: ����: �Ҳ�������
+        this.addToSendQueue(FMLNetworkHandler.getFMLFakeLoginPacket());
+                            ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:343
+: ����: �Ҳ�������
+        FMLNetworkHandler.onConnectionEstablishedToServer(this, netManager, par1Packet1Login);
+        ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:816
+: ����: �Ҳ�������
+            FMLNetworkHandler.onConnectionClosed(this.netManager, this.getPlayer());
+            ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:859
+: ����: �Ҳ�������
+        par1Packet3Chat = FMLNetworkHandler.handleChatMessage(this, par1Packet3Chat);
+                          ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:150
+3: ����: �Ҳ�������
+        FMLNetworkHandler.handlePacket131Packet(this, par1Packet131MapData);
+        ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:164
+0: ����: �Ҳ�������
+    FMLNetworkHandler.handlePacket250Packet(par1Packet250CustomPayload, netManager, this);
+    ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:186
+5: ����: �Ҳ�������
+        NetClientHandler.connectionCompatibilityLevel = connectionCompatibilityLevel;
+                        ^
+
+  ����:   ���� connectionCompatibilityLevel
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\multiplayer\NetClientHandler.java:187
+0: ����: �Ҳ�������
+        return connectionCompatibilityLevel;
+               ^
+
+  ����:   ���� connectionCompatibilityLevel
+  λ��: �� NetClientHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\client\renderer\RenderBlocks.java:8064: ����
+: �Ҳ�������
+                FMLRenderAccessLibrary.renderInventoryBlock(this, par1Block, par2, j);
+                                                                                   ^
+
+  ����:   ���� j
+  λ��: �� RenderBlocks
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\network\MemoryConnection.java:81: ����: ����
+�ݵ�����: boolean�޷�ת��ΪPacket
+            Packet var2 = (Packet)this.readPacketCache.remove(0);
+                                                             ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\network\MemoryConnection.java:93: ����: �Ҳ��
+�����
+            FMLNetworkHandler.onConnectionClosed(this, this.myNetHandler.getPlayer());
+            ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� MemoryConnection
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\network\TcpConnection.java:466: ����: �Ҳ����
+���
+            FMLNetworkHandler.onConnectionClosed(this, this.theNetHandler.getPlayer());
+            ^
+
+  ����:   ���� FMLNetworkHandler
+  λ��: �� TcpConnection
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:132: ����
+: IDtoClassMapping �� EntityList ���� private ���ʿ���
+        for (Object id : EntityList.IDtoClassMapping.keySet())
+                                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:162: ����
+: classToStringMapping �� EntityList ���� private ���ʿ���
+            if (!EntityList.classToStringMapping.containsKey(entityClass))
+                           ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:165: ����
+: classToStringMapping �� EntityList ���� private ���ʿ���
+                EntityList.classToStringMapping.put(entityClass, entityModName);
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:166: ����
+: stringToClassMapping �� EntityList ���� private ���ʿ���
+                EntityList.stringToClassMapping.put(entityModName, entityClass);
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:184: ����
+: classToStringMapping �� EntityList ���� private ���ʿ���
+        if (EntityList.classToStringMapping.containsKey(entityClass))
+                      ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:200: ����
+: �޷����� EntityList�еķ��� addMappingӦ�õ���������;
+        EntityList.addMapping(entityClass, entityName, id);
+                  ^
+
+  ��Ҫ: Class,String,int,int,int
+  �ҵ�: Class<CAP#1>,String,int
+  ԭ��: ʵ�ʲ����б����ʽ�����б���Ȳ�ͬ
+  ����, CAP#1�������ͱ���:
+    CAP#1��? extends Entity�Ĳ�����չEntity
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:236: ����
+: classToStringMapping �� EntityList ���� private ���ʿ���
+        if (EntityList.classToStringMapping.containsKey(entityClass))
+                      ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:252: ����
+: addMapping(Class,String,int,int,int) �� EntityList ���� private ���ʿ���
+        EntityList.addMapping(entityClass, entityName, id, backgroundEggColour, foregroundEggColour);
+                  ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:267: ����
+: itemWeight �� WeightedRandomItem ���� protected ���ʿ���
+                    entry.itemWeight = weightedProb;
+                         ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:280: ����
+: stringToClassMapping �� EntityList ���� private ���ʿ���
+        Class <? extends Entity > entityClazz = (Class<? extends Entity>) EntityList.stringToClassMapping.get(entityNam
+e);
+                                                                                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:308: ����
+: stringToClassMapping �� EntityList ���� private ���ʿ���
+        Class <? extends Entity > entityClazz = (Class<? extends Entity>) EntityList.stringToClassMapping.get(entityNam
+e);
+                                                                                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\EntityRegistry.java:383: ����
+: classToStringMapping �� EntityList ���� private ���ʿ���
+        String entityName = (String) EntityList.classToStringMapping.get(entityClass);
+                                               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\FMLClientHandler.java:266: ����: entit
+yRenderMap �� RenderManager ���� private ���ʿ���
+        RenderingRegistry.instance().loadEntityRenderers((Map<Class<? extends Entity>, Render>)RenderManager.instance.e
+ntityRenderMap);
+                                                                                                                     ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:105: ��
+��: clientUsername �� NetLoginHandler ���� private ���ʿ���
+            userName = ((NetLoginHandler) netHandler).clientUsername;
+                                                     ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:132: ��
+��: �Ҳ�������
+                netLoginHandler.completeConnection("You don't have FML installed, you cannot connect to this server");
+                               ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:150: ��
+��: �Ҳ�������
+                netLoginHandler.completeConnection(modKick);
+                               ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:161: ��
+��: func_72531_a(NetLoginHandler,boolean)��NetLoginHandler�в��ǹ�����; �޷����ⲿ������ж�����з���
+            NetLoginHandler.func_72531_a(netLoginHandler, false);
+                           ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:167: ��
+��: �Ҳ�������
+            netLoginHandler.completeConnection(null);
+                           ^
+
+  ����:   ���� completeConnection(<��ֵ>)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:171: ��
+��: �Ҳ�������
+            netLoginHandler.completeConnection("The server requires mods that are absent or out of date on your client"
+);
+                           ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:175: ��
+��: �Ҳ�������
+            netLoginHandler.completeConnection("Your client is not running a new enough version of FML to connect to th
+is server");
+                           ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:179: ��
+��: �Ҳ�������
+            netLoginHandler.completeConnection("There was a problem during FML negotiation");
+                           ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\network\FMLNetworkHandler.java:200: ��
+��: �Ҳ�������
+            netLoginHandler.completeConnection(kickReason);
+                           ^
+
+  ����:   ���� completeConnection(String)
+  λ��: ����ΪNetLoginHandler�ı��� netLoginHandler
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\GuiModList.java:166: ����: renderEngin
+e �� Minecraft ���� private ���ʿ���
+                            this.mc.renderEngine.bindTexture(rl);
+                                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\GuiScrollingList.java:268: ����: rende
+rEngine �� Minecraft ���� private ���ʿ���
+        this.client.renderEngine.bindTexture(Gui.optionsBackground);
+                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\GuiScrollingList.java:401: ����: rende
+rEngine �� Minecraft ���� private ���ʿ���
+        this.client.renderEngine.bindTexture(Gui.optionsBackground);
+                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderBlockRendererHandle
+r.java:29: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+    private BaseMod mod;
+            ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderBlockRendererHandle
+r.java:35: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+    public ModLoaderBlockRendererHandler(int renderId, boolean render3dInInventory, BaseMod mod)
+                                                                                    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderBlockRendererHandle
+r.java:66: ����: [deprecation] BaseMod�е�renderWorldBlock(RenderBlocks,IBlockAccess,int,int,int,Block,int)�ѹ�ʱ
+        return mod.renderWorldBlock(renderer, world, x, y, z, block, modelId);
+                  ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderBlockRendererHandle
+r.java:78: ����: [deprecation] BaseMod�е�renderInvBlock(RenderBlocks,Block,int,int)�ѹ�ʱ
+        mod.renderInvBlock(renderer, block, metadata, modelID);
+           ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:6
+1: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+    public static int obtainBlockModelIdFor(BaseMod mod, boolean inventoryRenderer)
+                                            ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:7
+3: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        BaseMod mod = (BaseMod) mc.getMod();
+        ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:7
+3: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        BaseMod mod = (BaseMod) mc.getMod();
+                       ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:7
+5: ����: entityRenderMap �� RenderManager ���� private ���ʿ���
+        Map<Class<? extends Entity>, Render> renderers = Maps.newHashMap(RenderManager.instance.entityRenderMap);
+                                                                                               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:8
+0: ����: [deprecation] BaseMod�е�addRenderer(Map<Class<? extends Entity>,Render>)�ѹ�ʱ
+            mod.addRenderer(renderers);
+               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:8
+8: ����: entityRenderMap �� RenderManager ���� private ���ʿ���
+        MapDifference<Class<? extends Entity>, Render> difference = Maps.difference(RenderManager.instance.entityRender
+Map, renderers, Equivalence.identity());
+                                                                                                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+09: ����: [deprecation] BaseMod�е�registerAnimation(Minecraft)�ѹ�ʱ
+            mod.registerAnimation(game);
+               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+54: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        return ((net.minecraft.src.BaseMod)mod).getContainerGUI((EntityClientPlayerMP) player, ID, x, y, z);
+                                  ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+54: ����: [deprecation] BaseMod�е�getContainerGUI(EntityClientPlayerMP,int,int,int,int)�ѹ�ʱ
+        return ((net.minecraft.src.BaseMod)mod).getContainerGUI((EntityClientPlayerMP) player, ID, x, y, z);
+                                               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+61: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        return ((net.minecraft.src.BaseMod)mod).spawnEntity(er.getModEntityId(), client.theWorld, input.scaledX, input.
+scaledY, input.scaledZ);
+                                  ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+61: ����: [deprecation] BaseMod�е�spawnEntity(int,World,double,double,double)�ѹ�ʱ
+        return ((net.minecraft.src.BaseMod)mod).spawnEntity(er.getModEntityId(), client.theWorld, input.scaledX, input.
+scaledY, input.scaledZ);
+                                               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+68: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        ((net.minecraft.src.BaseMod)mod).clientCustomPayload(client.thePlayer.sendQueue, packet);
+                           ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+68: ����: [deprecation] BaseMod�е�clientCustomPayload(NetClientHandler,Packet250CustomPayload)�ѹ�ʱ
+        ((net.minecraft.src.BaseMod)mod).clientCustomPayload(client.thePlayer.sendQueue, packet);
+                                        ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+76: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        ((BaseMod)mod).clientConnect((NetClientHandler)netClientHandler);
+          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+76: ����: [deprecation] BaseMod�е�clientConnect(NetClientHandler)�ѹ�ʱ
+        ((BaseMod)mod).clientConnect((NetClientHandler)netClientHandler);
+                      ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+85: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+            ((BaseMod)mod).clientDisconnect((NetClientHandler) managerLookups.get(manager));
+              ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderClientHelper.java:1
+85: ����: [deprecation] BaseMod�е�clientDisconnect(NetClientHandler)�ѹ�ʱ
+            ((BaseMod)mod).clientDisconnect((NetClientHandler) managerLookups.get(manager));
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderKeyBindingHandler.j
+ava:53: ����: [deprecation] net.minecraft.src�е�BaseMod�ѹ�ʱ
+        ((net.minecraft.src.BaseMod)modContainer.getMod()).keyboardEvent(kb);
+                           ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\modloader\ModLoaderKeyBindingHandler.j
+ava:53: ����: [deprecation] BaseMod�е�keyboardEvent(KeyBinding)�ѹ�ʱ
+        ((net.minecraft.src.BaseMod)modContainer.getMod()).keyboardEvent(kb);
+                                                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\registry\ClientRegistry.java:38: ����:
+ specialRendererMap �� TileEntityRenderer ���� private ���ʿ���
+        TileEntityRenderer.instance.specialRendererMap.put(tileEntityClass, specialRenderer);
+                                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\registry\RenderingRegistry.java:51: ��
+��: bipedArmorFilenamePrefix �� RenderBiped ���� private ���ʿ���
+        RenderBiped.bipedArmorFilenamePrefix = ObjectArrays.concat(RenderBiped.bipedArmorFilenamePrefix, armor);
+                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\registry\RenderingRegistry.java:51: ��
+��: bipedArmorFilenamePrefix �� RenderBiped ���� private ���ʿ���
+        RenderBiped.bipedArmorFilenamePrefix = ObjectArrays.concat(RenderBiped.bipedArmorFilenamePrefix, armor);
+                                                                              ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\client\registry\RenderingRegistry.java:52: ��
+��: bipedArmorFilenamePrefix �� RenderBiped ���� private ���ʿ���
+        return RenderBiped.bipedArmorFilenamePrefix.length - 1;
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\dedicated\DedicatedServer.java:65: ��
+��: �Ҳ�������
+        FMLCommonHandler.instance().onServerStart(this);
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� DedicatedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\dedicated\DedicatedServer.java:138: �
+���: �Ҳ�������
+        FMLCommonHandler.instance().onServerStarted();
+        ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� DedicatedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\dedicated\DedicatedServer.java:181: �
+���: �Ҳ�������
+        if (!FMLCommonHandler.instance().handleServerAboutToStart(this)) { return false; }
+             ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� DedicatedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\net\minecraft\server\dedicated\DedicatedServer.java:202: �
+���: �Ҳ�������
+        return FMLCommonHandler.instance().handleServerStarting(this);
+               ^
+
+  ����:   ���� FMLCommonHandler
+  λ��: �� DedicatedServer
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\asm\transformers\AccessTransformer.jav
+a:214: ����: �����ݵ�����: Object�޷�ת��ΪFieldNode
+                for (FieldNode n : classNode.fields)
+                                            ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\asm\transformers\AccessTransformer.jav
+a:233: ����: �����ݵ�����: Object�޷�ת��ΪMethodNode
+                for (MethodNode n : classNode.methods)
+                                             ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\VillagerRegistry.java:228: ��
+��: villagerStockList �� EntityVillager ���� private ���ʿ���
+            EntityVillager.villagerStockList.put(item.itemID, new Tuple(min, max));
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\VillagerRegistry.java:230: ��
+��: addMerchantItem(MerchantRecipeList,int,Random,float) �� EntityVillager ���� private ���ʿ���
+        villager.addMerchantItem(list, item.getMaxDamage(), random, chance);
+                ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\VillagerRegistry.java:237: ��
+��: blacksmithSellingList �� EntityVillager ���� private ���ʿ���
+            EntityVillager.blacksmithSellingList.put(item.itemID, new Tuple(min, max));
+                          ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:29: ����: [deprecation] net.minecraft.src�е�TradeEntry�ѹ�ʱ
+    private List<TradeEntry> trades = Lists.newArrayList();
+                 ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:34: ����: [deprecation] net.minecraft.src�е�TradeEntry�ѹ�ʱ
+        for (TradeEntry ent : trades)
+             ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:36: ����: [deprecation] TradeEntry�е�buying�ѹ�ʱ
+            if (ent.buying)
+                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:38: ����: [deprecation] TradeEntry�е�id�ѹ�ʱ
+                VillagerRegistry.addEmeraldBuyRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance, 
+ent.min, ent.max);
+                                                                                                     ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:38: ����: [deprecation] TradeEntry�е�chance�ѹ�ʱ
+                VillagerRegistry.addEmeraldBuyRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance, 
+ent.min, ent.max);
+                                                                                                              ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:38: ����: [deprecation] TradeEntry�е�min�ѹ�ʱ
+                VillagerRegistry.addEmeraldBuyRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance, 
+ent.min, ent.max);
+                                                                                                                       
+   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:38: ����: [deprecation] TradeEntry�е�max�ѹ�ʱ
+                VillagerRegistry.addEmeraldBuyRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance, 
+ent.min, ent.max);
+                                                                                                                       
+            ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:42: ����: [deprecation] TradeEntry�е�id�ѹ�ʱ
+                VillagerRegistry.addEmeraldSellRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance,
+ ent.min, ent.max);
+                                                                                                      ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:42: ����: [deprecation] TradeEntry�е�chance�ѹ�ʱ
+                VillagerRegistry.addEmeraldSellRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance,
+ ent.min, ent.max);
+                                                                                                               ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:42: ����: [deprecation] TradeEntry�е�min�ѹ�ʱ
+                VillagerRegistry.addEmeraldSellRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance,
+ ent.min, ent.max);
+                                                                                                                       
+    ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:42: ����: [deprecation] TradeEntry�е�max�ѹ�ʱ
+                VillagerRegistry.addEmeraldSellRecipe(villager, recipeList, random, Item.itemsList[ent.id], ent.chance,
+ ent.min, ent.max);
+                                                                                                                       
+             ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\modloader\ModLoaderVillageTradeHandler
+.java:47: ����: [deprecation] net.minecraft.src�е�TradeEntry�ѹ�ʱ
+    public void addTrade(TradeEntry entry)
+                         ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft\cpw\mods\fml\common\registry\GameRegistry.java:114: ����: 
+[deprecation] Mod�е�Block�ѹ�ʱ
+    public static Object buildBlock(ModContainer container, Class<?> type, Block annotation) throws Exception
+                                                                           ^
+
+ע: ĳЩ�����ļ�ʹ����δ�����򲻰�ȫ�Ĳ�����
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+100 ������
+38 ������
+==================
+
+== Recompiling server ==
+> Cleaning bin
+> Recompiling
+Server side recompiling might be skipped, this is normal, do not complain to FML/Forge team about server side.
+'"javac" -encoding UTF-8 -Xlint:-options -deprecation -g -source 1.6 -target 1.6 -classpath "lib;lib\*;jars\minecraft_s
+erver.jar" -sourcepath src\minecraft_server -d bin\minecraft_server @"c:\users\yuanqi~1\appdata\local\temp\java_src_pat
+h_ul1e7f.txt"' failed : 1
+
+== ERRORS FOUND in JAVA CODE ==
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft_server\net\minecraft\util\ChatMessageComponent.java:256: �
+���: ���һ������ʹ���˲�׼ȷ�ı������͵� varargs �����ķ� varargs ����; 
+                var7.append(StatCollector.func_74837_a(this.field_111090_h, var13));
+                                                                            ^
+
+  ���� varargs ����, Ӧʹ�� Object
+  ���ڷ� varargs ����, Ӧʹ�� Object[], ����Ҳ�������ƴ˾���
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft_server\net\minecraft\world\gen\feature\MapGenScatteredFeat
+ure.java:107: ����: field_75075_a �� StructureStart ���� protected ���ʿ���
+        if (var4 != null && var4 instanceof StructureScatteredFeatureStart && !var4.field_75075_a.isEmpty())
+                                                                                   ^
+
+F:\ATcraft-Addon-164\forge\forge-src\forge\mcp\src\minecraft_server\net\minecraft\world\gen\feature\MapGenScatteredFeat
+ure.java:109: ����: field_75075_a �� StructureStart ���� protected ���ʿ���
+            StructureComponent var5 = (StructureComponent)var4.field_75075_a.getFirst();
+                                                              ^
+
+ע: ĳЩ�����ļ�ʹ����δ�����򲻰�ȫ�Ĳ�����
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+2 ������
+1 ������
+==================
+

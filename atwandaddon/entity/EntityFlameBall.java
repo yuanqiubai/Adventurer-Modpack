@@ -1,0 +1,99 @@
+package atwandaddon.entity;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.World;
+
+/**
+ * 火焰弹弹射物实体
+ * 由火焰法杖(ItemFlameWand)发射，碰撞时对实体造成火焰伤害 + 点燃，并产生小型爆炸。
+ *
+ * 物理特性：
+ * - 重力系数极低(0.01)，弹道近乎直线
+ * - 伤害由 setDamage() 在发射时动态设定(5.0 ~ 8.0)
+ *
+ * 职责边界：
+ * - 仅负责碰撞检测和伤害/爆炸逻辑
+ * - 不关心发射源(法杖)的蓄力/弹药消耗
+ * - 渲染由 ClientProxy 注册的 RenderSnowball 处理
+ */
+public class EntityFlameBall extends EntityThrowable {
+
+    /** 弹射物伤害值，由发射方在 spawn 前通过 setDamage() 设定 */
+    private float damage = 8.0F;
+
+    /**
+     * 无参构造(Forge 实体注册必需)，仅调用父类
+     *
+     * @param _world 当前世界实例
+     */
+    public EntityFlameBall(World _world) {
+        super(_world);
+    }
+
+    /**
+     * 由投掷者发射的构造(法杖主用路径)
+     *
+     * @param _world 当前世界实例
+     * @param _thrower 投掷此弹射物的实体(玩家)
+     */
+    public EntityFlameBall(World _world, EntityLivingBase _thrower) {
+        super(_world, _thrower);
+    }
+
+    /**
+     * 坐标构造(网络同步 / 实体重建用)
+     *
+     * @param _world 当前世界实例
+     * @param _x 生成 X 坐标
+     * @param _y 生成 Y 坐标
+     * @param _z 生成 Z 坐标
+     */
+    public EntityFlameBall(World _world, double _x, double _y, double _z) {
+        super(_world, _x, _y, _z);
+    }
+
+    /**
+     * 设定弹射物伤害，在发射前由 ItemFlameWand 调用
+     *
+     * @param _damage 伤害值，通常 5.0 ~ 8.0
+     */
+    public void setDamage(float _damage) {
+        this.damage = _damage;
+    }
+
+    /**
+     * 碰撞回调
+     * 命中实体时施加火焰伤害 + 点燃 4 秒；命中方块或实体后产生小型爆炸并销毁自身。
+     * 仅在服务端执行(world.isRemote 检查)，客户端由网络同步展示效果。
+     *
+     * @param _pos 碰撞点信息，包含命中的实体或方块坐标
+     */
+    @Override
+    protected void onImpact(MovingObjectPosition _pos) {
+        if (!this.worldObj.isRemote) {
+            // 命中实体：施加投掷伤害 + 点燃 4 秒
+            if (_pos.entityHit != null) {
+                _pos.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
+                _pos.entityHit.setFire(4);
+            }
+
+            // 产生小型爆炸(威力 1.0，破坏方块 + 生成火焰)
+            this.worldObj.newExplosion(this, this.posX, this.posY, this.posZ, 1.0F, true, true);
+            this.setDead();
+        }
+    }
+
+    /**
+     * 重力加速度系数
+     * 0.01 极低值使弹道近似直线飞行，实现"火球"的视觉效果。
+     *
+     * @return 0.01F
+     */
+    @Override
+    protected float getGravityVelocity() {
+        return 0.01F;
+    }
+}

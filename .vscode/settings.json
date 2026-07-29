@@ -1,0 +1,15 @@
+{
+    "java.project.sourcePaths": [
+        "forge/src/main/java"
+    ],
+    "java.project.referencedLibraries": [
+        "forge/*.jar",
+        "forge/libraries/**/*.jar"
+    ],
+    "java.project.outputPath": "forge/build/classes",
+    "files.exclude": {
+        "**/.gradle": true,
+        "**/build": true,
+        "**/tmp": true
+    }
+}

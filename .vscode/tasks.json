@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Gradle: build",
+            "type": "shell",
+            "command": "${workspaceFolder}/forge/gradlew.bat",
+            "args": ["build"],
+            "options": {
+                "cwd": "${workspaceFolder}/forge"
+            },
+            "problemMatcher": ["$msCompile"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Gradle: clean",
+            "type": "shell",
+            "command": "${workspaceFolder}/forge/gradlew.bat",
+            "args": ["clean"],
+            "options": {
+                "cwd": "${workspaceFolder}/forge"
+            },
+            "problemMatcher": ["$msCompile"],
+            "group": "build"
+        },
+        {
+            "label": "Gradle: assemble",
+            "type": "shell",
+            "command": "${workspaceFolder}/forge/gradlew.bat",
+            "args": ["assemble"],
+            "options": {
+                "cwd": "${workspaceFolder}/forge"
+            },
+            "problemMatcher": ["$msCompile"],
+            "group": "build"
+        }
+    ]
+}

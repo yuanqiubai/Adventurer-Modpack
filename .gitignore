@@ -1,0 +1,32 @@
+# Forge MDK (469 MB, download separately)
+forge/
+
+# Build output
+build/
+tmp/
+tmp2/
+jartmp*/
+
+# Compiled classes
+*.class
+*.jar
+!libs/*.jar
+
+# Tools (CFR, etc. — download separately)
+tool/
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
