@@ -1,0 +1,27 @@
+package net.minecraft.client.mco;
+
+import net.minecraft.client.mco.ExceptionMcoHttp;
+import net.minecraft.client.mco.Request;
+
+public class RequestDelete extends Request {
+
+   public RequestDelete(String par1Str, int par2, int par3) {
+      super(par1Str, par2, par3);
+   }
+
+   public RequestDelete func_96370_f() {
+      try {
+         this.field_96367_a.setDoOutput(true);
+         this.field_96367_a.setRequestMethod("DELETE");
+         this.field_96367_a.connect();
+         return this;
+      } catch (Exception var2) {
+         throw new ExceptionMcoHttp("Failed URL: " + this.field_96365_b, var2);
+      }
+   }
+
+   // $FF: synthetic method
+   public Request func_96359_e() {
+      return this.func_96370_f();
+   }
+}

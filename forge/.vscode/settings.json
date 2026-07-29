@@ -1,0 +1,35 @@
+{
+    "java.jdt.ls.java.home": "F:\\java 11",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-1.8",
+            "path": "F:\\java 11",
+            "default": true
+        }
+    ],
+    "java.import.gradle.enabled": true,
+    "java.import.gradle.wrapper.enabled": true,
+    "java.import.gradle.java.home": "F:\\java 11",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.completion.favoriteStaticMembers": [
+        "net.minecraft.init.Items.*",
+        "net.minecraft.init.Blocks.*"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.autobuild.enabled": true,
+    "java.errors.incompleteClasspath.severity": "warning",
+    "java.project.sourcePaths": [
+        "src/main/java"
+    ],
+    "java.project.outputPath": "build/classes",
+    "java.format.settings.url": null,
+    "java.format.settings.profile": null,
+    "files.exclude": {
+        "**/.gradle": true,
+        "**/build": true,
+        "**/.gradle_home": true,
+        "**/forge-src": true,
+        "**/forge-src.zip": true
+    },
+    "gradle.nestedProjects": false
+}

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ATcraftAddon",
+  "name": "ATcraft Addon",
+  "description": "Adds magical weapons. Addon for AT'craft mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ATcraft Addon Dev"],
+  "credits": "Based on AT'craft",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

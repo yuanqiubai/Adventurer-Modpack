@@ -8,26 +8,18 @@
 |------|-------------|
 | JDK（编译用） | `F:\java 11` — OpenJDK 21.0.9 |
 | JRE（运行用） | `F:\java` — JRE 1.8.0_411 |
-| Forge MDK | `F:\ATcraft-Addon-164\forge\`（未上传到 Git，需自行配置） |
+| Forge MDK | 已包含在仓库 `forge\` 目录中 |
 | MCP | Forge MDK 内置 — MCP 8.11 |
 
 > ⚠️ `F:\java` 是 JRE 不能编译。编译、反编译等工具操作一律用 `F:\java 11`。
 
 ## 快速开始
 
-### 1. 安装 Forge MDK
+### 1. 克隆仓库
 
-下载 Forge 9.11.1.916 MDK，解压到 `forge\` 目录：
-
-```
-F:\ATcraft-Addon-164\
-├── forge\
-│   ├── gradlew.bat
-│   ├── forge-src\
-│   └── ...
-├── atwandaddon\        ← Mod 源码
-├── libs\               ← 编译依赖 JAR
-└── build\              ← 构建输出
+```powershell
+git clone https://github.com/yuanqiubai/-Legend-of-the-Adventurer-Modpack.git
+cd -Legend-of-the-Adventurer-Modpack
 ```
 
 ### 2. 编译项目

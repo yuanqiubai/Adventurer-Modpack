@@ -1,0 +1,49 @@
+package net.minecraft.item;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemWritableBook;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.world.World;
+
+public class ItemEditableBook extends Item {
+
+   public ItemEditableBook(int par1) {
+      super(par1);
+      this.setMaxStackSize(1);
+   }
+
+   public static boolean validBookTagContents(NBTTagCompound par0NBTTagCompound) {
+      if(!ItemWritableBook.validBookTagPages(par0NBTTagCompound)) {
+         return false;
+      } else if(!par0NBTTagCompound.hasKey("title")) {
+         return false;
+      } else {
+         String var1 = par0NBTTagCompound.getString("title");
+         return var1 != null && var1.length() <= 16?par0NBTTagCompound.hasKey("author"):false;
+      }
+   }
+
+   public String getItemDisplayName(ItemStack par1ItemStack) {
+      if(par1ItemStack.hasTagCompound()) {
+         NBTTagCompound var2 = par1ItemStack.getTagCompound();
+         NBTTagString var3 = (NBTTagString)var2.getTag("title");
+         if(var3 != null) {
+            return var3.toString();
+         }
+      }
+
+      return super.getItemDisplayName(par1ItemStack);
+   }
+
+   public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+      par3EntityPlayer.displayGUIBook(par1ItemStack);
+      return par1ItemStack;
+   }
+
+   public boolean getShareTag() {
+      return true;
+   }
+}

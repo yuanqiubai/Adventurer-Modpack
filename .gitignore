@@ -1,6 +1,3 @@
-# Forge MDK (469 MB, download separately)
-forge/
-
 # Build output
 build/
 tmp/
@@ -11,9 +8,6 @@ jartmp*/
 *.class
 *.jar
 !libs/*.jar
-
-# Tools (CFR, etc. — download separately)
-tool/
 
 # IDE
 .idea/

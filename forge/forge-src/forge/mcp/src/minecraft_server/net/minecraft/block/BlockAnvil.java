@@ -1,0 +1,91 @@
+package net.minecraft.block;
+
+import net.minecraft.block.BlockSand;
+import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityFallingSand;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+public class BlockAnvil extends BlockSand {
+
+   public static final String[] statuses = new String[]{"intact", "slightlyDamaged", "veryDamaged"};
+   private static final String[] anvilIconNames = new String[]{"anvil_top_damaged_0", "anvil_top_damaged_1", "anvil_top_damaged_2"};
+
+   protected BlockAnvil(int par1) {
+      super(par1, Material.anvil);
+      this.setLightOpacity(0);
+      this.setCreativeTab(CreativeTabs.tabDecorations);
+   }
+
+   public boolean renderAsNormalBlock() {
+      return false;
+   }
+
+   public boolean isOpaqueCube() {
+      return false;
+   }
+
+   public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
+      int var7 = MathHelper.floor_double((double)(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+      int var8 = par1World.getBlockMetadata(par2, par3, par4) >> 2;
+      ++var7;
+      var7 %= 4;
+      if(var7 == 0) {
+         par1World.setBlockMetadataWithNotify(par2, par3, par4, 2 | var8 << 2, 2);
+      }
+
+      if(var7 == 1) {
+         par1World.setBlockMetadataWithNotify(par2, par3, par4, 3 | var8 << 2, 2);
+      }
+
+      if(var7 == 2) {
+         par1World.setBlockMetadataWithNotify(par2, par3, par4, 0 | var8 << 2, 2);
+      }
+
+      if(var7 == 3) {
+         par1World.setBlockMetadataWithNotify(par2, par3, par4, 1 | var8 << 2, 2);
+      }
+
+   }
+
+   public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
+      if(par1World.isRemote) {
+         return true;
+      } else {
+         par5EntityPlayer.displayGUIAnvil(par2, par3, par4);
+         return true;
+      }
+   }
+
+   public int getRenderType() {
+      return 35;
+   }
+
+   public int damageDropped(int par1) {
+      return par1 >> 2;
+   }
+
+   public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int par2, int par3, int par4) {
+      int var5 = par1IBlockAccess.getBlockMetadata(par2, par3, par4) & 3;
+      if(var5 != 3 && var5 != 1) {
+         this.setBlockBounds(0.125F, 0.0F, 0.0F, 0.875F, 1.0F, 1.0F);
+      } else {
+         this.setBlockBounds(0.0F, 0.0F, 0.125F, 1.0F, 1.0F, 0.875F);
+      }
+
+   }
+
+   protected void onStartFalling(EntityFallingSand par1EntityFallingSand) {
+      par1EntityFallingSand.setIsAnvil(true);
+   }
+
+   public void onFinishFalling(World par1World, int par2, int par3, int par4, int par5) {
+      par1World.playAuxSFX(1022, par2, par3, par4, 0);
+   }
+
+}

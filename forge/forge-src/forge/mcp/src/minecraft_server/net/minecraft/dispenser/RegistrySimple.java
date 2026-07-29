@@ -1,0 +1,23 @@
+package net.minecraft.dispenser;
+
+import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.Map;
+import net.minecraft.dispenser.IRegistry;
+
+public class RegistrySimple implements IRegistry {
+
+   protected final Map registryObjects = this.func_111054_a();
+
+   protected HashMap func_111054_a() {
+      return Maps.newHashMap();
+   }
+
+   public Object getObject(Object par1Obj) {
+      return this.registryObjects.get(par1Obj);
+   }
+
+   public void putObject(Object par1Obj, Object par2Obj) {
+      this.registryObjects.put(par1Obj, par2Obj);
+   }
+}

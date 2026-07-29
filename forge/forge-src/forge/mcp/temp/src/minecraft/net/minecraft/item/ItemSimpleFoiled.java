@@ -1,0 +1,15 @@
+package net.minecraft.item;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+public class ItemSimpleFoiled extends Item {
+
+   public ItemSimpleFoiled(int p_i1902_1_) {
+      super(p_i1902_1_);
+   }
+
+   public boolean func_77636_d(ItemStack p_77636_1_) {
+      return true;
+   }
+}

@@ -1,0 +1,45 @@
+package net.minecraft.block;
+
+import java.util.Random;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.world.World;
+
+public class BlockTallGrass extends BlockFlower {
+
+   private static final String[] grassTypes = new String[]{"deadbush", "tallgrass", "fern"};
+
+   protected BlockTallGrass(int par1) {
+      super(par1, Material.vine);
+      float var2 = 0.4F;
+      this.setBlockBounds(0.5F - var2, 0.0F, 0.5F - var2, 0.5F + var2, 0.8F, 0.5F + var2);
+   }
+
+   public int idDropped(int par1, Random par2Random, int par3) {
+      return par2Random.nextInt(8) == 0?Item.seeds.itemID:-1;
+   }
+
+   public int quantityDroppedWithBonus(int par1, Random par2Random) {
+      return 1 + par2Random.nextInt(par1 * 2 + 1);
+   }
+
+   public void harvestBlock(World par1World, EntityPlayer par2EntityPlayer, int par3, int par4, int par5, int par6) {
+      if(!par1World.isRemote && par2EntityPlayer.getCurrentEquippedItem() != null && par2EntityPlayer.getCurrentEquippedItem().itemID == Item.shears.itemID) {
+         par2EntityPlayer.addStat(StatList.mineBlockStatArray[this.blockID], 1);
+         this.dropBlockAsItem_do(par1World, par3, par4, par5, new ItemStack(Block.tallGrass, 1, par6));
+      } else {
+         super.harvestBlock(par1World, par2EntityPlayer, par3, par4, par5, par6);
+      }
+
+   }
+
+   public int getDamageValue(World par1World, int par2, int par3, int par4) {
+      return par1World.getBlockMetadata(par2, par3, par4);
+   }
+
+}

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven 3.6.0
+Built-By: Lee
+Build-Jdk: 10.0.2
+Specification-Title: cfr
+Specification-Version: 0.152
+Implementation-Title: cfr
+Implementation-Version: 0.152
+Implementation-Vendor-Id: org.benf
+Main-Class: org.benf.cfr.reader.Main
+

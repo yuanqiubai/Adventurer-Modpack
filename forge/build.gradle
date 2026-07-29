@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+
+version = "1.0"
+group = "atwandaddon"
+archivesBaseName = "ATcraft-Addon-164"
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile files('forge-src/forge/mcp/temp/client_recomp.jar')
+    compile files('forge-src/forge/mcp/lib/minecraftforge-9.11.1.916-mcp.jar')
+    compile files('forge-src/forge/mcp/jars/libraries/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar')
+    compile files('../libs/adventurer_engine_mcp.jar')
+    compile files('../libs/adventurer_core_mcp.jar')
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes(
+            'FMLCorePluginContainsFMLMod': 'true'
+        )
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", "1.6.4"
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': '1.6.4'
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
