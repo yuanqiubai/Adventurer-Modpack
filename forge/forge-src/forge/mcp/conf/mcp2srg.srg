@@ -18799,8 +18799,14 @@ MD: zz/a ()I net/minecraft/item/crafting/RecipeFireworks/getRecipeSize ()I
 MD: zz/a (Lvk;)Lye; net/minecraft/item/crafting/RecipeFireworks/getCraftingResult (Lnet/minecraft/inventory/InventoryCrafting;)Lnet/minecraft/item/ItemStack;
 MD: zz/a (Lvk;Labw;)Z net/minecraft/item/crafting/RecipeFireworks/matches (Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;)Z
 MD: zz/b ()Lye; net/minecraft/item/crafting/RecipeFireworks/getRecipeOutput ()Lnet/minecraft/item/ItemStack;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ItemExampleAmmo/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ItemExampleGun/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/HeavySword/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/LeadBulletMod/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/SnowEagleAP/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 FD: nn/q atwandaddon/entity/EntityFlameBall/worldObj
 FD: nn/u atwandaddon/entity/EntityFlameBall/posX
 FD: nn/v atwandaddon/entity/EntityFlameBall/posY
