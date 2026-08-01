@@ -18818,6 +18818,7 @@ FD: nn/ah atwandaddon/entity/EntitySniperBullet/dataWatcher
 FD: nn/q atwandaddon/entity/EntitySniperBullet/worldObj
 FD: nn/Q atwandaddon/entity/EntitySniperBullet/ticksExisted
 FD: nn/E atwandaddon/entity/EntitySniperBullet/isDead
+FD: nn/R atwandaddon/entity/EntitySniperBullet/rand
 MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/setDead ()V
 FD: yc/cv atwandaddon/weapon/ammo/LeadBulletMod/itemID
 MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/SnowfieldExplorer/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V

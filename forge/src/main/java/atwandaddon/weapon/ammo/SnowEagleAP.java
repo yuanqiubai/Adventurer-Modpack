@@ -38,7 +38,7 @@ public class SnowEagleAP extends BasicAmmo {
             //   背包图标: snow_eagle_ap.png  (由 .icon("snow_eagle_ap") 控制)
             //   弹幕图标: lead_bullet_mod.png (由 LeadBulletMod.itemID 动态传入)
             .entityModel("item_" + _renderItemId)
-            .bulletNum(1)
+            .bulletNum(10)
             .ammoCapacity(1)
             .gravity(false)      // 无重力狙击弹道
             // ---- 射击参数 ----

@@ -1,6 +1,6 @@
 # 雪原探索者狙击枪 — 开发日志
 
-> **最后更新**: 2025-08-01 15:17 — 音效域名修复
+> **最后更新**: 2025-08-01 15:30 — 可配置散布参数
 
 ---
 
@@ -51,12 +51,21 @@ GameRegistry.registerItem(yourAmmo, "yourAmmo");
 
 ### 2. 枪械类
 
-枪械只需覆写 `onPlayerStoppedUsing` 来创建自定义弹丸。如果不需要零散布（接受引擎精度系统），直接继承 `BasicRangedWeapon` 即可。
+枪械只需覆写 `onPlayerStoppedUsing` 来创建自定义弹丸。`this.accuracy` 从枪械 NBT/JSON 配置自动读取，传给弹丸构造器控制散布。
 
 ```java
 // 模板：放在 atwandaddon.weapon.gun 包下
 public class YourGun extends BasicRangedWeapon {
-    // buildJson() 或 buildNbt() → 参考 SnowfieldExplorer
+    // buildJson() 或 GunNbtBuilder → 参考 SnowfieldExplorer
+
+    @Override
+    public void onPlayerStoppedUsing(ItemStack _item, World _world, EntityPlayer _player, int _count) {
+        // ... 弹药检查、蓄力检查、耐久消耗 ...
+        // 创建弹丸，this.accuracy 从枪械配置自动读取
+        YourBullet bullet = new YourBullet(_world, _player, ammo.entity_speed, this.accuracy);
+        bullet.setDamage(basicDamage);
+        // ... 生成弹丸、消耗弹药、播放音效 ...
+    }
 }
 ```
 
@@ -70,12 +79,37 @@ public class YourBullet extends EntityBulletModelItem {
     // 必须有无参 World 构造器（Forge 反射创建客户端实体用）
     public YourBullet(World _world) { super(_world); }
 
-    // 射击构造器
-    public YourBullet(World _world, EntityLivingBase _shooter, float _speed) {
+    // 射击构造器 — _accuracy 控制散布
+    //   accuracy = 1.0 → 零散布（狙击枪）
+    //   accuracy = 0.9 → 小散布（步枪）
+    //   accuracy = 0.5 → 大散布（霰弹枪）
+    public YourBullet(World _world, EntityLivingBase _shooter, float _speed, float _accuracy) {
         super(_world, _shooter, _speed, 1.0F);
-        // 零散布方向计算（参考 EntitySniperBullet 第 70-90 行）
-        // ⚠️ motion 赋值必须通过 Entity 类型中转：Entity e = this; e.motionX = ...;
+
+        // 方向计算（含散布偏移）
+        float yawRad = ((Entity)_shooter).rotationYaw / 180.0F * (float)Math.PI;
+        float pitchRad = ((Entity)_shooter).rotationPitch / 180.0F * (float)Math.PI;
+
+        // 散布：MAX_SPREAD = 15°，accuracy 越低散布越大
+        float MAX_SPREAD = 15.0F;
+        float maxOffset = (1.0F - _accuracy) * MAX_SPREAD;
+        float maxOffsetRad = maxOffset / 180.0F * (float)Math.PI;
+        float yawOffset = (((Entity)_shooter).rand.nextFloat() * 2 - 1) * maxOffsetRad;
+        float pitchOffset = (((Entity)_shooter).rand.nextFloat() * 2 - 1) * maxOffsetRad;
+
+        float dirX = -MathHelper.sin(yawRad + yawOffset) * MathHelper.cos(pitchRad + pitchOffset);
+        float dirY = -MathHelper.sin(pitchRad + pitchOffset);
+        float dirZ = MathHelper.cos(yawRad + yawOffset) * MathHelper.cos(pitchRad + pitchOffset);
+
+        float len = MathHelper.sqrt_float(dirX * dirX + dirY * dirY + dirZ * dirZ);
+        float speed = 3.0F;
+        // ⚠️ motion 赋值必须通过 Entity 类型中转
+        Entity e = this;
+        e.motionX = dirX / len * speed;
+        e.motionY = dirY / len * speed;
+        e.motionZ = dirZ / len * speed;
     }
+}
 
     // ⚠️ 必须覆写 setRenderItemID 立即同步 DataWatcher
     @Override
@@ -253,6 +287,57 @@ this.maxRange = 30.0f;
 ```
 
 **修复**: 使用 NBT 构造函数（`AmmoNbtBuilder`），经 `RangeAttackPacket` 从 NBT 读取全部参数，完全绕过 JSON 构造器的硬编码。
+
+---
+
+### 坑 #7: Entity.rand 的 SRG 映射 — NoSuchFieldError: R
+
+**日期**: 2025-08-01  
+**现象**: 在 `EntitySniperBullet` 中使用 `this.rand.nextFloat()` 后射击闪退，报 `NoSuchFieldError: R`
+
+**根因**: `this.rand` 在子类字节码中 fieldref owner = `EntitySniperBullet`。加入 `FD: nn/R atwandaddon/entity/EntitySniperBullet/rand` 后，SpecialSource 正确将 `rand` 重映射为 `R`。但运行时 Forge 的 `FMLDeobfuscatingRemapper` 在 SRG→Obf 阶段无法跨类继承解析 `EntitySniperBullet/R` → `Entity/R` → obfuscated 名。
+
+**对比 `dataWatcher`（`ah`）为什么能工作**: 待查证。可能是 Forge 运行时对某些字段有特殊处理，或 `packaged.srg` 中某些字段的继承解析路径不同。
+
+**修复**: 避免使用任何 Minecraft Entity 的实例字段。用 `Math.random()` 替代 `this.rand.nextFloat()`——无字段访问，零 SRG 风险：
+
+```java
+// ❌ 崩溃 — Entity.rand 的 fieldref owner = EntitySniperBullet
+float offset = (this.rand.nextFloat() * 2.0F - 1.0F) * maxOffsetRad;
+
+// ✅ 安全 — Math.random() 是静态方法，不涉及 Minecraft 字段
+float offset = ((float)Math.random() * 2.0F - 1.0F) * maxOffsetRad;
+```
+
+**经验法则**: 在自定义 Entity 子类中，能用 JDK 标准库解决的问题不要碰 Minecraft Entity 的实例字段。
+
+---
+
+## 功能记录
+
+### 可配置散布系统 (2025-08-01)
+
+**设计**: `EntitySniperBullet` 构造器新增 `_accuracy` 参数（0.0~1.0），控制弹道散布。
+
+**散布公式**:
+```
+maxOffset(度) = (1.0 - accuracy) × 15.0°
+yawOffset   = rand(-1, 1) × maxOffset(弧度)
+pitchOffset = rand(-1, 1) × maxOffset(弧度)
+最终方向 = vanilla_dir(yaw + yawOffset, pitch + pitchOffset)
+```
+
+**精度对照表**:
+
+| accuracy | 最大散布 | 适用场景 |
+|----------|---------|---------|
+| 1.0 | 0° | 狙击枪（指哪打哪） |
+| 0.9 | 1.5° | 精确步枪 |
+| 0.8 | 3.0° | 突击步枪 |
+| 0.5 | 7.5° | 霰弹枪 |
+| 0.0 | 15.0° | 最大散布 |
+
+**调用方式**: 枪械侧 `new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy)`，`this.accuracy` 自动从枪械 NBT/JSON 配置读取。
 
 ---
 

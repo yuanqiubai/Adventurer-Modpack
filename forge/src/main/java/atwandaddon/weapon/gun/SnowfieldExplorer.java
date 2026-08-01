@@ -50,9 +50,9 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             .knockback(0.1)
             // ---- 射击参数 ----
             .shootMode(ShootMode.SEMI)
-            .shootNumber(1)
+            .shootNumber(10)
             .shootDelay(1)
-            .accuracy(0.9)
+            .accuracy(0.75)
             .shootSound("bow_zx")
             .maxRange(64.0)
             .maxSpeed(6.0)
@@ -168,8 +168,9 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         // 伤害枪械耐久（每发 1 点）
         _item.damageItem(1, _player);
 
-        // 创建零散布狙击弹丸
-        EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed);
+        // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT/JSON 配置读取）
+        // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
+        EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
         bullet.setDamage(basicDamage);
         bullet.setIceDamage(iceDamage);
         bullet.setKnockbackStrength(ammo.knockback);
