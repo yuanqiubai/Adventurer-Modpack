@@ -5,6 +5,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -13,6 +15,7 @@ import atwandaddon.weapon.melee.HeavySword;
 import atwandaddon.weapon.gun.SnowfieldExplorer;
 import atwandaddon.weapon.ammo.LeadBulletMod;
 import atwandaddon.weapon.ammo.SnowEagleAP;
+import atwandaddon.entity.EntitySniperBullet;
 
 /**
  * ATcraft Addon Mod 主入口
@@ -25,6 +28,8 @@ import atwandaddon.weapon.ammo.SnowEagleAP;
  * - 渲染由 ClientProxy 代理处理
  */
 @Mod(modid = ATcraftAddon.MODID, name = ATcraftAddon.NAME, version = ATcraftAddon.VERSION)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false,
+    channels = {"ATcraftAddon"}, packetHandler = ATcraftPacketHandler.class)
 public class ATcraftAddon {
 
     /** Mod 标识符，Forge 用此 ID 区分不同 Mod */
@@ -134,6 +139,11 @@ public class ATcraftAddon {
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(snowEagleAP, "snowEagleAP");
         // snowEagleAP.registerAsAmmo(); — NBT 构造器自动完成注册
+
+        // 注册自定义狙击弹丸实体（零散布弹道）
+        // trackingRange=64, updateFrequency=1, sendsVelocityUpdates=true
+        EntityRegistry.registerModEntity(EntitySniperBullet.class, "SniperBullet",
+            250, instance, 64, 1, true);
 
         proxy.registerRenderers();
     }

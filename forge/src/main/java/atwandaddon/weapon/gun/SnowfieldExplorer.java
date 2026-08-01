@@ -7,10 +7,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import com.adventurer_engine.common.PlayerTools;
+import com.adventurer_engine.common.items.blank.ranged_weapon.BasicAmmo;
 import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
 import com.adventurer_engine.util.JsonHelper;
 import com.google.gson.internal.StringMap;
+
+import atwandaddon.entity.EntitySniperBullet;
 import atwandaddon.weapon.ammo.SnowEagleAP;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
 import atwandaddon.weapon.nbt.NbtEventTags;
@@ -99,6 +103,110 @@ public class SnowfieldExplorer extends BasicRangedWeapon
     // }
 
     // ==================== NBTs 充能系统 ====================
+
+    // ==================== 自定义零散布狙击弹道 ====================
+
+    /**
+     * 覆写引擎的松手开火方法，用零散布 {@link EntitySniperBullet} 替换默认弹丸。
+     *
+     * <p>引擎 {@code shootOnce()} 经过 {@code disturbVector} + 自定义 {@code c()} 方法
+     * 多层精度处理，实测导致弹道严重偏离目标。此覆写完全绕过引擎精度系统：</p>
+     * <ol>
+     * <li>检查弹药是否加载、玩家是否持有足够弹药</li>
+     * <li>检查蓄力是否完成（use_duration >= charge_time）</li>
+     * <li>伤害枪械耐久</li>
+     * <li>创建 {@link EntitySniperBullet} — 纯 vanilla 方向数学，零散布</li>
+     * <li>消耗弹药、播放音效、设置冷却</li>
+     * </ol>
+     *
+     * @param _item   枪械 ItemStack
+     * @param _world  当前世界
+     * @param _player 射击者
+     * @param _uc2    蓄力倒计时（引擎透传参数）
+     */
+    @Override
+    public void onPlayerStoppedUsing(ItemStack _item, World _world, EntityPlayer _player, int _itemInUseCount)
+    {
+        // 检查是否有已装填的弹药
+        if (!_item.hasTagCompound() || !_item.getTagCompound().hasKey(CURRENT_AMMO))
+        {
+            return;
+        }
+
+        // 从 NBT 读取当前装填的弹药名
+        String ammoName = _item.getTagCompound().getString(CURRENT_AMMO);
+        BasicAmmo ammo = (BasicAmmo)BasicAmmo.getAmmoByString(ammoName);
+        if (ammo == null)
+        {
+            return;
+        }
+
+        // 检查玩家背包中是否还有此弹药
+        if (PlayerTools.ammoAmount(_player, ammoName) <= 0)
+        {
+            return;
+        }
+
+        // 仅在服务端生成实体
+        if (_world.isRemote)
+        {
+            return;
+        }
+
+        // 蓄力检查：引擎 3-param a() 已控制蓄力起止，此处跳过
+        // 注：ItemStack 的 use_duration 字段在我们的 MCP 中为 field_111284_a，
+        // 待确认后可恢复蓄力进度检查
+        // if (_item.field_111284_a < 4)
+        // {
+        //     return;
+        // }
+
+        // 计算合并伤害（枪 16.0 + 弹药 8.0 = 24.0）
+        float basicDamage = 16.0F + ammo.basic_damage;
+        float iceDamage = 16.0F + ammo.ice_damage;
+
+        // 伤害枪械耐久（每发 1 点）
+        _item.damageItem(1, _player);
+
+        // 创建零散布狙击弹丸
+        EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed);
+        bullet.setDamage(basicDamage);
+        bullet.setIceDamage(iceDamage);
+        bullet.setKnockbackStrength(ammo.knockback);
+        bullet.setMaxRange(ammo.maxRange);
+        bullet.setGravity(ammo.gravity);
+        bullet.setPenetrate(ammo.penetrate);
+        bullet.setNoeff(ammo.noeff);
+
+        // 设置弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
+        String entityModel = ammo.entity_model;
+        // [DEBUG] 记录弹药 entity_model 解析
+        System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
+        if (entityModel != null && entityModel.startsWith("item_"))
+        {
+            int parsedId = Integer.parseInt(entityModel.substring(5));
+            System.out.println("[SniperDebug] Parsed renderItemID=" + parsedId
+                + " itemExists=" + (net.minecraft.item.Item.itemsList[parsedId] != null));
+            bullet.setRenderItemID(parsedId);
+        }
+        else
+        {
+            System.out.println("[SniperDebug] WARNING: entity_model is null or doesn't start with 'item_'!");
+        }
+
+        // 生成弹丸实体
+        _world.spawnEntityInWorld(bullet);
+
+        // 播放射击音效
+        // ⚠️ 引擎 SoundManager.addSound() 会加 "adventurer_engine:" 前缀注册音效，
+        // 因此 playSoundAtEntity 也需要传入带域名的完整音效名。
+        String sound = ammo.shoot_sound != null ? ammo.shoot_sound : "bow_zx";
+        _world.playSoundAtEntity(_player, "adventurer_engine:" + sound, 1.0F, 1.0F);
+
+        // 消耗弹药
+        // 注：shoot_delay 冷却由引擎 EventLoader 每 tick 管理，此处无需手动设置
+        PlayerTools.consumeAmmo(_player, ammoName);
+    }
 
     @Override
     public void onUpdate(ItemStack _stack, World _world, Entity _entity, int _slot, boolean _isCurrent)

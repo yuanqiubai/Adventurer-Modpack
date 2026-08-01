@@ -1,15 +1,19 @@
 {
+    "java.jdt.ls.java.home": "F:\\java 11",
     "java.project.sourcePaths": [
-        "forge/src/main/java"
+        "forge/src/main/java",
+        "adventurer_engine_src"
     ],
-    "java.project.referencedLibraries": [
-        "forge/*.jar",
-        "forge/libraries/**/*.jar"
-    ],
-    "java.project.outputPath": "forge/build/classes",
-    "files.exclude": {
-        "**/.gradle": true,
-        "**/build": true,
-        "**/tmp": true
+    "java.project.referencedLibraries": {
+        "include": [
+            "libs/**/*.jar",
+            "forge/forge-src/forge/mcp/lib/**/*.jar",
+            "forge/forge-src/forge/mcp/jars/bin/*.jar",
+            "forge/forge-src/forge/mcp/jars/libraries/**/*.jar",
+            "forge/forge-src/forge/mcp/temp/client_recomp.jar"
+        ],
+        "exclude": [
+            "forge/forge-src/forge/mcp/jars/bin/natives/**"
+        ]
     }
 }

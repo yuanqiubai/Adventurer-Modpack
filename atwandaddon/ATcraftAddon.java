@@ -49,6 +49,10 @@ public class ATcraftAddon {
     /** 弹药宝珠，火焰法杖消耗品 */
     public static Item ammoOrb;
 
+    /** Melee: 重剑 */
+    public static Item heavySword;
+
+
     /**
      * 预初始化阶段
      * 创建创造标签页、注册所有物品、初始化代理渲染。
@@ -82,6 +86,12 @@ public class ATcraftAddon {
             .setTextureName("atcraftaddon:flame_wand")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(flameWand, "flameWand");
+
+        heavySword = new ItemHeavySword(25002)
+            .setUnlocalizedName("heavySword")
+            .setTextureName("atcraftaddon:heavy_sword")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(heavySword, "heavy_Sword");
 
         // 委托代理注册渲染器(客户端注册实体渲染，服务端空实现)
         proxy.registerRenderers();

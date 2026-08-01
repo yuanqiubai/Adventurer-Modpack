@@ -18813,3 +18813,11 @@ FD: nn/v atwandaddon/entity/EntityFlameBall/posY
 FD: nn/w atwandaddon/entity/EntityFlameBall/posZ
 MD: nn/x ()V atwandaddon/entity/EntityFlameBall/setDead ()V
 MD: uq/h ()Lof; atwandaddon/entity/EntityFlameBall/getThrower ()Lnet/minecraft/entity/EntityLivingBase;
+# EntitySniperBullet — 访问 Entity 继承字段需要显式 FD 映射
+FD: nn/ah atwandaddon/entity/EntitySniperBullet/dataWatcher
+FD: nn/q atwandaddon/entity/EntitySniperBullet/worldObj
+FD: nn/Q atwandaddon/entity/EntitySniperBullet/ticksExisted
+FD: nn/E atwandaddon/entity/EntitySniperBullet/isDead
+MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/setDead ()V
+FD: yc/cv atwandaddon/weapon/ammo/LeadBulletMod/itemID
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/SnowfieldExplorer/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
