@@ -168,43 +168,93 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         // 伤害枪械耐久（每发 1 点）
         _item.damageItem(1, _player);
 
-        // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT/JSON 配置读取）
-        // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
-        EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
-        bullet.setDamage(basicDamage);
-        bullet.setIceDamage(iceDamage);
-        bullet.setKnockbackStrength(ammo.knockback);
-        bullet.setMaxRange(ammo.maxRange);
-        bullet.setGravity(ammo.gravity);
-        bullet.setPenetrate(ammo.penetrate);
-        bullet.setNoeff(ammo.noeff);
+        // ===== 旧代码 (保留以作参考) — 单发 spawn =====
+        // // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT/JSON 配置读取）
+        // // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
+        // EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
+        // bullet.setDamage(basicDamage);
+        // bullet.setIceDamage(iceDamage);
+        // bullet.setKnockbackStrength(ammo.knockback);
+        // bullet.setMaxRange(ammo.maxRange);
+        // bullet.setGravity(ammo.gravity);
+        // bullet.setPenetrate(ammo.penetrate);
+        // bullet.setNoeff(ammo.noeff);
+        //
+        // // 设置弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
+        // String entityModel = ammo.entity_model;
+        // // [DEBUG] 记录弹药 entity_model 解析
+        // System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
+        // if (entityModel != null && entityModel.startsWith("item_"))
+        // {
+        //     int parsedId = Integer.parseInt(entityModel.substring(5));
+        //     System.out.println("[SniperDebug] Parsed renderItemID=" + parsedId
+        //         + " itemExists=" + (net.minecraft.item.Item.itemsList[parsedId] != null));
+        //     bullet.setRenderItemID(parsedId);
+        // }
+        // else
+        // {
+        //     System.out.println("[SniperDebug] WARNING: entity_model is null or doesn't start with 'item_'!");
+        // }
+        //
+        // // 生成弹丸实体
+        // _world.spawnEntityInWorld(bullet);
+        // ===== 旧代码结束 =====
 
-        // 设置弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
+        // ===== 新代码 — 多弹丸散弹系统 =====
+        // 弹丸数量上限由枪械控制，实际发射数取枪上限与弹药数量的较小值
+        // 枪: BasicRangedWeapon.shoot_number (public final int, 来自 NBT shoot_number)
+        // 弹药: BasicAmmo.entity_num (public final int, 来自 NBT bullet_num)
+        int bulletCount = Math.min(this.shoot_number, ammo.entity_num);
+
+        // 解析弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
+        // 提取到循环外避免重复解析
         String entityModel = ammo.entity_model;
+        int renderItemId = -1; // 弹幕渲染图标 ID，-1 = 无效/不设置
         // [DEBUG] 记录弹药 entity_model 解析
         System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
         if (entityModel != null && entityModel.startsWith("item_"))
         {
-            int parsedId = Integer.parseInt(entityModel.substring(5));
-            System.out.println("[SniperDebug] Parsed renderItemID=" + parsedId
-                + " itemExists=" + (net.minecraft.item.Item.itemsList[parsedId] != null));
-            bullet.setRenderItemID(parsedId);
+            renderItemId = Integer.parseInt(entityModel.substring(5));
+            System.out.println("[SniperDebug] Parsed renderItemID=" + renderItemId
+                + " itemExists=" + (net.minecraft.item.Item.itemsList[renderItemId] != null));
         }
         else
         {
             System.out.println("[SniperDebug] WARNING: entity_model is null or doesn't start with 'item_'!");
         }
 
-        // 生成弹丸实体
-        _world.spawnEntityInWorld(bullet);
+        // 循环生成弹丸：每颗弹丸独立调用 EntitySniperBullet 构造器，
+        // 构造器内的 Math.random() 保证每颗弹丸获得不同的随机散布偏转
+        for (int i = 0; i < bulletCount; i++)
+        {
+            // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT 配置读取）
+            // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
+            EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
+            bullet.setDamage(basicDamage);
+            bullet.setIceDamage(iceDamage);
+            bullet.setKnockbackStrength(ammo.knockback);
+            bullet.setMaxRange(ammo.maxRange);
+            bullet.setGravity(ammo.gravity);
+            bullet.setPenetrate(ammo.penetrate);
+            bullet.setNoeff(ammo.noeff);
 
-        // 播放射击音效
+            // 设置弹幕渲染图标
+            if (renderItemId >= 0)
+            {
+                bullet.setRenderItemID(renderItemId);
+            }
+
+            // 生成弹丸实体到世界
+            _world.spawnEntityInWorld(bullet);
+        }
+
+        // 播放射击音效（只播放一次，不在循环内）
         // ⚠️ 引擎 SoundManager.addSound() 会加 "adventurer_engine:" 前缀注册音效，
         // 因此 playSoundAtEntity 也需要传入带域名的完整音效名。
         String sound = ammo.shoot_sound != null ? ammo.shoot_sound : "bow_zx";
         _world.playSoundAtEntity(_player, "adventurer_engine:" + sound, 1.0F, 1.0F);
 
-        // 消耗弹药
+        // 消耗弹药（只消耗一次，不在循环内）
         // 注：shoot_delay 冷却由引擎 EventLoader 每 tick 管理，此处无需手动设置
         PlayerTools.consumeAmmo(_player, ammoName);
     }
