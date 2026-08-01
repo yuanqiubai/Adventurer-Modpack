@@ -109,7 +109,9 @@ implements un {
             this.y = nv[1];
             this.z = nv[2];
         }
-        this.c(this.x, this.y, this.z, speed * 1.5f, 1.0f);
+        // 🔥 修复：inaccuracy 从 1.0f 改为 0.0f。MC 的 setThrowableHeading 用最后参数控制随机散布，
+        // 1.0f = 最大散布（箭矢默认值），对狙击枪完全不适用。改为 0.0f 后仅由 accuracy 字段控制精度。
+        this.c(this.x, this.y, this.z, speed * 1.5f, 0.0f);
     }
 
     public void l_() {

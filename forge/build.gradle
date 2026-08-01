@@ -23,6 +23,7 @@ dependencies {
     compile files('forge-src/forge/mcp/jars/libraries/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar')
     compile files('../libs/adventurer_engine_mcp.jar')
     compile files('../libs/adventurer_core_mcp.jar')
+    compile files('forge-src/forge/mcp/jars/bin/lwjgl.jar')
 }
 
 compileJava {

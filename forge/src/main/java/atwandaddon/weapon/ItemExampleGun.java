@@ -15,22 +15,27 @@ public class ItemExampleGun extends BasicRangedWeapon {
         StringMap map = new StringMap();
         map.put("name", "example_gun");
         map.put("icon", "example_gun");
-        map.put("duration", 100.0D);             // Max durability
-        map.put("basic_damage", 8.0D);          // Base damage
-        map.put("charge_time", 0.0D);           // Charge time in ticks, 0 = no charge
-        map.put("charge_stage", 0.0D);          // Charge stages, 0 = none
-        map.put("shoot_delay", 12.0D);          // Delay between shots in ticks
-        map.put("shoot_mode", "semi");         // Semi-auto
-        map.put("shoot_number", 1.0D);          // Bullets per shot
-        map.put("accuracy", 0.9D);              // Accuracy, 1.0 = perfect
-        map.put("knockback", 0.5D);             // Knockback strength
-        map.put("unbreakable", false);          // Can take durability damage
-        map.put("shoot_sound", "random.bow"); // Shoot sound
-        map.put("gravity", true);               // Projectile is affected by gravity
-        map.put("penetrate", false);            // Projectile does not penetrate
-        map.put("maxRange", 64.0D);             // Max range in blocks
-        map.put("maxSpeed", 3.0D);              // Projectile speed
-        map.put("stack", 1.0D);                 // Not stackable
+        map.put("duration", 100.0D);            // 最大耐久度
+        map.put("basic_damage", 8.0D);          // 基础伤害
+        map.put("charge_time", 0.0D);           // 蓄力时间（单位：tick），0 = 无需蓄力
+        // 🚨 蓄力阶段数，0 = 无蓄力阶段。
+        // 🚨 若 charge_stage >= 1，必须同时提供 icons 列表！
+        // 🚨 例如：map.put("icons", Arrays.asList("icon_name"));
+        // 🚨 否则 registerIcons() 中 this.icons.size() 会空指针 → 启动闪退！
+        // 🚨 参见 BasicRangedWeapon.a(mt) 第 222-227 行。
+        map.put("charge_stage", 0.0D);
+        map.put("shoot_delay", 12.0D);          // 射击间隔（单位：tick）
+        map.put("shoot_mode", "semi");          // 半自动模式
+        map.put("shoot_number", 1.0D);          // 每次射击的子弹数
+        map.put("accuracy", 0.9D);              // 精度，1.0 = 完美精度
+        map.put("knockback", 0.5D);             // 击退强度
+        map.put("unbreakable", false);          // 是否不可破坏（false = 会消耗耐久度）
+        map.put("shoot_sound", "random.bow");   // 射击音效
+        map.put("gravity", true);               // 弹射物受重力影响
+        map.put("penetrate", false);            // 弹射物不具备穿透效果
+        map.put("maxRange", 64.0D);             // 最大射程（单位：方块）
+        map.put("maxSpeed", 3.0D);              // 弹射物速度
+        map.put("stack", 1.0D);                 // 堆叠数量（1.0 = 不可堆叠）
         map.put("allowed_ammo", Arrays.asList(ItemExampleAmmo.AMMO_NAME));
         return new JsonHelper(map);
     }

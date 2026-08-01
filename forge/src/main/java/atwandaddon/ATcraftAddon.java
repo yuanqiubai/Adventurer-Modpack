@@ -112,25 +112,25 @@ public class ATcraftAddon {
         // ID 25261 — 重剑保持旧 ID
         heavySword = (HeavySword) new HeavySword(25005)
             .setUnlocalizedName("heavySword")
-            .setTextureName("atcraftaddon:heavy_sword")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(heavySword, "heavySword");
 
         // ID 25262 — 雪原探索者狙击步枪
         snowfieldExplorer = (SnowfieldExplorer) new SnowfieldExplorer(25006)
             .setUnlocalizedName("snowfieldExplorer")
-            .setTextureName("atcraftaddon:snowfield_explorer")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(snowfieldExplorer, "snowfieldExplorer");
 
-        // ID 25264 — 铅弹改
+        // ID 26256 — 铅弹改
         leadBulletMod = (LeadBulletMod) new LeadBulletMod(26000)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(leadBulletMod, "leadBulletMod");
         leadBulletMod.registerAsAmmo();
 
-        // ID 25265 — 雪鹰穿甲弹（NBT 路径，自动注册 ammoItem）
-        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001)
+        // ID 26267 — 雪鹰穿甲弹（NBT 路径，自动注册 ammoItem）
+        // 传入 leadBulletMod.itemID（shiftedIndex = 26256），
+        // 确保 entity_model 中的 renderItemID 与 Item.itemsList 索引一致
+        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001, leadBulletMod.itemID)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(snowEagleAP, "snowEagleAP");
         // snowEagleAP.registerAsAmmo(); — NBT 构造器自动完成注册

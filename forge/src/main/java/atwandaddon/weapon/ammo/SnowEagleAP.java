@@ -17,9 +17,11 @@ public class SnowEagleAP extends BasicAmmo {
     public static final String AMMO_NAME = "snow_eagle_ap";
 
     /**
-     * @param _id 物品数字 ID
+     * @param _id             物品数字 ID（逻辑 ID）
+     * @param _renderItemId   LeadBulletMod 的 {@code itemID}（shiftedIndex = 逻辑 ID + 256）。
+     *                        用于弹幕实体渲染，必须匹配 {@code Item.itemsList} 的索引。
      */
-    public SnowEagleAP(int _id) {
+    public SnowEagleAP(int _id, int _renderItemId) {
         // ===== NBT 路径（当前使用）=====
         // 引擎 JSON 构造器硬编码 ice_damage = 0.0f，
         // 导致穿甲伤害、穿透等参数无法生效。
@@ -30,9 +32,12 @@ public class SnowEagleAP extends BasicAmmo {
             .maxStack(64)
             // ---- 伤害 ----
             .basicDamage(8.0)    // 普通物理伤害
-            .iceDamage(6.0)      // 冰穿甲伤害（独立护甲计算）🔥 NBT 专属
+            .iceDamage(8.0)      // 冰穿甲伤害（独立护甲计算）🔥 NBT 专属
             // ---- 弹道 ----
-            .entityModel("bullet")
+            // 弹幕实体图标与弹药背包图标分离：
+            //   背包图标: snow_eagle_ap.png  (由 .icon("snow_eagle_ap") 控制)
+            //   弹幕图标: lead_bullet_mod.png (由 LeadBulletMod.itemID 动态传入)
+            .entityModel("item_" + _renderItemId)
             .bulletNum(1)
             .ammoCapacity(1)
             .gravity(false)      // 无重力狙击弹道
@@ -40,7 +45,7 @@ public class SnowEagleAP extends BasicAmmo {
             .shootMode(ShootMode.SEMI)
             .shootDelay(1)
             .chargeTime(2)
-            .accuracy(1.0)       // 完美精度
+            .accuracy(0.95)       // 狙击精度
             .knockback(0.5)
             .shootSound("bow_zx")
             .maxRange(80.0)
@@ -49,7 +54,7 @@ public class SnowEagleAP extends BasicAmmo {
             .penetrate(true)     // 穿透目标
             .noeff(false)
             // ---- 暴击：高斯波动 ±16 ----
-            .fluctuating(16.0)
+            // .fluctuating(16.0)
             // ---- 构建 NBT ----
             .build());
 
