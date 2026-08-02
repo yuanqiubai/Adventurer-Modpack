@@ -65,42 +65,6 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             .build());
     }
 
-    /**
-     * [测试] JSON 构造参数 — 用于排除 NBT 映射问题。
-     * 引擎 JSON 路径的 BasicRangedWeapon 构造器硬编码 ice_damage=0, gravity=true, penetrate=false，
-     * 但 accuracy 等核心参数能正确读取。先用 JSON 路径测试精度是否正常。
-     */
-    // private static JsonHelper buildJson() {
-    //     StringMap map = new StringMap();
-    //     // ---- 基础属性 ----
-    //     map.put("name", "snowfield_explorer");
-    //     map.put("icon", "snowfield_explorer");
-    //     map.put("duration", 9.0D);            // MUST be Double
-    //     map.put("unbreakable", false);
-    //     map.put("stack", 1.0D);
-    //     // ---- 蓄力系统 ----
-    //     map.put("charge_stage", 1.0D);
-    //     map.put("charge_time", 4.0D);
-    //     // 蓄力图标列表 — charge_stage >= 1 时必须提供，否则 registerIcons 空指针
-    //     map.put("icons", Arrays.asList("snowfield_explorer"));
-    //     // ---- 伤害 ----
-    //     map.put("basic_damage", 16.0D);
-    //     map.put("knockback", 0.1D);
-    //     // ---- 射击参数 ----
-    //     map.put("shoot_mode", "semi");
-    //     map.put("shoot_number", 1.0D);
-    //     map.put("shoot_delay", 1.0D);
-    //     map.put("accuracy", 0.9D);            // 狙击精度
-    //     map.put("shoot_sound", "bow_zx");
-    //     map.put("maxRange", 64.0D);
-    //     map.put("maxSpeed", 6.0D);
-    //     // ---- 弹道 ----
-    //     map.put("gravity", false);
-    //     map.put("penetrate", false);
-    //     // ---- 弹药 ----
-    //     map.put("allowed_ammo", Arrays.asList(SnowEagleAP.AMMO_NAME));
-    //     return new JsonHelper(map);
-    // }
 
     // ==================== NBTs 充能系统 ====================
 
@@ -153,52 +117,14 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             return;
         }
 
-        // 蓄力检查：引擎 3-param a() 已控制蓄力起止，此处跳过
-        // 注：ItemStack 的 use_duration 字段在我们的 MCP 中为 field_111284_a，
-        // 待确认后可恢复蓄力进度检查
-        // if (_item.field_111284_a < 4)
-        // {
-        //     return;
-        // }
 
-        // 计算合并伤害（枪 16.0 + 弹药 8.0 = 24.0）
-        float basicDamage = 16.0F + ammo.basic_damage;
-        float iceDamage = 16.0F + ammo.ice_damage;
+        // 计算合并伤害（枪 + 弹药，从 NBT 字段读取而非硬编码）
+        float basicDamage = this.basic_damage + ammo.basic_damage;
+        float iceDamage   = this.ice_damage   + ammo.ice_damage;
 
         // 伤害枪械耐久（每发 1 点）
-        _item.damageItem(1, _player);
+        _item.damageItem(SnowEagleAP.DURABILITY_COST, _player);
 
-        // ===== 旧代码 (保留以作参考) — 单发 spawn =====
-        // // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT/JSON 配置读取）
-        // // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
-        // EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
-        // bullet.setDamage(basicDamage);
-        // bullet.setIceDamage(iceDamage);
-        // bullet.setKnockbackStrength(ammo.knockback);
-        // bullet.setMaxRange(ammo.maxRange);
-        // bullet.setGravity(ammo.gravity);
-        // bullet.setPenetrate(ammo.penetrate);
-        // bullet.setNoeff(ammo.noeff);
-        //
-        // // 设置弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
-        // String entityModel = ammo.entity_model;
-        // // [DEBUG] 记录弹药 entity_model 解析
-        // System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
-        // if (entityModel != null && entityModel.startsWith("item_"))
-        // {
-        //     int parsedId = Integer.parseInt(entityModel.substring(5));
-        //     System.out.println("[SniperDebug] Parsed renderItemID=" + parsedId
-        //         + " itemExists=" + (net.minecraft.item.Item.itemsList[parsedId] != null));
-        //     bullet.setRenderItemID(parsedId);
-        // }
-        // else
-        // {
-        //     System.out.println("[SniperDebug] WARNING: entity_model is null or doesn't start with 'item_'!");
-        // }
-        //
-        // // 生成弹丸实体
-        // _world.spawnEntityInWorld(bullet);
-        // ===== 旧代码结束 =====
 
         // ===== 新代码 — 多弹丸散弹系统 =====
         // 弹丸数量上限由枪械控制，实际发射数取枪上限与弹药数量的较小值
@@ -211,7 +137,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         String entityModel = ammo.entity_model;
         int renderItemId = -1; // 弹幕渲染图标 ID，-1 = 无效/不设置
         // [DEBUG] 记录弹药 entity_model 解析
-        System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
+        // System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
         if (entityModel != null && entityModel.startsWith("item_"))
         {
             renderItemId = Integer.parseInt(entityModel.substring(5));
@@ -263,7 +189,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
     public void onUpdate(ItemStack _stack, World _world, Entity _entity, int _slot, boolean _isCurrent)
     {
         super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
-        if (_isCurrent && _entity instanceof EntityPlayer)
+        if (_entity instanceof EntityPlayer)
         {
             NbtEventTags.write(_stack, NbtEventTags.PRESET_SNIPER);
         }

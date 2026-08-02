@@ -1,6 +1,6 @@
 # 雪原探索者狙击枪 — 开发日志
 
-> **最后更新**: 2025-08-01 15:30 — 可配置散布参数
+> **最后更新**: 2025-08-01 15:45 — 充能系统改用 ITickHandler
 
 ---
 
@@ -313,6 +313,54 @@ float offset = ((float)Math.random() * 2.0F - 1.0F) * maxOffsetRad;
 
 ---
 
+### 坑 #8: Item.onUpdate 在 MC 1.6.4 服务端不被调用
+
+**日期**: 2025-08-01  
+**现象**: 充能系统的 `ChargeTimer` 在 NBTExplorer 中不存在，`[ChargeDebug]` 日志一条都没有。充能效果完全失效。
+
+**根因**: MC 1.6.4 中 `Item.onUpdate()` 仅客户端触发：
+- `ItemStack.updateAnimation()` 调用 `item.onUpdate()`
+- 集成服务器 (Integrated Server) 使用 `EntityPlayerMP.onUpdate()` → `inventory.decrementAnimations()` — **不触发** `updateAnimation()`
+- 只有客户端 `EntityClientPlayerMP.onUpdate()` → `inventory.decrementAnimations()` → `updateAnimation()`
+
+**修复**: 改用 Forge 1.6.4 的 `ITickHandler` + `TickRegistry` 在服务端每 tick 手动驱动充能逻辑：
+
+```java
+// ATcraftAddon.preInit() 中注册
+TickRegistry.registerTickHandler(new ITickHandler() {
+    @Override
+    public void tickEnd(EnumSet<TickType> _type, Object... _tickData) {
+        EntityPlayer player = (EntityPlayer) _tickData[1];
+        if (player.worldObj.isRemote) return;
+
+        // 遍历玩家背包，查找需要充能的枪械
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack != null && stack.getItem() instanceof SnowfieldExplorer) {
+                SnowfieldExplorer.tickRecharge(stack);
+            }
+        }
+    }
+
+    @Override public EnumSet<TickType> ticks() { return EnumSet.of(TickType.PLAYER); }
+    @Override public String getLabel() { return "ATcraftAddon:GunRecharge"; }
+    @Override public void tickStart(EnumSet<TickType> _type, Object... _tickData) {}
+}, Side.SERVER);
+```
+
+**充能逻辑** (`SnowfieldExplorer.tickRecharge`, `public static`):
+- 每 tick 累加 NBT 的 `ChargeTimer`
+- 达到 130 tick (6.5 秒) 恢复 1 耐久
+- 耐久满时重置计时器
+
+**设计要点**:
+- 充能逻辑从 `Item.onUpdate` 抽出为 `public static void tickRecharge(ItemStack)` — 独立于实例生命周期，由 `ITickHandler` 驱动
+- 遍历背包处理所有 `SnowfieldExplorer` 实例 — 玩家可能持有多把枪
+- 仅注册 `Side.SERVER` — 客户端 tick 由引擎原逻辑处理
+
+**经验法则**: MC 1.6.4 中不要依赖 `Item.onUpdate` 做服务端逻辑。需要服务端 tick 驱动时用 `ITickHandler` + `TickRegistry`。
+
+---
+
 ## 功能记录
 
 ### 可配置散布系统 (2025-08-01)
@@ -341,16 +389,45 @@ pitchOffset = rand(-1, 1) × maxOffset(弧度)
 
 ---
 
+### NBT 充能核心系统 (2025-08-01)
+
+**设计**: 枪械耐久 = 充能槽，开枪消耗耐久，自动恢复。
+
+**架构**:
+```
+ATcraftAddon.preInit()
+  → TickRegistry.registerTickHandler(ITickHandler, Side.SERVER)
+    → 每 tick 遍历玩家背包
+      → SnowfieldExplorer.tickRecharge(ItemStack)
+        → NBT ChargeTimer 累加
+        → 达 130 tick → 恢复 1 点耐久
+```
+
+**关键常量** (`SnowfieldExplorer`):
+| 常量 | 值 | 说明 |
+|------|-----|------|
+| `CHARGE_TIMER` | `"ChargeTimer"` | NBT 键名 |
+| `CHARGE_INTERVAL` | `130` | 充能间隔（tick），6.5 秒 |
+| `MAX_CHARGE` | `9` | 最大耐久（充能槽数） |
+
+**耐久保护**: `_item.getItemDamage() + duraCost >= MAX_CHARGE` 时禁止开枪，防止枪械销毁。
+
+**耐久消耗**: 由弹药类 `SnowEagleAP.DURABILITY_COST` 定义（当前为 1），方便不同弹药差异化消耗。
+
+**NBT 持久化**: `ChargeTimer` 存储在 ItemStack NBT → 跟随玩家存档自动持久化。NBTExplorer 可查看/编辑。
+
+---
+
 ## 关键文件索引
 
 | 文件 | 作用 |
 |------|------|
 | `EntitySniperBullet.java` | 零散布弹丸实体，继承 EntityBulletModelItem，覆写 setRenderItemID |
-| `SnowfieldExplorer.java` | 狙击枪物品，覆写 onPlayerStoppedUsing 创建自定义弹丸 |
-| `SnowEagleAP.java` | 穿甲弹，NBT 路径构建 |
+| `SnowfieldExplorer.java` | 狙击枪物品，覆写 onPlayerStoppedUsing + 充能逻辑 |
+| `SnowEagleAP.java` | 穿甲弹，NBT 路径构建 + DURABILITY_COST |
 | `AmmoNbtBuilder.java` | NBT 构造器，绕过 JSON 构造器 ice_damage 硬编码 bug |
 | `ATcraftPacketHandler.java` | 存根 IPacketHandler，满足 @NetworkMod 要求 |
 | `mcp2srg.srg` | 自定义 SRG 映射条目（dataWatcher、worldObj 等） |
 | `ClientProxy.java` | 注册 FlyItemRender 渲染器 |
 | `LeadBulletMod.java` | 弹幕图标物品（itemID 供 renderItemID 引用） |
-| `ATcraftAddon.java` | @Mod 主类 + @NetworkMod + 实体/物品注册 |
+| `ATcraftAddon.java` | @Mod 主类 + @NetworkMod + ITickHandler 充能驱动 + 实体/物品注册 |

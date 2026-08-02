@@ -16,6 +16,9 @@ public class SnowEagleAP extends BasicAmmo {
     /** 弹药注册名，供枪械 {@code allowed_ammo} 引用 */
     public static final String AMMO_NAME = "snow_eagle_ap";
 
+    /** 每发射击消耗的枪械充能点数 */
+    public static final int DURABILITY_COST = 1;
+
     /**
      * @param _id             物品数字 ID（逻辑 ID）
      * @param _renderItemId   LeadBulletMod 的 {@code itemID}（shiftedIndex = 逻辑 ID + 256）。
@@ -38,7 +41,7 @@ public class SnowEagleAP extends BasicAmmo {
             //   背包图标: snow_eagle_ap.png  (由 .icon("snow_eagle_ap") 控制)
             //   弹幕图标: lead_bullet_mod.png (由 LeadBulletMod.itemID 动态传入)
             .entityModel("item_" + _renderItemId)
-            .bulletNum(10)
+            .bulletNum(1)
             .ammoCapacity(1)
             .gravity(false)      // 无重力狙击弹道
             // ---- 射击参数 ----
@@ -48,7 +51,7 @@ public class SnowEagleAP extends BasicAmmo {
             .accuracy(0.95)       // 狙击精度
             .knockback(0.5)
             .shootSound("bow_zx")
-            .maxRange(80.0)
+            .maxRange(48.0)
             .maxSpeed(6.0)
             // ---- 特殊效果 ----
             .penetrate(true)     // 穿透目标

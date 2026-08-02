@@ -39,16 +39,16 @@ import net.minecraft.nbt.NBTTagCompound;
 public final class NbtEventTags
 {
     // ============================
-    // 充能系统标签
+    // 枪魂系统标签
     // ============================
 
     /** 每 N tick 自动修复 1 点耐久。0 = 不自动修复 */
     public static final String TAG_HEAL_TIMER        = "onUpdate_HealDamageTimer";
 
-    /** damage >= 此值时阻止右键（充能耗尽阈值）。不设置 = 永远不禁用 */
+    /** damage >= 此值时阻止右键（枪魂耗尽阈值）。不设置 = 永远不禁用 */
     public static final String TAG_DISABLE_THRESHOLD = "onItemRightClick_Disable";
 
-    /** 右键时耐久变化量。正值 = 消耗充能，负值 = 恢复充能，0 = 不额外消耗 */
+    /** 右键时耐久变化量。正值 = 消耗枪魂，负值 = 恢复枪魂，0 = 不额外消耗 */
     public static final String TAG_RIGHT_CLICK_DUR   = "onItemRightClick_dur";
 
     /** 近战命中时耐久修复量。通常设负值（-1 = 回 1 耐久） */
@@ -167,12 +167,97 @@ public final class NbtEventTags
     }
 
     /**
-     * 使用预置配置写入充能标签。
+     * 使用预置配置写入枪魂标签。
      * @see #write(ItemStack, int, int, int, int)
      */
     public static void write(ItemStack _stack, Preset _preset)
     {
         write(_stack, _preset.healTimer, _preset.disableThreshold, _preset.shootCost, _preset.meleeHeal);
+        // 写入可选音效
+        if (_preset.rightClickSound != null)
+        {
+            writeSound(_stack, TAG_RIGHT_CLICK_SOUND, _preset.rightClickSound);
+        }
+        if (_preset.hitSound != null)
+        {
+            writeSound(_stack, TAG_HIT_SOUND, _preset.hitSound);
+        }
+        if (_preset.swingSound != null)
+        {
+            writeSound(_stack, TAG_SWING_SOUND, _preset.swingSound);
+        }
+    }
+
+    // ============================
+    // 音效写入
+    // ============================
+
+    /**
+     * 向 ItemStack 写入音效标签。
+     *
+     * <p>音效名自动加 {@code "tpcore."} 前缀，与 NBTs mod 约定一致。</p>
+     * <p>例如 {@code writeSound(stack, TAG_HIT_SOUND, "blade")} → 播放 {@code tpcore.blade}。</p>
+     * <p>与枪魂标签不同，音效标签每次调用都会覆写（允许多次调用切换音效）。</p>
+     *
+     * @param _stack 物品栈
+     * @param _tag   音效标签常量（TAG_RIGHT_CLICK_SOUND / TAG_HIT_SOUND / TAG_SWING_SOUND）
+     * @param _sound 音效名（不含 "tpcore." 前缀），如 "blade", "bow"
+     */
+    public static void writeSound(ItemStack _stack, String _tag, String _sound)
+    {
+        if (_stack == null || _sound == null)
+        {
+            return;
+        }
+        if (!_stack.hasTagCompound())
+        {
+            _stack.setTagCompound(new NBTTagCompound());
+        }
+        _stack.getTagCompound().setString(_tag, _sound);
+    }
+
+    // ============================
+    // 药水写入
+    // ============================
+
+    /**
+     * 向 ItemStack 追加一组药水效果（id, dur, amp）。
+     *
+     * <p>支持多次调用以叠加多个药水效果。内部将新的三元组追加到已有 {@code int[]} 末尾。</p>
+     * <p>格式：{@code int[] = [potionId, duration, amplifier, ...]}，每 3 个 int 为一组。</p>
+     * <p>例如两次调用：
+     * <pre>{@code
+     * writePotion(stack, TAG_HIT_TARGET, 2, 100, 1);  // 缓慢 II 100tick
+     * writePotion(stack, TAG_HIT_TARGET, 9, 60, 0);    // 反胃 I 60tick
+     * // → int[] = [2, 100, 1, 9, 60, 0]
+     * }</pre></p>
+     *
+     * @param _stack      物品栈
+     * @param _tag        药水标签常量（TAG_HIT_TARGET / TAG_RIGHT_CLICK_POTION 等）
+     * @param _potionId   MC 药水效果 ID（如 1=速度, 2=缓慢, 5=力量）
+     * @param _duration   效果持续时长（tick），20 tick = 1 秒
+     * @param _amplifier  效果等级（0 = I 级, 1 = II 级）
+     */
+    public static void writePotion(ItemStack _stack, String _tag, int _potionId, int _duration, int _amplifier)
+    {
+        if (_stack == null)
+        {
+            return;
+        }
+        if (!_stack.hasTagCompound())
+        {
+            _stack.setTagCompound(new NBTTagCompound());
+        }
+        NBTTagCompound nbt = _stack.getTagCompound();
+        // 读取已有药水数组，无则为空数组
+        int[] existing = nbt.hasKey(_tag) ? nbt.getIntArray(_tag) : new int[0];
+        // 新数组 = 已有 + 3 个新元素
+        int[] combined = new int[existing.length + 3];
+        System.arraycopy(existing, 0, combined, 0, existing.length);
+        combined[existing.length]     = _potionId;
+        combined[existing.length + 1] = _duration;
+        combined[existing.length + 2] = _amplifier;
+        nbt.setIntArray(_tag, combined);
     }
 
     // ============================
@@ -181,17 +266,55 @@ public final class NbtEventTags
 
     public static class Preset
     {
+        /** 自动修复间隔（tick），0 = 不自动修复 */
         public final int healTimer;
+        /** 枪魂耗尽阈值（damage >= 此值 → 阻止右键），0 = 不禁用 */
         public final int disableThreshold;
+        /** 右键耐久消耗（引擎已扣 1，可追加），0 = 不额外消耗 */
         public final int shootCost;
+        /** 近战修复量（负值 = 回耐久），0 = 不修复 */
         public final int meleeHeal;
+        /** [可选] 右键音效名（不含 "tpcore." 前缀），null = 不设置 */
+        public final String rightClickSound;
+        /** [可选] 近战命中音效名，null = 不设置 */
+        public final String hitSound;
+        /** [可选] 挥动武器音效名，null = 不设置 */
+        public final String swingSound;
 
+        /**
+         * 构造枪魂预置（不含音效）。
+         *
+         * @param _healTimer        自动修复间隔（tick），0 = 不自动修复
+         * @param _disableThreshold 枪魂耗尽阈值，0 = 不禁用
+         * @param _shootCost        右键耐久消耗，0 = 不额外消耗
+         * @param _meleeHeal        近战修复量，0 = 不修复
+         */
         public Preset(int _healTimer, int _disableThreshold, int _shootCost, int _meleeHeal)
+        {
+            this(_healTimer, _disableThreshold, _shootCost, _meleeHeal, null, null, null);
+        }
+
+        /**
+         * 构造枪魂预置（含可选音效）。
+         *
+         * @param _healTimer        自动修复间隔（tick），0 = 不自动修复
+         * @param _disableThreshold 枪魂耗尽阈值，0 = 不禁用
+         * @param _shootCost        右键耐久消耗，0 = 不额外消耗
+         * @param _meleeHeal        近战修复量，0 = 不修复
+         * @param _rightClickSound  右键音效名（null = 不设置），如 "blade"
+         * @param _hitSound         近战命中音效名（null = 不设置），如 "blade_hit"
+         * @param _swingSound       挥动武器音效名（null = 不设置），如 "whoosh"
+         */
+        public Preset(int _healTimer, int _disableThreshold, int _shootCost, int _meleeHeal,
+                      String _rightClickSound, String _hitSound, String _swingSound)
         {
             this.healTimer = _healTimer;
             this.disableThreshold = _disableThreshold;
             this.shootCost = _shootCost;
             this.meleeHeal = _meleeHeal;
+            this.rightClickSound = _rightClickSound;
+            this.hitSound = _hitSound;
+            this.swingSound = _swingSound;
         }
     }
 }
