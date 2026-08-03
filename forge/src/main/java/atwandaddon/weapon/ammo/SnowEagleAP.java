@@ -14,10 +14,10 @@ import atwandaddon.weapon.nbt.AmmoNbtBuilder;
 public class SnowEagleAP extends BasicAmmo {
 
     /** 弹药注册名，供枪械 {@code allowed_ammo} 引用 */
-    public static final String AMMO_NAME = "snow_eagle_ap";
+    public static final String AMMO_NAME = "snowEagleAP";
 
-    /** 每发射击消耗的枪械充能点数 */
-    public static final int DURABILITY_COST = 1;
+    /** 每发射击消耗的枪魂点数 */
+    public static final int COST = 4;
 
     /**
      * @param _id             物品数字 ID（逻辑 ID）
@@ -32,72 +32,42 @@ public class SnowEagleAP extends BasicAmmo {
         super(AmmoNbtBuilder.create(_id, AMMO_NAME)
             // ---- 基础属性 ----
             .icon("snow_eagle_ap")
+            .description("能够冻结敌人同时有概率造成高毁灭性伤害")
             .maxStack(64)
             // ---- 伤害 ----
-            .basicDamage(8.0)    // 普通物理伤害
-            .iceDamage(8.0)      // 冰穿甲伤害（独立护甲计算）🔥 NBT 专属
+            .basicDamage(8.0)   // 基础伤害（护甲计算）
+            .iceDamage(16.0)     // 冰穿甲伤害
             // ---- 弹道 ----
             // 弹幕实体图标与弹药背包图标分离：
             //   背包图标: snow_eagle_ap.png  (由 .icon("snow_eagle_ap") 控制)
             //   弹幕图标: lead_bullet_mod.png (由 LeadBulletMod.itemID 动态传入)
             .entityModel("item_" + _renderItemId)
-            .bulletNum(1)
-            .ammoCapacity(1)
-            .gravity(false)      // 无重力狙击弹道
+            .bulletNum(1)       // 弹幕实体数量（1 发 = 1 个弹幕实体）
+            .ammoCapacity(1)    // 弹药容量
+            .gravity(false)     // 无重力狙击弹道
             // ---- 射击参数 ----
             .shootMode(ShootMode.SEMI)
-            .shootDelay(1)
-            .chargeTime(2)
-            .accuracy(0.95)       // 狙击精度
-            .knockback(0.5)
-            .shootSound("bow_zx")
-            .maxRange(48.0)
-            .maxSpeed(6.0)
+            .shootDelay(1)      // 射击冷却（tick）
+            .chargeTime(40)     // 蓄力时间（tick）
+            .accuracy(0.95)     // 精度
+            .knockback(0.5)     // 击退
+            .shootSound("4ld")
+            .maxRange(48.0)     // 最大射程（方块数）
+            .maxSpeed(6.0)      // 最大弹丸飞行速度（方块/秒）
             // ---- 特殊效果 ----
-            .penetrate(true)     // 穿透目标
-            .noeff(false)
-            // ---- 暴击：高斯波动 ±16 ----
-            // .fluctuating(16.0)
+            .penetrate(true)    // 穿透目标
+            .noeff(false)       // 是否无击中效果（true=无击中效果，false=有击中效果）
+            // ---- 击中异常 ----
+            // 格式: {效果ID, 持续tick, 等级, 效果ID, 持续tick, 等级, ...}
+            //   2=缓慢, 18=虚弱(抗性降低)
+            //   effect_wounded 的效果等级: 0=I, 1=II, ...
+            .effectWounded(new int[]{2, 40, 3, 11, 40, -5})
+            // 格式: {效果0概率, 效果1概率, ...}  1.0=100%触发
+            .probWounded(new float[]{1.0f, 0.5f})
             // ---- 构建 NBT ----
             .build());
-
-        // ===== JSON 路径（旧版，保留参考）=====
-        // 此路径存在引擎 bug：BasicAmmo JSON 构造器硬编码 this.ice_damage = 0.0f
-        // 因此 ice_damage, penetrate, gravity 等参数实际不生效
-        // super(_id, buildJson_OLD(), "ade_gadgets");
     }
 
-    /**
-     * [保留] 旧版 JSON 构造参数。
-     * 引擎 JSON 路径的 BasicAmmo 构造器有 bug（ice_damage 硬编码为 0），
-     * 故已切换到 NBT 路径。此方法仅作为参数参考保留。
-     */
-    /*
-    private static JsonHelper buildJson_OLD() {
-        StringMap map = new StringMap();
-        map.put("name", AMMO_NAME);
-        map.put("icon", "snow_eagle_ap");
-        map.put("duration", 1.0D);
-        map.put("unbreakable", false);
-        map.put("stack", 64.0D);
-        map.put("basic_damage", 8.0D);
-        map.put("ice_damage", 6.0D);             // ❌ JSON 路径不生效
-        map.put("entity_model", "bullet");
-        map.put("entity_num", 1.0D);
-        map.put("entity_speed", 6.0D);
-        map.put("gravity", false);
-        map.put("shoot_mode", "semi");
-        map.put("shoot_delay", 1.0D);
-        map.put("charge_time", 2.0D);
-        map.put("accuracy", 1.0D);
-        map.put("knockback", 0.5D);
-        map.put("shoot_sound", "bow_zx");
-        map.put("penetrate", true);
-        map.put("noeff", false);
-        map.put("onAttack", BuffFactory.armorPiercingCrit(16.0D));
-        return new JsonHelper(map);
-    }
-    */
 
     /**
      * NBT 构造器已在 {@link BasicAmmo#BasicAmmo(net.minecraft.nbt.NBTTagCompound)}

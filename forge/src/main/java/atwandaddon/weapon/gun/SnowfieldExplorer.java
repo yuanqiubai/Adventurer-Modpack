@@ -4,10 +4,13 @@ import java.util.Arrays;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.adventurer_engine.common.PlayerTools;
+import com.adventurer_engine.common.gadgets.DamagePacket;
+import com.adventurer_engine.common.items.blank.BasicItem;
 import com.adventurer_engine.common.items.blank.ranged_weapon.BasicAmmo;
 import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
@@ -15,60 +18,62 @@ import com.adventurer_engine.util.JsonHelper;
 import com.google.gson.internal.StringMap;
 
 import atwandaddon.entity.EntitySniperBullet;
+import atwandaddon.weapon.ammo.MachineGunMagazine;
 import atwandaddon.weapon.ammo.SnowEagleAP;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
 import atwandaddon.weapon.nbt.NbtEventTags;
 
 /**
- * 雪原探索者 — 栓动狙击步枪（充能系统试验品）。
+ * 雪原探索者 — 轨道炮（枪魂系统试验品）。
  *
- * <p>充能机制委托给 NBTs-1.0.2 mod 的 ASM 钩子处理：</p>
+ * <p>枪魂机制委托给 NBTs-1.0.2 mod 的 ASM 钩子处理：</p>
  * <ul>
  * <li>每枪消耗 1 引擎耐久 → 累计 5 发后 {@code onItemRightClick_Disable} 阻止开枪</li>
- * <li>{@code onUpdate_HealDamageTimer: 130} → 每 6.5 秒自动回 1 充能</li>
- * <li>{@code hitEntity_HealDamage: -1} → 近战枪托攻击回 1 充能</li>
+ * <li>{@code onUpdate_HealDamageTimer: 130} → 每 6.5 秒自动回 1 枪魂</li>
+ * <li>{@code hitEntity_HealDamage: -1} → 近战枪托攻击回 1 枪魂</li>
  * </ul>
  */
 public class SnowfieldExplorer extends BasicRangedWeapon
 {
     public SnowfieldExplorer(int _id)
     {
+        
         // ===== NBT 路径（测试中注释掉）=====
         super(GunNbtBuilder.create(_id, "snowfield_explorer")
             // ---- 基础属性 ----
             .icon("snowfield_explorer")
-            .maxStack(1)
-            .durability(9)
-            .unbreakable(false)
+            .maxStack(1)        // 最大堆叠数
+            .durability(16)     // 耐久
+            .unbreakable(false) // 是否无耐久
             // ---- 蓄力系统 ----
-            .chargeStage(1)
-            .chargeTime(4)
+            .chargeStage(3)     // 1=单阶段蓄力，2=双阶段蓄力
+            .chargeTime(20)     // 蓄力时间（tick）
             .chargeIcons(Arrays.asList("snowfield_explorer"))
             // ---- 伤害 ----
-            .basicDamage(16.0)
-            .iceDamage(16.0)
-            .knockback(0.1)
+            .basicDamage(5.0)   // 基础伤害（护甲计算）
+            .iceDamage(60.0)    // 冰穿甲伤害
+            .knockback(0.1)     // 击退
             // ---- 射击参数 ----
             .shootMode(ShootMode.SEMI)
-            .shootNumber(10)
-            .shootDelay(1)
-            .accuracy(0.75)
+            .shootNumber(1)     // 最大发射的弹丸数（由弹药 entity_num 决定实际数量）
+            .shootDelay(10)     // 射击间隔（tick）
+            .accuracy(0.95)     // 精度（0.0~1.0，越高越准）
             .shootSound("bow_zx")
-            .maxRange(64.0)
-            .maxSpeed(6.0)
+            .maxRange(48.0)     // 最大射程（方块数）
+            .maxSpeed(6.0)      // 最大弹丸飞行速度（方块/秒）
             // ---- 弹道 ----
             .gravity(false)
             .penetrate(false)
             // ---- 弹药 ----
-            .allowedAmmo(Arrays.asList(SnowEagleAP.AMMO_NAME))
+            .allowedAmmo(Arrays.asList(
+                SnowEagleAP.AMMO_NAME,
+                MachineGunMagazine.AMMO_NAME,
+                 "weapon_12021",
+                ((BasicItem) Item.itemsList[12038 + 256]).internal_name))
             // ---- 构建 NBT ----
             .build());
     }
 
-
-    // ==================== NBTs 充能系统 ====================
-
-    // ==================== 自定义零散布狙击弹道 ====================
 
     /**
      * 覆写引擎的松手开火方法，用零散布 {@link EntitySniperBullet} 替换默认弹丸。
@@ -117,36 +122,63 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             return;
         }
 
+        // ===== 蓄力倍率计算（复现引擎 shootOnce 中的公式）=====
+        int maxUseDuration = _item.getMaxItemUseDuration();
+        int elapsedTicks = maxUseDuration - _itemInUseCount;
+        float chargeRatio = 1.0F;
+        if (this.charge_time > 1 && this.charge_stage > 0)
+        {
+            int chargeStage = Math.min(
+                (int)Math.floor((double)elapsedTicks / (double)this.charge_time * (double)this.charge_stage),
+                this.charge_stage
+            );
+            chargeRatio = (float)chargeStage / (float)this.charge_stage;
+        }
+        // 蓄力不足时不发射
+        if (chargeRatio <= 0.0F)
+        {
+            return;
+        }
 
         // 计算合并伤害（枪 + 弹药，从 NBT 字段读取而非硬编码）
         float basicDamage = this.basic_damage + ammo.basic_damage;
         float iceDamage   = this.ice_damage   + ammo.ice_damage;
 
-        // 伤害枪械耐久（每发 1 点）
-        _item.damageItem(SnowEagleAP.DURABILITY_COST, _player);
+        // 应用蓄力倍率到伤害和弹速
+        basicDamage *= chargeRatio;
+        iceDamage   *= chargeRatio;
+        float bulletSpeed = ammo.entity_speed * chargeRatio;
 
 
-        // ===== 新代码 — 多弹丸散弹系统 =====
-        // 弹丸数量上限由枪械控制，实际发射数取枪上限与弹药数量的较小值
-        // 枪: BasicRangedWeapon.shoot_number (public final int, 来自 NBT shoot_number)
-        // 弹药: BasicAmmo.entity_num (public final int, 来自 NBT bullet_num)
-        int bulletCount = Math.min(this.shoot_number, ammo.entity_num);
+        if(ammo.internal_name.equals(SnowEagleAP.AMMO_NAME))
+        {   
+            int remain = _item.getMaxDamage() - _item.getItemDamage();
+
+            float multiplier = CriticalDamageMultiplier();
+            basicDamage *= multiplier;
+            iceDamage   *= multiplier;
+
+            // 伤害枪械耐久（每发 1 点）
+            _item.damageItem(SnowEagleAP.COST, _player);
+        }
+        else
+        {
+            // 伤害枪械耐久（每发 1 点）
+            _item.damageItem(1, _player);
+        }
+
+
+        // 弹丸数量 = shoot_number × entity_num（复现引擎双循环：外层 shoot_number，内层 entity_num）
+        int bulletCount = this.shoot_number * ammo.entity_num;
 
         // 解析弹幕渲染图标（从弹药 entity_model 解析 "item_<id>" 格式）
         // 提取到循环外避免重复解析
         String entityModel = ammo.entity_model;
         int renderItemId = -1; // 弹幕渲染图标 ID，-1 = 无效/不设置
-        // [DEBUG] 记录弹药 entity_model 解析
-        // System.out.println("[SniperDebug] Ammo entity_model='" + entityModel + "' ammoName=" + ammoName);
+       
         if (entityModel != null && entityModel.startsWith("item_"))
         {
             renderItemId = Integer.parseInt(entityModel.substring(5));
-            System.out.println("[SniperDebug] Parsed renderItemID=" + renderItemId
-                + " itemExists=" + (net.minecraft.item.Item.itemsList[renderItemId] != null));
-        }
-        else
-        {
-            System.out.println("[SniperDebug] WARNING: entity_model is null or doesn't start with 'item_'!");
         }
 
         // 循环生成弹丸：每颗弹丸独立调用 EntitySniperBullet 构造器，
@@ -155,7 +187,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         {
             // 创建可配置散布的自定义弹丸（accuracy 从枪械 NBT 配置读取）
             // accuracy = 1.0 → 零散布狙击；accuracy = 0.9 → 小散布（当前配置）
-            EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, ammo.entity_speed, this.accuracy);
+            EntitySniperBullet bullet = new EntitySniperBullet(_world, _player, bulletSpeed, this.accuracy);
             bullet.setDamage(basicDamage);
             bullet.setIceDamage(iceDamage);
             bullet.setKnockbackStrength(ammo.knockback);
@@ -163,6 +195,15 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             bullet.setGravity(ammo.gravity);
             bullet.setPenetrate(ammo.penetrate);
             bullet.setNoeff(ammo.noeff);
+
+            // 注入弹药 DamagePacket，使击中异常效果（effect_wounded 等）生效
+            // 引擎 EntityBulletGeneral.onUpdate() 在命中时调用 dmgPack.causeDamage()
+            DamagePacket dmgPacket = ammo.onAttack;
+                      
+            if (dmgPacket != null)
+            {
+                bullet.setDamagePacket(dmgPacket);
+            }
 
             // 设置弹幕渲染图标
             if (renderItemId >= 0)
@@ -175,7 +216,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         }
 
         // 播放射击音效（只播放一次，不在循环内）
-        // ⚠️ 引擎 SoundManager.addSound() 会加 "adventurer_engine:" 前缀注册音效，
+        // 引擎 SoundManager.addSound() 会加 "adventurer_engine:" 前缀注册音效，
         // 因此 playSoundAtEntity 也需要传入带域名的完整音效名。
         String sound = ammo.shoot_sound != null ? ammo.shoot_sound : "bow_zx";
         _world.playSoundAtEntity(_player, "adventurer_engine:" + sound, 1.0F, 1.0F);
@@ -191,8 +232,17 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
         if (_entity instanceof EntityPlayer)
         {
-            NbtEventTags.write(_stack, NbtEventTags.PRESET_SNIPER);
+            NbtEventTags.write(_stack, NbtEventTags.PRESET_RAILGUN);
         }
     }
 
+
+    public float CriticalDamageMultiplier()
+    {
+        if(Math.random() < 0.3) // 30% 概率触发暴击
+        {
+            return 1.75f;        // 暴击伤害倍率
+        }
+        return 1.0f;            // 非暴击：正常伤害
+    }
 }

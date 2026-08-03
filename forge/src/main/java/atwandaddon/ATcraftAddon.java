@@ -10,11 +10,18 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-
+// ============================= 导入自定义武器类 ============================================
 import atwandaddon.weapon.melee.HeavySword;
+import atwandaddon.weapon.gun.RotaryMachineGun;
 import atwandaddon.weapon.gun.SnowfieldExplorer;
+// ============================= 导入自定义弹药类 ============================================
 import atwandaddon.weapon.ammo.LeadBulletMod;
 import atwandaddon.weapon.ammo.SnowEagleAP;
+import atwandaddon.weapon.ammo.MachineGunMagazine;
+// ============================= 导入自定义纯物品（弹幕图标用）===================================
+import atwandaddon.weapon.BulletEntity.LeadBulletModEntity;
+import atwandaddon.weapon.BulletEntity.ProjectileEntity;
+
 import atwandaddon.entity.EntitySniperBullet;
 
 /**
@@ -54,21 +61,25 @@ public class ATcraftAddon {
     public static CreativeTabs tabAddon;
     /** 弹药分类栏 */
     public static CreativeTabs tabAmmo;
+    /** 实体分类栏 */
+    public static CreativeTabs tabEntity;
 
-    /** 占位物品(保留 ID) */
+    // ============================ 自定义武器实例 ============================================
     public static Item placeholder1;
     public static Item placeholder2;
     public static Item placeholder3;
     public static Item placeholder4;
     public static Item placeholder5;
-    /** 重剑 */
     public static HeavySword heavySword;
-    /** 雪原探索者狙击步枪 */
     public static SnowfieldExplorer snowfieldExplorer;
-    /** 雪鹰穿甲弹 */
-    public static SnowEagleAP snowEagleAP;
-    /** 铅弹改 */
-    public static LeadBulletMod leadBulletMod;
+    public static RotaryMachineGun rotaryMachineGun;    // 转轮机枪
+    // ============================ 自定义弹药实例 ============================================
+    public static SnowEagleAP snowEagleAP;                  // 雪鹰穿甲弹
+    public static LeadBulletMod leadBulletMod;              // 铅弹改
+    public static MachineGunMagazine machineGunMagazine;    // 风暴弹夹
+    // ============================ 自定义弹药实体实例 ============================================
+    public static LeadBulletModEntity leadBulletModEntity;  // 铅弹改实体
+    public static ProjectileEntity projectileEntity;        // 弹丸实体
 
     /**
      * 预初始化阶段
@@ -93,7 +104,15 @@ public class ATcraftAddon {
             }
         };
 
-        // 注册顺序决定内部 ID，必须与旧版一致以兼容 RPG 地图存档
+        tabEntity = new CreativeTabs(CreativeTabs.creativeTabArray.length, "ATcraftEntity") {
+            @Override
+            public Item getTabIconItem() {
+                return projectileEntity;
+            }
+        };
+
+        // ============================================= 注册自定义武器 ============================================
+
         // ID 25256 — 占位
         placeholder1 = new Item(25000).setUnlocalizedName("placeholder1");
         GameRegistry.registerItem(placeholder1, "placeholder1");
@@ -126,21 +145,46 @@ public class ATcraftAddon {
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(snowfieldExplorer, "snowfieldExplorer");
 
-        // ID 26256 — 铅弹改
+        // ID 25263 — 蓝火转轮机枪
+        rotaryMachineGun = (RotaryMachineGun) new RotaryMachineGun(25007)
+            .setUnlocalizedName("rotaryMachineGun")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(rotaryMachineGun, "rotaryMachineGun");
+
+        // ============================================= 注册自定义物品（弹幕图标）============================================
+        // CRITICAL: 纯物品必须在弹药之前注册！弹药构造器通过 itemID 引用纯物品，
+        // 用于 entity_model 弹幕渲染图标。若纯物品为 null → NullPointerException。
+
+        leadBulletModEntity = (LeadBulletModEntity) new LeadBulletModEntity(26500)
+            .setUnlocalizedName("leadBulletModEntity")
+            .setTextureName("adventurer_engine:lead_bullet_mod")
+            .setCreativeTab(tabEntity);
+        GameRegistry.registerItem(leadBulletModEntity, "leadBulletModEntity");
+
+        projectileEntity = (ProjectileEntity) new ProjectileEntity(26501)
+            .setUnlocalizedName("projectileEntity")
+            .setTextureName("adventurer_engine:projectile")
+            .setCreativeTab(tabEntity);
+        GameRegistry.registerItem(projectileEntity, "projectileEntity");
+
+        // ============================================= 注册自定义弹药 ============================================
         leadBulletMod = (LeadBulletMod) new LeadBulletMod(26000)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(leadBulletMod, "leadBulletMod");
-        leadBulletMod.registerAsAmmo();
 
         // ID 26267 — 雪鹰穿甲弹（NBT 路径，自动注册 ammoItem）
-        // 传入 leadBulletMod.itemID（shiftedIndex = 26256），
+        // 传入 leadBulletModEntity.itemID（shiftedIndex = 26256），
         // 确保 entity_model 中的 renderItemID 与 Item.itemsList 索引一致
-        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001, leadBulletMod.itemID)
+        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001, leadBulletModEntity.itemID)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(snowEagleAP, "snowEagleAP");
-        // snowEagleAP.registerAsAmmo(); — NBT 构造器自动完成注册
 
-        // 注册自定义狙击弹丸实体（零散布弹道）
+        // 蓝火弹夹
+        machineGunMagazine = (MachineGunMagazine) new MachineGunMagazine(26002, projectileEntity.itemID)
+            .setCreativeTab(tabAmmo);
+        GameRegistry.registerItem(machineGunMagazine, "machineGunMagazine");
+
+        // 注册自定义弹丸实体
         // trackingRange=64, updateFrequency=1, sendsVelocityUpdates=true
         EntityRegistry.registerModEntity(EntitySniperBullet.class, "SniperBullet",
             250, instance, 64, 1, true);

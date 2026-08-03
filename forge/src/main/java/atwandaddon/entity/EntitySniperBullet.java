@@ -28,8 +28,6 @@ public class EntitySniperBullet extends EntityBulletModelItem
     public EntitySniperBullet(World _world)
     {
         super(_world);
-        // [DEBUG] 客户端反射构造 — 记录实体创建
-        System.out.println("[SniperDebug] Client entity created (World-only ctor), renderItemID=" + this.renderItemID);
     }
 
     /**
@@ -103,15 +101,6 @@ public class EntitySniperBullet extends EntityBulletModelItem
         thisEntity.motionX = dirX / len * effectiveSpeed;
         thisEntity.motionY = dirY / len * effectiveSpeed;
         thisEntity.motionZ = dirZ / len * effectiveSpeed;
-
-        // [DEBUG] 记录服务端弹丸创建参数
-        System.out.println("[SniperDebug] Server bullet created: yaw="
-            + ((net.minecraft.entity.Entity)_shooter).rotationYaw
-            + " pitch=" + ((net.minecraft.entity.Entity)_shooter).rotationPitch
-            + " accuracy=" + _accuracy + " spread=" + maxOffset + "deg"
-            + " dir=(" + dirX + "," + dirY + "," + dirZ + ")"
-            + " speed=" + effectiveSpeed
-            + " motion=(" + thisEntity.motionX + "," + thisEntity.motionY + "," + thisEntity.motionZ + ")");
     }
 
     /**
@@ -133,18 +122,11 @@ public class EntitySniperBullet extends EntityBulletModelItem
     @Override
     public void setRenderItemID(int _id)
     {
-        // [DEBUG] 记录设置前的状态
-        System.out.println("[SniperDebug] setRenderItemID called: _id=" + _id
-            + " old field=" + this.renderItemID);
-
         this.renderItemID = _id;
         // 立即同步到 DataWatcher，避免生成包发送 0 值
         // dataWatcher 是 Entity 的 protected 字段，子类可直接访问。
         // 字节码 fieldref owner = EntitySniperBullet，需在 mcp2srg.srg
         // 中添加 FD: nn/ah atwandaddon/entity/EntitySniperBullet/dataWatcher
         this.dataWatcher.updateObject(16, Integer.valueOf(_id));
-
-        // [DEBUG] 确认同步后的字段值
-        System.out.println("[SniperDebug] setRenderItemID done: field=" + this.renderItemID);
     }
 }

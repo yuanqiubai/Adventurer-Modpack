@@ -18807,6 +18807,13 @@ MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setUn
 MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
 MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/LeadBulletMod/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/SnowEagleAP/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/MachineGunMagazine/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
 FD: nn/q atwandaddon/entity/EntityFlameBall/worldObj
 FD: nn/u atwandaddon/entity/EntityFlameBall/posX
 FD: nn/v atwandaddon/entity/EntityFlameBall/posY
@@ -18827,4 +18834,10 @@ MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/setDead ()V
 FD: yc/cv atwandaddon/weapon/ammo/LeadBulletMod/itemID
 MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/SnowfieldExplorer/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
 MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/SnowfieldExplorer/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/RotaryMachineGun/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/RotaryMachineGun/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+MD: yc/a (Lye;Labw;Luf;I)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
 MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V

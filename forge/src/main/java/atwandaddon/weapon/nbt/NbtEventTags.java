@@ -1,5 +1,6 @@
 package atwandaddon.weapon.nbt;
 
+import atwandaddon.weapon.nbt.NbtEventTags.Preset;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -118,14 +119,19 @@ public final class NbtEventTags
     // 预置配置
     // ============================
 
-    /** 速射类：快速恢复（3 秒 / 点），6 发锁住，近战回 1 */
+    /** 速射类：快速恢复（3 秒 / 点），满耐久扣减6点耐久后锁住，额外消耗 1 */
     public static final Preset PRESET_PISTOL  = new Preset(60, 6, 1, -1);
 
-    /** 狙击类：慢速恢复（6.5 秒 / 点），5 发锁住，引擎自带扣耐久无需额外消耗 */
+    /** 狙击类：慢速恢复（6.5 秒 / 点），满耐久扣减5点耐久后锁住，无额外消耗 */
     public static final Preset PRESET_SNIPER  = new Preset(130, 5, 0, -1);
 
-    /** 散弹类：中速恢复（5 秒 / 点），3 发锁住，近战回 2 */
+    /** 轨道炮类：慢速恢复(10 秒 / 点)，满耐久扣减10点耐久后锁住，无额外消耗 */
+    public static final Preset PRESET_RAILGUN = new Preset(200, 10, 0, 0);
+
+    /** 散弹类：中速恢复（5 秒 / 点），满耐久扣减3点耐久后锁住，额外消耗 1，近战回 2 */
     public static final Preset PRESET_SHOTGUN = new Preset(100, 3, 1, -2);
+
+      public static final Preset PRESET_MACHINEGUN = new Preset(10, 140, 0, 0);
 
     // ============================
     // 写入方法

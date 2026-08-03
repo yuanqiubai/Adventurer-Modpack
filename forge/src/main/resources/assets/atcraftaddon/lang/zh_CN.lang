@@ -1,11 +1,19 @@
 # ATcraft Addon — 中文译名
 
+# 武器
+item.heavySword.name=重剑
+item.snowfieldExplorer.name=雪原探索者
+item.rotaryMachineGun.name=蓝火转轮机枪
+
+# 弹药
+item.leadBulletMod.name=铅弹改
+item.snowEagleAP.name=雪鹰穿甲弹
+item.machineGunMagazine.name=蓝火弹夹
+
+# 纯物品（弹幕图标）
+item.leadBulletModEntity.name=铅弹改
+item.projectileEntity.name=弹丸
+
 # 原版物品
 item.ammoOrb.name=弹药宝珠
 item.flameWand.name=火焰法杖
-
-# adventurer_engine 武器
-item.heavySword.name=重剑
-item.snowfieldExplorer.name=雪原探索者
-item.lead_bullet_mod.name=铅弹改
-item.snow_eagle_ap.name=雪鹰穿甲弹

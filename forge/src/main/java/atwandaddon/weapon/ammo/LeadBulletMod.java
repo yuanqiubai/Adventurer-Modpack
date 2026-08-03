@@ -7,7 +7,7 @@ import com.google.gson.internal.StringMap;
 
 public class LeadBulletMod extends BasicAmmo {
 
-    public static final String AMMO_NAME = "lead_bullet_mod";
+    public static final String AMMO_NAME = "leadBulletMod";
 
     private static JsonHelper buildJson() {
         StringMap map = new StringMap();
