@@ -18841,3 +18841,25 @@ MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setUnl
 MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/RotaryMachineGun/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
 MD: yc/a (Lye;Labw;Luf;I)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
 MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+
+# === BoltActionRifle / BoltActionRifle_2 继承方法映射 ===
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle_2/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+
+# === SnowfieldExplorerAddBayonet / Bayonet / Bayonet_2 ===
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# === EntitySniperBullet onUpdate 覆写 ===
+MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/onUpdate ()V
+FD: nn/M atwandaddon/entity/EntitySniperBullet/isDead
+FD: of/q atwandaddon/entity/EntitySniperBullet/worldObj
+MD: com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/func_70071_h_ ()V com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/onUpdate ()V

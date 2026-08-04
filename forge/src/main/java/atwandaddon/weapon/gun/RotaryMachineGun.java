@@ -39,7 +39,7 @@ public class RotaryMachineGun extends BasicRangedWeapon
     public RotaryMachineGun(int _id)
     {
         super(GunNbtBuilder.create(_id, "rotaryMachineGun")
-            .description("重火器\\n可进行超高速射击的机枪,但不具备枪魂\\n持续射击会降低耐久,耐久过低时无法使用\\n随时间流枪管会降温")
+            .description("重火器\\n可进行超高速射击的机枪,但不具备枪魂\\n持续射击会降低耐久,耐久过低时无法使用\\n随时间流逝枪管会降温")
             .icon("rotary_machine_gun")
             .maxStack(1)                        // 最大堆叠数
             .durability(160)                    // 耐久
@@ -57,7 +57,7 @@ public class RotaryMachineGun extends BasicRangedWeapon
             .shootDelay(103)                    // 射击间隔（tick），预热加速初始值：(103-3)/1=100tick=5秒满速
             .accuracy(0.75)                     // 精度（0.0~1.0，越高越准）
             .shootSound("bow_zx")               // 射击音效
-            .maxRange(32.0)                     // 最大射程（方块数）
+            .maxRange(28.0)                     // 最大射程（方块数）
             .maxSpeed(6.0)                      // 最大弹丸飞行速度（方块/秒）
             .gravity(false)                     // 弹道重力（true=受重力影响，false=无重力直线弹道）
             .penetrate(false)                   // 子弹穿透（命中后销毁，不可贯穿多个目标）

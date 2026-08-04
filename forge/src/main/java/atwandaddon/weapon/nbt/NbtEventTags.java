@@ -122,8 +122,11 @@ public final class NbtEventTags
     /** 速射类：快速恢复（3 秒 / 点），满耐久扣减6点耐久后锁住，额外消耗 1 */
     public static final Preset PRESET_PISTOL  = new Preset(60, 6, 1, -1);
 
-    /** 狙击类：慢速恢复（6.5 秒 / 点），满耐久扣减5点耐久后锁住，无额外消耗 */
-    public static final Preset PRESET_SNIPER  = new Preset(130, 5, 0, -1);
+    /** 狙击类：慢速恢复（6.5 秒 / 点），满耐久扣减5点耐久后锁住，无额外消耗， 近战不恢复耐久 */
+    public static final Preset PRESET_SNIPER  = new Preset(130, 5, 0, 0);
+
+    /** 狙击 + 刺刀类：慢速恢复（6.5 秒 / 点），满耐久扣减5点耐久后锁住，无额外消耗， 近战回 1 耐久 */
+    public static final Preset PRESET_SNIPER_ADD_BAYONET = new Preset(130, 5, 0, -1);
 
     /** 轨道炮类：慢速恢复(10 秒 / 点)，满耐久扣减10点耐久后锁住，无额外消耗 */
     public static final Preset PRESET_RAILGUN = new Preset(200, 10, 0, 0);
@@ -293,7 +296,7 @@ public final class NbtEventTags
          * @param _healTimer        自动修复间隔（tick），0 = 不自动修复
          * @param _disableThreshold 枪魂耗尽阈值，0 = 不禁用
          * @param _shootCost        右键耐久消耗，0 = 不额外消耗
-         * @param _meleeHeal        近战修复量，0 = 不修复
+         * @param _meleeHeal        近战修复量，0 = 不修复, -1 = 回 1 点耐久
          */
         public Preset(int _healTimer, int _disableThreshold, int _shootCost, int _meleeHeal)
         {
@@ -306,7 +309,7 @@ public final class NbtEventTags
          * @param _healTimer        自动修复间隔（tick），0 = 不自动修复
          * @param _disableThreshold 枪魂耗尽阈值，0 = 不禁用
          * @param _shootCost        右键耐久消耗，0 = 不额外消耗
-         * @param _meleeHeal        近战修复量，0 = 不修复
+         * @param _meleeHeal        近战修复量，0 = 不修复, -1 = 回 1 点耐久
          * @param _rightClickSound  右键音效名（null = 不设置），如 "blade"
          * @param _hitSound         近战命中音效名（null = 不设置），如 "blade_hit"
          * @param _swingSound       挥动武器音效名（null = 不设置），如 "whoosh"

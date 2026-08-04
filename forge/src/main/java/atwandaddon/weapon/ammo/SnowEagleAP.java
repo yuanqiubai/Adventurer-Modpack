@@ -61,7 +61,7 @@ public class SnowEagleAP extends BasicAmmo {
             // 格式: {效果ID, 持续tick, 等级, 效果ID, 持续tick, 等级, ...}
             //   2=缓慢, 18=虚弱(抗性降低)
             //   effect_wounded 的效果等级: 0=I, 1=II, ...
-            .effectWounded(new int[]{2, 40, 3, 11, 40, -5})
+            .effectWounded(new int[]{2, 40, 3, 11, 60, -1})
             // 格式: {效果0概率, 效果1概率, ...}  1.0=100%触发
             .probWounded(new float[]{1.0f, 0.5f})
             // ---- 构建 NBT ----

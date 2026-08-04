@@ -41,6 +41,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
         // ===== NBT 路径（测试中注释掉）=====
         super(GunNbtBuilder.create(_id, "snowfield_explorer")
             // ---- 基础属性 ----
+            .description("轨道炮\\n可造成毁灭性伤害,但不具备枪魂且枪身沉重\\n消耗特殊子弹时,会大幅消耗能量\\n每次用尽能量都需要长时间等待恢复")
             .icon("snowfield_explorer")
             .maxStack(1)        // 最大堆叠数
             .durability(16)     // 耐久
@@ -51,7 +52,7 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             .chargeIcons(Arrays.asList("snowfield_explorer"))
             // ---- 伤害 ----
             .basicDamage(5.0)   // 基础伤害（护甲计算）
-            .iceDamage(60.0)    // 冰穿甲伤害
+            .iceDamage(40.0)    // 冰穿甲伤害
             .knockback(0.1)     // 击退
             // ---- 射击参数 ----
             .shootMode(ShootMode.SEMI)
@@ -239,10 +240,14 @@ public class SnowfieldExplorer extends BasicRangedWeapon
 
     public float CriticalDamageMultiplier()
     {
-        if(Math.random() < 0.3) // 30% 概率触发暴击
+        if(Math.random() < 0.5) // 50% 概率触发暴击
         {
+            if(Math.random() < 0.5)
+            {
+                return 2.0f;     // 暴击伤害倍率
+            }
             return 1.75f;        // 暴击伤害倍率
         }
-        return 1.0f;            // 非暴击：正常伤害
+        return 1.0f;             // 非暴击：正常伤害
     }
 }

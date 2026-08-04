@@ -15,5 +15,6 @@
         "exclude": [
             "forge/forge-src/forge/mcp/jars/bin/natives/**"
         ]
-    }
+    },
+    "java.format.settings.url": ".vscode/java-formatter.xml"
 }

@@ -11,16 +11,23 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 // ============================= 导入自定义武器类 ============================================
-import atwandaddon.weapon.melee.HeavySword;
-import atwandaddon.weapon.gun.RotaryMachineGun;
-import atwandaddon.weapon.gun.SnowfieldExplorer;
+import atwandaddon.weapon.melee.HeavySword;                 // 重剑
+import atwandaddon.weapon.melee.Bayonet;                    // 刺刀:寒锋
+import atwandaddon.weapon.melee.Bayonet_2;                  // 刺刀:猎魂
+import atwandaddon.weapon.gun.BoltActionRifle;              // 栓动式步枪-猎魂
+import atwandaddon.weapon.gun.BoltActionRifle_2;            // 栓动式步枪-猎魂-A
+import atwandaddon.weapon.gun.RotaryMachineGun;             // 蓝火转轮机枪
+import atwandaddon.weapon.gun.SnowfieldExplorer;            // 雪原探索者
+import atwandaddon.weapon.gun.SnowfieldExplorerAddBayonet;  // 雪原探索者-寒锋
 // ============================= 导入自定义弹药类 ============================================
-import atwandaddon.weapon.ammo.LeadBulletMod;
-import atwandaddon.weapon.ammo.SnowEagleAP;
-import atwandaddon.weapon.ammo.MachineGunMagazine;
+import atwandaddon.weapon.ammo.LeadBulletMod;               // 铅弹改
+import atwandaddon.weapon.ammo.SnowEagleAP;                 // 雪鹰穿甲弹
+import atwandaddon.weapon.ammo.MachineGunMagazine;          // 蓝火弹夹
 // ============================= 导入自定义纯物品（弹幕图标用）===================================
-import atwandaddon.weapon.BulletEntity.LeadBulletModEntity;
-import atwandaddon.weapon.BulletEntity.ProjectileEntity;
+import atwandaddon.weapon.BulletEntity.LeadBulletModEntity; // 铅弹改-实体
+import atwandaddon.weapon.BulletEntity.ProjectileEntity;    // 弹丸实体
+
+import atwandaddon.buff.bleed.BleedTickHandler;
 
 import atwandaddon.entity.EntitySniperBullet;
 
@@ -63,16 +70,21 @@ public class ATcraftAddon {
     public static CreativeTabs tabAmmo;
     /** 实体分类栏 */
     public static CreativeTabs tabEntity;
+    /** 其他武器分类栏 */
+    public static CreativeTabs otherWeapons;
 
     // ============================ 自定义武器实例 ============================================
-    public static Item placeholder1;
-    public static Item placeholder2;
+    public static BoltActionRifle boltActionRifle;              // 栓动式步枪-猎魂
+    public static BoltActionRifle_2 boltActionRifle_2;          // 栓动式步枪-猎魂-A
+    public static RotaryMachineGun rotaryMachineGun;            // 转轮机枪
     public static Item placeholder3;
     public static Item placeholder4;
     public static Item placeholder5;
-    public static HeavySword heavySword;
-    public static SnowfieldExplorer snowfieldExplorer;
-    public static RotaryMachineGun rotaryMachineGun;    // 转轮机枪
+    public static HeavySword heavySword;                        // 重剑
+    public static SnowfieldExplorer snowfieldExplorer;          // 雪原探索者
+    public static SnowfieldExplorerAddBayonet snowfieldExplorerAddBayonet;  // 雪原探索者-寒锋
+    public static Bayonet bayonet;                              // 刺刀
+    public static Bayonet_2 bayonet_2;                          // 刺刀2
     // ============================ 自定义弹药实例 ============================================
     public static SnowEagleAP snowEagleAP;                  // 雪鹰穿甲弹
     public static LeadBulletMod leadBulletMod;              // 铅弹改
@@ -112,14 +124,17 @@ public class ATcraftAddon {
         };
 
         // ============================================= 注册自定义武器 ============================================
+        // ID 25256 — 栓动式步枪-猎魂
+        boltActionRifle = (BoltActionRifle) new BoltActionRifle(25000)
+            .setUnlocalizedName("boltActionRifle")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(boltActionRifle, "boltActionRifle");
 
-        // ID 25256 — 占位
-        placeholder1 = new Item(25000).setUnlocalizedName("placeholder1");
-        GameRegistry.registerItem(placeholder1, "placeholder1");
-
-        // ID 25257 — 占位
-        placeholder2 = new Item(25001).setUnlocalizedName("placeholder2");
-        GameRegistry.registerItem(placeholder2, "placeholder2");
+        // ID 25257 — 栓动式步枪-猎魂-A
+        boltActionRifle_2 = (BoltActionRifle_2) new BoltActionRifle_2(25001)
+            .setUnlocalizedName("boltActionRifle_2")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(boltActionRifle_2, "boltActionRifle_2");
 
         // ID 25258 — 占位
         placeholder3 = new Item(25002).setUnlocalizedName("placeholder3");
@@ -138,18 +153,35 @@ public class ATcraftAddon {
             .setUnlocalizedName("heavySword")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(heavySword, "heavySword");
-
+        
         // ID 25262 — 雪原探索者狙击步枪
         snowfieldExplorer = (SnowfieldExplorer) new SnowfieldExplorer(25006)
             .setUnlocalizedName("snowfieldExplorer")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(snowfieldExplorer, "snowfieldExplorer");
 
-        // ID 25263 — 蓝火转轮机枪
-        rotaryMachineGun = (RotaryMachineGun) new RotaryMachineGun(25007)
+        // ID 25263 — 雪原探索者狙击步枪附加刺刀
+        snowfieldExplorerAddBayonet = (SnowfieldExplorerAddBayonet) new SnowfieldExplorerAddBayonet(25007)
+            .setUnlocalizedName("snowfieldExplorerAddBayonet")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(snowfieldExplorerAddBayonet, "snowfieldExplorerAddBayonet");
+
+        // ID 25264 — 蓝火转轮机枪
+        rotaryMachineGun = (RotaryMachineGun) new RotaryMachineGun(25008)
             .setUnlocalizedName("rotaryMachineGun")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(rotaryMachineGun, "rotaryMachineGun");
+
+        // ID 25265 — 刺刀
+        bayonet = (Bayonet) new Bayonet(25009)
+            .setUnlocalizedName("bayonet")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(bayonet, "bayonet");
+
+        bayonet_2 = (Bayonet_2) new Bayonet_2(25010)
+            .setUnlocalizedName("bayonet_2")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(bayonet_2, "bayonet_2");
 
         // ============================================= 注册自定义物品（弹幕图标）============================================
         // CRITICAL: 纯物品必须在弹药之前注册！弹药构造器通过 itemID 引用纯物品，
