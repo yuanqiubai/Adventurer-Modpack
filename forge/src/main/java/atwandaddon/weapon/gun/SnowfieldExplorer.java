@@ -68,7 +68,6 @@ public class SnowfieldExplorer extends BasicRangedWeapon
             // ---- 弹药 ----
             .allowedAmmo(Arrays.asList(
                 SnowEagleAP.AMMO_NAME,
-                MachineGunMagazine.AMMO_NAME,
                  "weapon_12021",
                 ((BasicItem) Item.itemsList[12038 + 256]).internal_name))
             // ---- 构建 NBT ----

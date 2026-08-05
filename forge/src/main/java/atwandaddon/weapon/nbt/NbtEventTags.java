@@ -126,7 +126,7 @@ public final class NbtEventTags
     public static final Preset PRESET_SNIPER  = new Preset(130, 5, 0, 0);
 
     /** 狙击 + 刺刀类：慢速恢复（6.5 秒 / 点），满耐久扣减5点耐久后锁住，无额外消耗， 近战回 1 耐久 */
-    public static final Preset PRESET_SNIPER_ADD_BAYONET = new Preset(130, 5, 0, -1);
+    public static final Preset PRESET_SNIPER_ADD_BAYONET = new Preset(130, 10, 1, -1);
 
     /** 轨道炮类：慢速恢复(10 秒 / 点)，满耐久扣减10点耐久后锁住，无额外消耗 */
     public static final Preset PRESET_RAILGUN = new Preset(200, 10, 0, 0);

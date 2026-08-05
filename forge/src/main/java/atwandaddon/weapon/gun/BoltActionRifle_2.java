@@ -17,6 +17,7 @@ import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
 
 import atwandaddon.entity.EntitySniperBullet;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
+import atwandaddon.weapon.nbt.NbtEventTags;
 
 /**
  * 栓动式步枪 — 猎魂·A（开启模式变体）。
@@ -56,7 +57,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
     {
         super(GunNbtBuilder.create(_id, "boltActionRifle_2")
             // ---- 基础属性 ----
-            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配了枪魂配件:刺刀后,提升了作战能力且能够近战恢复枪魂\\n在开启模式下,作战能力大幅提升,但会增加枪魂消耗")
+            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配了枪魂配件:刺刀\\n提升了作战能力且能够近战恢复枪魂\\n在开启模式下,作战能力大幅提升,但会增加枪魂消耗")
             .icon("bolt_action_rifle_2")
             .maxStack(1)
             .durability(13)
@@ -64,7 +65,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
             // ---- 蓄力系统 ----
             .chargeStage(5)
             .chargeTime(0)       // 0 = 瞬发无蓄力
-            .chargeIcons(Arrays.asList("bolt_action_rifle"))
+            .chargeIcons(Arrays.asList("bolt_action_rifle_2"))
             // ---- 伤害 ----
             .basicDamage(2.0)
             .iceDamage(18.0)
@@ -85,6 +86,9 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
                 ((BasicItem) Item.itemsList[12273]).internal_name,  // 铅弹
                 ((BasicItem) Item.itemsList[12277]).internal_name,  // 穿甲弹
                 ((BasicItem) Item.itemsList[12293]).internal_name)) // 狙击弹
+            // ---- 命中效果：流血 DOT (PotionBleed, ID=30, 100% 触发, 10秒) ----
+            .effectWounded(new int[]{30, 200, 5})
+            .probWounded(new float[]{1.0F})
             .build());
     }
 
@@ -111,6 +115,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
         /** 弹幕渲染图标 ID，-1 表示无自定义图标 */
         int   renderItemId;
     }
+
 
     // ================================================================
     //  生命周期 — 覆写引擎方法
@@ -165,31 +170,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
         }
 
         // ---- 弹幕生成 → 音效 → 弹药消耗 ----
-        projectileGeneration(_world, _player, ammo, ammoName, power);
-    }
-
-    /**
-     * 物品每 tick 更新回调。
-     *
-     * <p>当前空实现。如需枪魂 NBT 标签自动写入，取消下方注释并添加
-     * {@code NbtEventTags.write()} 调用。</p>
-     *
-     * @param _stack     物品堆
-     * @param _world     当前世界
-     * @param _entity    持有物品的实体
-     * @param _slot      物品所在栏位
-     * @param _isCurrent 是否为当前手持物品
-     */
-    @Override
-    public void onUpdate(ItemStack _stack, World _world, Entity _entity,
-                         int _slot, boolean _isCurrent)
-    {
-        // TODO: 根据需要启用枪魂 NBT 标签自动写入
-        // super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
-        // if (_entity instanceof EntityPlayer)
-        // {
-        //     NbtEventTags.write(_stack, NbtEventTags.PRESET_RAILGUN);
-        // }
+        projectileGeneration(_world, _player, ammo, ammoName, power, _item);
     }
 
     // ================================================================
@@ -210,8 +191,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
      * @param _ammo           当前装填的弹药，用于伤害合并和弹速计算
      * @return 蓄力计算结果；蓄力不足时返回 {@code null}，调用方应中止发射
      */
-    private PowerResult accumulatingPower(ItemStack _item, int _itemInUseCount,
-                                          EntityPlayer _player, BasicAmmo _ammo)
+    private PowerResult accumulatingPower(ItemStack _item, int _itemInUseCount, EntityPlayer _player, BasicAmmo _ammo)
     {
         // ---- 蓄力倍率 ----
         int maxUseDuration = _item.getMaxItemUseDuration();
@@ -279,10 +259,12 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
      */
     private void projectileGeneration(World _world, EntityPlayer _player,
                                       BasicAmmo _ammo, String _ammoName,
-                                      PowerResult _power)
+                                      PowerResult _power, ItemStack _weaponItem)
     {
+        int totalBullets = _power.bulletCount;
+
         // ---- 循环生成弹丸 ----
-        for (int i = 0; i < _power.bulletCount; i++)
+        for (int i = 0; i < totalBullets; i++)
         {
             EntitySniperBullet bullet = new EntitySniperBullet(
                 _world, _player, _power.bulletSpeed, this.accuracy);
@@ -298,11 +280,18 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
             bullet.setPenetrate(_ammo.penetrate);
             bullet.setNoeff(_ammo.noeff);
 
-            // 注入命中效果（effect_wounded 等）
+            // 注入弹药命中效果
             DamagePacket dmgPacket = _ammo.onAttack;
             if (dmgPacket != null)
             {
                 bullet.setDamagePacket(dmgPacket);
+            }
+
+            // 注入枪械命中效果（effect_wounded / 流血 DOT 等）
+            // 引擎 shootOnce() 被绕过，需手动传递枪械的 DamagePacket
+            if (this.onAttack != null)
+            {
+                bullet.setDamagePacket(this.onAttack);
             }
 
             // 设置弹幕渲染图标
@@ -312,6 +301,20 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
             }
 
             _world.spawnEntityInWorld(bullet);
+
+            // ===== 旧代码 (保留以作参考) =====
+            // 注入武器面板伤害到 PotionBleed（含 NBT 属性 + 护甲加成，按 Operation 应用）
+            // NbtAttributeHelper.Result nbtBonus = NbtAttributeHelper.readAll(_weaponItem, _player);
+            // float finalBasic = nbtBonus.bowPower.applyTo(_power.basicDamage);
+            // float finalIce   = nbtBonus.icePower.applyTo(_power.iceDamage);
+            // float finalWand  = nbtBonus.wandDamage.applyTo(0F);
+            // float totalPanel = finalBasic + finalIce + finalWand;
+            // PotionBleed.pendingWeaponDamage = totalPanel;
+            // FMLLog.info(...);
+            // ===== 新代码 =====
+            // BuffMonitor 通过 LivingHurtEvent 自动捕获实际承受伤害，
+            // 无需武器端手动传递面板伤害给 PotionBleed。
+            // PotionBleed.performEffect() 通过 BuffMonitor.consumeDamage() 读取。
         }
 
         // ---- 音效 + 弹药消耗（循环外，仅一次）----
@@ -322,12 +325,13 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
     }
 
     @Override
-    public void onUpdate(ItemStack _stack, World _world, Entity _entity, int _slot, boolean _isCurrent)
+    public void onUpdate(ItemStack _stack, World _world, Entity _entity,
+                         int _slot, boolean _isCurrent)
     {
         super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
         if (_entity instanceof EntityPlayer)
         {
-            NbtEventTags.write(_stack, new Preset(120, 10, 1, -1));
+            NbtEventTags.write(_stack, NbtEventTags.PRESET_SNIPER_ADD_BAYONET);
         }
     }
 }

@@ -19,3 +19,6 @@ item.machineGunMagazine.name=蓝火弹夹
 item.leadBulletModEntity.name=铅弹改
 item.projectileEntity.name=弹丸
 
+# 药水buff
+potion.bleed=流血
+potion.deadline=悬赏·死线

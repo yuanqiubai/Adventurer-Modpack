@@ -10,6 +10,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 // ============================= 导入自定义武器类 ============================================
 import atwandaddon.weapon.melee.HeavySword;                 // 重剑
 import atwandaddon.weapon.melee.Bayonet;                    // 刺刀:寒锋
@@ -27,7 +28,13 @@ import atwandaddon.weapon.ammo.MachineGunMagazine;          // 蓝火弹夹
 import atwandaddon.weapon.BulletEntity.LeadBulletModEntity; // 铅弹改-实体
 import atwandaddon.weapon.BulletEntity.ProjectileEntity;    // 弹丸实体
 
-import atwandaddon.buff.bleed.BleedTickHandler;
+import atwandaddon.buff.BuffDef;
+import atwandaddon.buff.BuffMonitor;
+import atwandaddon.buff.BuffRegistry;
+import atwandaddon.buff.EntityBuffListener;
+import atwandaddon.buff.NbtDamageListener;
+import atwandaddon.buff.potion.PotionBleed;
+import atwandaddon.buff.potion.PotionDeadline;
 
 import atwandaddon.entity.EntitySniperBullet;
 
@@ -220,6 +227,45 @@ public class ATcraftAddon {
         // trackingRange=64, updateFrequency=1, sendsVelocityUpdates=true
         EntityRegistry.registerModEntity(EntitySniperBullet.class, "SniperBullet",
             250, instance, 64, 1, true);
+
+        // 注册自定义 Potion（流血 DOT）并注册 Forge 事件监听
+        // Potion 构造器自动注册到 potionTypes[ID]（MC 原生机制）
+        PotionBleed bleed = new PotionBleed();
+
+        // BuffDef 注册到 BuffRegistry — 后续武器可通过 NbtEventTags 施加
+        // 参数 (ID, 时长, 等级) 与 NbtEventTags.writePotion() 保持一致
+        BuffRegistry.register(new BuffDef(PotionBleed.ID, 200, 0)
+            .damageRatio(0.1F)
+            .tickInterval(2L));
+
+        // 注册自定义 Potion（悬赏·死线 — 累积伤害到期爆发）
+        // 死线的计时和结算由 EntityBuffListener 独立管理，不依赖 MC Potion 系统的持续时间
+        PotionDeadline deadline = new PotionDeadline();
+
+        // BuffDef 注册到 BuffRegistry — tickInterval=0 表示死线无间隔触发（由监听器独立计时）
+        BuffRegistry.register(new BuffDef(PotionDeadline.ID, 200, 0)
+            .damageRatio(PotionDeadline.DAMAGE_RATIO)
+            .tickInterval(0L));
+
+        // BuffMonitor 接管 LivingHurtEvent 监听（解耦武器与 buff）
+        // 旧设计：PotionBleed 自身监听 EVENT_BUS
+        // 新设计：BuffMonitor 是唯一监听者，Potion 子类通过 consumeDamage() 读取
+        // ===== 旧代码 (保留以作参考) =====
+        // BuffMonitor monitor = new BuffMonitor();
+        // MinecraftForge.EVENT_BUS.register(monitor);
+        //
+        // // NbtDamageListener 追踪玩家武器 + 装备 NBT 属性加成
+        // // 与 BuffMonitor 互补：BuffMonitor 捕获实际伤害，NbtDamageListener 捕获 NBT 加成
+        // // PotionBleed 组合两者还原完整面板伤害 → DOT
+        // NbtDamageListener nbtListener = new NbtDamageListener();
+        // MinecraftForge.EVENT_BUS.register(nbtListener);
+        // ===== 新代码 =====
+
+        // EntityBuffListener 统一实体伤害数据持久化 + Buff 状态扫描
+        // 取代 BuffMonitor + NbtDamageListener，解决旧设计"消费后删除"导致
+        // 流血 DOT 仅触发一次的 bug。伤害数据持久存储，允许多次 DOT tick 重复读取。
+        EntityBuffListener entityListener = new EntityBuffListener();
+        MinecraftForge.EVENT_BUS.register(entityListener);
 
         proxy.registerRenderers();
     }

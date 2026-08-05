@@ -1,5 +1,7 @@
 {
     "java.jdt.ls.java.home": "F:\\java 11",
+    "java.import.gradle.enabled": false,
+    "java.import.gradle.wrapper.enabled": false,
     "java.project.sourcePaths": [
         "forge/src/main/java",
         "adventurer_engine_src"
@@ -15,6 +17,5 @@
         "exclude": [
             "forge/forge-src/forge/mcp/jars/bin/natives/**"
         ]
-    },
-    "java.format.settings.url": ".vscode/java-formatter.xml"
+    }
 }

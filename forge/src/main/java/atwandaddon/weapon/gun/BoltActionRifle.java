@@ -17,6 +17,7 @@ import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
 
 import atwandaddon.entity.EntitySniperBullet;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
+import atwandaddon.weapon.nbt.NbtEventTags;
 
 public class BoltActionRifle extends BasicRangedWeapon
 {
@@ -47,6 +48,9 @@ public class BoltActionRifle extends BasicRangedWeapon
                 ((BasicItem) Item.itemsList[12273]).internal_name,
                 ((BasicItem) Item.itemsList[12277]).internal_name,
                 ((BasicItem) Item.itemsList[12293]).internal_name))
+            // 悬赏·死线：命中后施加 ID=31，200 tick (10秒)，等级 0 (I级)
+            .effectWounded(new int[]{31, 200, 0})
+            .probWounded(new float[]{1.0F})     // 100% 触发
             .build());
     }
 
@@ -125,37 +129,14 @@ public class BoltActionRifle extends BasicRangedWeapon
     }
 
     @Override
-    public void onUpdate(ItemStack _stack, World _world, Entity _entity, int _slot, boolean _isCurrent)
+    public void onUpdate(ItemStack _stack, World _world, Entity _entity,
+                         int _slot, boolean _isCurrent)
     {
         super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
         if (_entity instanceof EntityPlayer)
         {
-            NbtEventTags.write(_stack, new Preset(130, 10, 0, -1));
+            NbtEventTags.write(_stack, NbtEventTags.PRESET_SNIPER_ADD_BAYONET);
         }
-    }
-
-    /**
-     * 物品每 tick 更新回调。
-     *
-     * <p>当前空实现。如需枪魂 NBT 标签自动写入，取消下方注释并添加
-     * {@code NbtEventTags.write()} 调用。</p>
-     *
-     * @param _stack     物品堆
-     * @param _world     当前世界
-     * @param _entity    持有物品的实体
-     * @param _slot      物品所在栏位
-     * @param _isCurrent 是否为当前手持物品
-     */
-    @Override
-    public void onUpdate(ItemStack _stack, World _world, Entity _entity,
-                         int _slot, boolean _isCurrent)
-    {
-        // TODO: 根据需要启用枪魂 NBT 标签自动写入
-        // super.onUpdate(_stack, _world, _entity, _slot, _isCurrent);
-        // if (_entity instanceof EntityPlayer)
-        // {
-        //     NbtEventTags.write(_stack, NbtEventTags.PRESET_RAILGUN);
-        // }
     }
 
     // ================================================================
@@ -269,6 +250,13 @@ public class BoltActionRifle extends BasicRangedWeapon
             if (dmgPacket != null)
             {
                 bullet.setDamagePacket(dmgPacket);
+            }
+
+            // 注入枪械命中效果（悬赏·死线 / 流血 DOT 等）
+            // 引擎 shootOnce() 被绕过，需手动传递枪械的 DamagePacket
+            if (this.onAttack != null)
+            {
+                bullet.setDamagePacket(this.onAttack);
             }
 
             // 设置弹幕渲染图标

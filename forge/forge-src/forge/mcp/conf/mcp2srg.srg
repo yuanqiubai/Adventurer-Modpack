@@ -18863,3 +18863,34 @@ MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/onUpdate ()V
 FD: nn/M atwandaddon/entity/EntitySniperBullet/isDead
 FD: of/q atwandaddon/entity/EntitySniperBullet/worldObj
 MD: com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/func_70071_h_ ()V com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/onUpdate ()V
+
+# === BoltActionRifle / BoltActionRifle_2 ===
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle_2/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+
+# === SnowfieldExplorerAddBayonet / Bayonet / Bayonet_2 ===
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# === PotionBleed — override vanilla Potion methods (Pitfall #10) ===
+MD: ni/a (II)Z atwandaddon/buff/potion/PotionBleed/isReady (II)Z
+MD: ni/a (Lof;I)V atwandaddon/buff/potion/PotionBleed/performEffect (Lnet/minecraft/entity/EntityLivingBase;I)V
+
+# === PotionDeadline — override vanilla Potion methods (Pitfall #10) ===
+MD: ni/a (II)Z atwandaddon/buff/potion/PotionDeadline/isReady (II)Z
+MD: ni/a (Lof;I)V atwandaddon/buff/potion/PotionDeadline/performEffect (Lnet/minecraft/entity/EntityLivingBase;I)V
+
+# === EntityLivingBase(entityId) — javac emits fieldref owner=of for _event.entityLiving.entityId ===
+# entityId is defined on Entity(nn) but javac uses the variable's declared type EntityLivingBase(of)
+FD: of/k net/minecraft/entity/EntityLivingBase/entityId
+# === EntityPlayer(entityId) — javac emits fieldref owner=uf for player.entityId ===
+# Same root cause: entityId defined on Entity(nn), but variable type is EntityPlayer(uf)
+FD: uf/k net/minecraft/entity/player/EntityPlayer/entityId
