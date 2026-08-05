@@ -10,8 +10,10 @@
 ```
 atwandaddon/buff/
 ├── potion/
-│   └── PotionBleed.java         # 流血 DOT Potion 实现
-├── EntityBuffListener.java      # 核心监听器：伤害数据持久存储
+│   ├── PotionBleed.java         # 流血 DOT Potion 实现
+│   └── PotionDeadline.java      # 死线 — 延迟爆发伤害
+├── EntityBuffListener.java      # 核心监听器：伤害数据持久化
+├── BuffRegistry.java            # Buff ID 注册中心
 ├── DebugLog.java                # 调试日志工具（待添加）
 ├── BuffMonitor.java             # [已弃用] 旧版伤害累加器（保留代码）
 ├── NbtDamageListener.java       # [已弃用] 旧版 NBT 属性监听器（保留代码）
@@ -22,6 +24,7 @@ atwandaddon/buff/
 
 ATcraftAddon.preInit()
   ├── new PotionBleed()          # 注册到 Potion.potionTypes[30]
+  ├── new PotionDeadline()       # 注册到 Potion.potionTypes[31]
   ├── EntityBuffListener listener = new EntityBuffListener()
   └── MinecraftForge.EVENT_BUS.register(listener)
 ```
@@ -47,8 +50,14 @@ ATcraftAddon.preInit()
   │           attackEntityFrom(DamageSource.generic, damage)
   │           重置 hurtResistantTime = 0  ← 关键！否则后续 DOT 被无敌帧阻挡
   │
-  └─→ LivingUpdateEvent → EntityBuffListener.onLivingUpdate()
-        检测实体 Buff 状态，无 Buff → 清理伤害记录
+  ├─→ LivingUpdateEvent → EntityBuffListener.onLivingUpdate()
+  │       仅处理死线 (Deadline) 独立计时，不清理伤害记录
+  │
+  ├─→ LivingDeathEvent → EntityBuffListener.onLivingDeath()
+  │       清理已死亡实体的伤害记录
+  │
+  └─→ WorldEvent.Unload → EntityBuffListener.onWorldUnload()
+          世界卸载时全清所有记录（防止静态 Map 跨地图残留）
 ```
 
 ---
@@ -86,13 +95,40 @@ EntityBuffListener listener = new EntityBuffListener();
 MinecraftForge.EVENT_BUS.register(listener);
 ```
 
-**监听三个事件**：
+**监听四个事件**：
 
 | 事件 | 方法 | 职责 |
 |------|------|------|
 | `LivingHurtEvent` | `onLivingHurt()` | 计算理论面板伤害，持久存储（不消费） |
-| `LivingUpdateEvent` | `onLivingUpdate()` | 扫描 Buff 状态，无 Buff 时清理记录 |
-| `LivingDeathEvent` | `onLivingDeath()` | 实体死亡时清理记录 |
+| `LivingUpdateEvent` | `onLivingUpdate()` | 仅处理死线 (Deadline) 独立计时，**不清理记录** |
+| `LivingDeathEvent` | `onLivingDeath()` | 实体死亡时清理单条记录 |
+| `WorldEvent.Unload` | `onWorldUnload()` | 世界卸载时全清所有记录 |
+
+**⚠️ 为什么不在 `LivingUpdateEvent` 中清理记录？**
+
+这是本系统最重要的设计决策之一。MC 1.6.4 的实体更新顺序为：
+
+```
+EntityLivingBase.onEntityUpdate()
+  ├─ 1. LivingUpdateEvent 触发        ← 我们的 onLivingUpdate
+  ├─ 2. ... 其他更新逻辑 ...
+  └─ 3. updatePotionEffects()          ← performEffect 在这里调用
+```
+
+引擎的 `DamagePacket.causeDamage` 流程是：
+
+```
+causeDamage()
+  ├─ attackEntityFrom(basicDamage)     ← LivingHurtEvent 触发 → 记录存入
+  ├─ attackEntityFrom(iceDamage)       
+  └─ buffGiver(effects)                ← addPotionEffect 在这里！
+```
+
+**时序冲突**：如果在 `LivingUpdateEvent` 中检查 `isPotionActive()` 来决定是否清理记录，则在首次命中的同一 tick 内，Potion 尚未被 `buffGiver` 施加，`isPotionActive()` 返回 `false`，伤害记录被误删 → `performEffect` 读取到 0 → DOT 不触发（但图标正常显示，因为图标在渲染帧才检查）。
+
+**解决方案**：伤害记录改为只在以下时机清理：
+- **实体死亡** → `onLivingDeath()` 清理单条
+- **世界卸载** → `onWorldUnload()` 全量清空（`records` 是静态 HashMap，跨地图不自动清理）
 
 **攻击者识别逻辑**（`onLivingHurt`）：
 1. `DamageSource.getSourceOfDamage()` — 间接攻击源（弹丸 → 射击玩家）
@@ -120,9 +156,15 @@ float totalPanelDmg = EntityBuffListener.getDamage(entityId);  // 持久存储�
 
 ```java
 private static class DamageRecord {
-    float totalPanelDamage;     // 理论完整面板伤害（v2 核心字段）
-    int   attackerEntityId;     // 攻击来源玩家的 entityId
-    long  lastDOTTick;          // 上次 DOT 触发时的世界 tick（预留）
+    float totalPanelDamage;        // 理论完整面板伤害（v2 核心字段）
+    int   attackerEntityId;        // 攻击来源玩家的 entityId
+    long  lastDOTTick;             // 上次 DOT 触发时的世界 tick（预留）
+
+    // 死线 (Deadline) 独立计时字段
+    boolean deadlineActive;        // 死线是否已激活
+    long    deadlineExpireTick;    // 死线到期世界时间
+    int     deadlineAmplifier;     // 死线等级
+    float   deadlineAccumulatedDamage;  // 死线期间累积伤害
 }
 ```
 
@@ -205,7 +247,19 @@ FD: nn/af  net/minecraft/entity/Entity/hurtResistantTime
 
 - **日志输出**：用 `cpw.mods.fml.common.FMLLog.log(Level.INFO, msg)` 代替 `System.out`，输出会写入 `.minecraft/ForgeModLoader-client-0.log`
 - **SRG 验证**：每次编译后用 javap 检查 SRG jar 中的字段/方法名是否已变为 SRG 形式
-- **DOT 不触发诊断顺序**：(1) performEffect 是否被调用？(2) getDamage 是否返回 >0？(3) attackEntityFrom 返回值是否为 true？(4) hurtResistantTime 是否已重置？
+- **DOT 不触发诊断顺序**：
+  1. `performEffect` 是否被调用？（检查日志 / SRG remap 是否生效）
+  2. `getDamage` 是否返回 >0？（检查 records 是否被误删 — 见下方已知踩坑）
+  3. `attackEntityFrom` 返回值是否为 `true`？
+  4. `hurtResistantTime` 是否已重置？
+
+### 已知踩坑：LivingUpdateEvent 清理记录导致 DOT 失效
+
+**症状**：实体挂上流血图标但不扣血。首次进入地图时必现，退出重进后有时正常。
+
+**根因**：`LivingUpdateEvent` 先于 `updatePotionEffects()` 触发，而引擎的 `buffGiver` 在 `attackEntityFrom` 之后才施加 Potion。在 `LivingUpdateEvent` 中检查 `isPotionActive()` 时 Potion 尚未挂上，伤害记录被误删。
+
+**教训**：不要在 `LivingUpdateEvent` 中基于 `isPotionActive()` 清理伤害记录。记录生命周期改为在 `LivingDeathEvent`（单条）和 `WorldEvent.Unload`（全量）中管理。
 
 ---
 
@@ -226,7 +280,9 @@ FD: nn/af  net/minecraft/entity/Entity/hurtResistantTime
 | 文件 | 职责 |
 |------|------|
 | `buff/potion/PotionBleed.java` | 流血 DOT 实现核心 |
+| `buff/potion/PotionDeadline.java` | 死线 — 延迟爆发伤害（独立计时） |
 | `buff/EntityBuffListener.java` | 伤害数据持久化 + Buff 生命周期管理 |
+| `buff/BuffRegistry.java` | Buff ID 注册中心 |
 | `buff/BuffFactory.java` | Buff 工厂（待扩展） |
 | `buff/BuffMonitor.java` | [已弃用] 旧版伤害累加器 |
 | `buff/NbtDamageListener.java` | [已弃用] 旧版 NBT 属性监听器 |
