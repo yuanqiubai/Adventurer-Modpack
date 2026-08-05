@@ -47,6 +47,7 @@ public class PotionDeadline extends Potion
     {
         super(ID, true, 0x8B0000);  // 负面效果，暗红色
         this.setPotionName("potion.deadline");
+        this.setIconIndex(4, 2); 
         instance = this;
     }
 
