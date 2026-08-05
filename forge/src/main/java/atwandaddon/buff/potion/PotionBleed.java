@@ -42,6 +42,9 @@ public class PotionBleed extends Potion
     /** DOT 伤害系数 — 每次触发伤害 = 1 + 实际承受伤害 × (amplifier + 1) × DAMAGE_RATIO */
     private static final float DAMAGE_RATIO = 0.1F;
 
+    /** 伤害随机波动范围，0.2 = ±20%（即 80%~120% 随机倍率），每次 DOT tick 独立随机 */
+    private static final float FLUCTUATION = 0.2F;
+
     /** 伤害触发间隔（tick），2 tick = 0.1 秒 = 10 次/秒 */
     private static final long TICK_INTERVAL = 2L;
 
@@ -113,9 +116,12 @@ public class PotionBleed extends Potion
             return;  // 无有效伤害记录，跳过此 tick
         }
 
-        // DOT = 1 + 理论面板伤害 × 倍率 × 等级
+        // DOT = (1 + 理论面板伤害 × 倍率 × 等级) × 随机波动
         // amplifier 0 = I 级（×1），amplifier 1 = II 级（×2）
-        float damage = 1F + (totalPanelDamage * DAMAGE_RATIO * (float)(_amplifier + 1));
+        // 随机波动：80%~120%，每次 DOT tick 独立随机，模拟出血不稳定感
+        float fluctuationMultiplier = 1.0F + (_entity.worldObj.rand.nextFloat() * 2F - 1F) * FLUCTUATION;
+        float damage = (1F + (totalPanelDamage * DAMAGE_RATIO * (float)(_amplifier + 1)))
+                      * fluctuationMultiplier;
 
         _entity.attackEntityFrom(DamageSource.generic, damage);
 
