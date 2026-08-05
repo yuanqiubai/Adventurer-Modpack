@@ -35,6 +35,7 @@ import atwandaddon.buff.EntityBuffListener;
 import atwandaddon.buff.NbtDamageListener;
 import atwandaddon.buff.potion.PotionBleed;
 import atwandaddon.buff.potion.PotionDeadline;
+import atwandaddon.buff.potion.PotionVulnerable;
 
 import atwandaddon.entity.EntitySniperBullet;
 
@@ -78,7 +79,7 @@ public class ATcraftAddon {
     /** 实体分类栏 */
     public static CreativeTabs tabEntity;
     /** 其他武器分类栏 */
-    public static CreativeTabs otherWeapons;
+    public static CreativeTabs tabOtherWeapons;
 
     // ============================ 自定义武器实例 ============================================
     public static BoltActionRifle boltActionRifle;              // 栓动式步枪-猎魂
@@ -92,6 +93,19 @@ public class ATcraftAddon {
     public static SnowfieldExplorerAddBayonet snowfieldExplorerAddBayonet;  // 雪原探索者-寒锋
     public static Bayonet bayonet;                              // 刺刀
     public static Bayonet_2 bayonet_2;                          // 刺刀2
+    // ============================ 其它武器实例 (sword_1 ~ sword_12) ====================================
+    public static HeavySword sword_1;   // 其它武器 sword_1
+    public static HeavySword sword_2;   // 其它武器 sword_2
+    public static HeavySword sword_3;   // 其它武器 sword_3
+    public static HeavySword sword_4;   // 其它武器 sword_4
+    public static HeavySword sword_5;   // 其它武器 sword_5
+    public static HeavySword sword_6;   // 其它武器 sword_6
+    public static HeavySword sword_7;   // 其它武器 sword_7
+    public static HeavySword sword_8;   // 其它武器 sword_8
+    public static HeavySword sword_9;   // 其它武器 sword_9
+    public static HeavySword sword_10;  // 其它武器 sword_10
+    public static HeavySword sword_11;  // 其它武器 sword_11
+    public static HeavySword sword_12;  // 其它武器 sword_12
     // ============================ 自定义弹药实例 ============================================
     public static SnowEagleAP snowEagleAP;                  // 雪鹰穿甲弹
     public static LeadBulletMod leadBulletMod;              // 铅弹改
@@ -130,6 +144,12 @@ public class ATcraftAddon {
             }
         };
 
+        tabOtherWeapons = new CreativeTabs(CreativeTabs.creativeTabArray.length, "ATcraftEntity") {
+            @Override
+            public Item getTabIconItem() {
+                return sword_2;
+            }
+        };
         // ============================================= 注册自定义武器 ============================================
         // ID 25256 — 栓动式步枪-猎魂
         boltActionRifle = (BoltActionRifle) new BoltActionRifle(25000)
@@ -156,7 +176,7 @@ public class ATcraftAddon {
         GameRegistry.registerItem(placeholder5, "placeholder5");
 
         // ID 25261 — 重剑保持旧 ID
-        heavySword = (HeavySword) new HeavySword(25005)
+        heavySword = (HeavySword) new HeavySword(25005, "heavy_sword", "heavy_sword")
             .setUnlocalizedName("heavySword")
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(heavySword, "heavySword");
@@ -227,7 +247,69 @@ public class ATcraftAddon {
         // trackingRange=64, updateFrequency=1, sendsVelocityUpdates=true
         EntityRegistry.registerModEntity(EntitySniperBullet.class, "SniperBullet",
             250, instance, 64, 1, true);
+        
+        // ============================================= 注册其它武器 ==============================================
+        // sword_1 ~ sword_12，ID 27000 ~ 27011，name/icon 与纹理文件名一一对应
+        sword_1 = (HeavySword) new HeavySword(27000, "sword_1", "sword_1")
+            .setUnlocalizedName("sword_1")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_1, "sword_1");
 
+        sword_2 = (HeavySword) new HeavySword(27001, "sword_2", "sword_2")
+            .setUnlocalizedName("sword_2")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_2, "sword_2");
+
+        sword_3 = (HeavySword) new HeavySword(27002, "sword_3", "sword_3")
+            .setUnlocalizedName("sword_3")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_3, "sword_3");
+
+        sword_4 = (HeavySword) new HeavySword(27003, "sword_4", "sword_4")
+            .setUnlocalizedName("sword_4")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_4, "sword_4");
+
+        sword_5 = (HeavySword) new HeavySword(27004, "sword_5", "sword_5")
+            .setUnlocalizedName("sword_5")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_5, "sword_5");
+
+        sword_6 = (HeavySword) new HeavySword(27005, "sword_6", "sword_6")
+            .setUnlocalizedName("sword_6")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_6, "sword_6");
+
+        sword_7 = (HeavySword) new HeavySword(27006, "sword_7", "sword_7")
+            .setUnlocalizedName("sword_7")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_7, "sword_7");
+
+        sword_8 = (HeavySword) new HeavySword(27007, "sword_8", "sword_8")
+            .setUnlocalizedName("sword_8")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_8, "sword_8");
+
+        sword_9 = (HeavySword) new HeavySword(27008, "sword_9", "sword_9")
+            .setUnlocalizedName("sword_9")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_9, "sword_9");
+
+        sword_10 = (HeavySword) new HeavySword(27009, "sword_10", "sword_10")
+            .setUnlocalizedName("sword_10")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_10, "sword_10");
+
+        sword_11 = (HeavySword) new HeavySword(27010, "sword_11", "sword_11")
+            .setUnlocalizedName("sword_11")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_11, "sword_11");
+
+        sword_12 = (HeavySword) new HeavySword(27011, "sword_12", "sword_12")
+            .setUnlocalizedName("sword_12")
+            .setCreativeTab(tabOtherWeapons);
+        GameRegistry.registerItem(sword_12, "sword_12");
+        // ============================================= 注册自定义buff ============================================
         // 注册自定义 Potion（流血 DOT）并注册 Forge 事件监听
         // Potion 构造器自动注册到 potionTypes[ID]（MC 原生机制）
         PotionBleed bleed = new PotionBleed();
@@ -245,6 +327,13 @@ public class ATcraftAddon {
         // BuffDef 注册到 BuffRegistry — tickInterval=0 表示死线无间隔触发（由监听器独立计时）
         BuffRegistry.register(new BuffDef(PotionDeadline.ID, 200, 0)
             .damageRatio(PotionDeadline.DAMAGE_RATIO)
+            .tickInterval(0L));
+
+        // 注册自定义 Potion（DOT 易伤 — 每级使实体承受的 DOT 伤害 +25%）
+        // 纯被动 Buff，无主动效果；DOT 来源（如 PotionBleed）主动查询此 Buff 并应用倍率
+        PotionVulnerable vulnerable = new PotionVulnerable();
+
+        BuffRegistry.register(new BuffDef(PotionVulnerable.ID, 200, 0)
             .tickInterval(0L));
 
         // BuffMonitor 接管 LivingHurtEvent 监听（解耦武器与 buff）

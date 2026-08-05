@@ -1,7 +1,6 @@
 package atwandaddon.weapon.melee;
 
 import com.adventurer_engine.common.items.blank.BasicItemSword;
-
 import atwandaddon.weapon.nbt.SwordNbtBuilder;
 
 

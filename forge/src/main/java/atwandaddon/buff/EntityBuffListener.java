@@ -145,11 +145,23 @@ public class EntityBuffListener
             player = (EntityPlayer) srcEntity;
         }
 
+        if (srcOfDmg == null && srcEntity == null)
+        {
+            // DOT 伤害 / 环境伤害等无来源方 → 不更新 panel 伤害记录
+            // 防止 DOT feedback loop：performEffect→attackEntityFrom→LivingHurtEvent→+= 回写
+            return;
+        }
+
         if (player == null)
         {
-            // 非玩家攻击 → 用 _event.ammount 作为兜底（NPC / 跌落 / 环境伤害等）
+            // ===== 旧代码 (保留以作参考) =====
+            // // 非玩家攻击 → 用 _event.ammount 作为兜底（NPC / 跌落 / 环境伤害等）
+            // DamageRecord rec = getOrCreate(entityId);
+            // rec.totalPanelDamage += _event.ammount;
+            // ===== 新代码 =====
+            // 用 = 覆盖而非 += 累加，与引擎武器路径保持一致（见 line210 注释）
             DamageRecord rec = getOrCreate(entityId);
-            rec.totalPanelDamage += _event.ammount;
+            rec.totalPanelDamage = _event.ammount;
             return;
         }
 
@@ -189,9 +201,14 @@ public class EntityBuffListener
         }
         else
         {
-            // 非引擎武器（原版剑/弓等）→ 用 _event.ammount 兜底
+            // ===== 旧代码 (保留以作参考) =====
+            // // 非引擎武器（原版剑/弓等）→ 用 _event.ammount 兜底
+            // DamageRecord rec = getOrCreate(entityId);
+            // rec.totalPanelDamage += _event.ammount;
+            // ===== 新代码 =====
+            // 用 = 覆盖而非 += 累加
             DamageRecord rec = getOrCreate(entityId);
-            rec.totalPanelDamage += _event.ammount;
+            rec.totalPanelDamage = _event.ammount;
             return;
         }
 

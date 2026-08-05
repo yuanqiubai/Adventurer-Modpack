@@ -7,6 +7,7 @@ import net.minecraft.util.DamageSource;
 import cpw.mods.fml.common.FMLLog;
 
 import atwandaddon.buff.EntityBuffListener;
+import atwandaddon.buff.potion.PotionVulnerable;
 
 /**
  * 流血 DOT Potion — 基于实体实际承受伤害的百分比流血。
@@ -116,11 +117,13 @@ public class PotionBleed extends Potion
             return;  // 无有效伤害记录，跳过此 tick
         }
 
-        // DOT = (1 + 理论面板伤害 × 倍率 × 等级) × 随机波动
+        // DOT = (1 + 理论面板伤害 × 倍率 × 等级) × 易伤加成 × 随机波动
         // amplifier 0 = I 级（×1），amplifier 1 = II 级（×2）
         // 随机波动：80%~120%，每次 DOT tick 独立随机，模拟出血不稳定感
         float fluctuationMultiplier = 1.0F + (_entity.worldObj.rand.nextFloat() * 2F - 1F) * FLUCTUATION;
+        float vulnerableMultiplier  = PotionVulnerable.getDOTMultiplier(_entity);
         float damage = (1F + (totalPanelDamage * DAMAGE_RATIO * (float)(_amplifier + 1)))
+                      * vulnerableMultiplier
                       * fluctuationMultiplier;
 
         _entity.attackEntityFrom(DamageSource.generic, damage);

@@ -24,7 +24,7 @@ public class BoltActionRifle extends BasicRangedWeapon
     public BoltActionRifle(int _id)
     {
         super(GunNbtBuilder.create(_id, "boltActionRifle")
-            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配了枪魂配件:刺刀后,提升了作战能力且能够近战恢复枪魂")
+            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配枪魂配件:刺刀\\n提升了作战能力且能够近战恢复枪魂")
             .icon("bolt_action_rifle")
             .maxStack(1)        // 最大堆叠数
             .durability(13)     // 耐久

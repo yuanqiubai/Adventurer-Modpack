@@ -56,9 +56,8 @@ public class SnowfieldExplorerAddBayonet extends BasicRangedWeapon
             .penetrate(false)
             .allowedAmmo(Arrays.asList(
                 SnowEagleAP.AMMO_NAME,
-                MachineGunMagazine.AMMO_NAME,
                  "weapon_12021",
-                ((BasicItem) Item.itemsList[12038 + 256]).internal_name))
+                ((BasicItem) Item.itemsList[12294]).internal_name))
             // ---- 构建 NBT ----
             .build());
     }

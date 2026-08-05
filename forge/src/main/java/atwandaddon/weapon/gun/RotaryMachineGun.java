@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.adventurer_engine.common.PlayerTools;
 import com.adventurer_engine.common.gadgets.DamagePacket;
+import com.adventurer_engine.common.items.blank.BasicItem;
 import com.adventurer_engine.common.items.blank.ranged_weapon.BasicAmmo;
 import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
@@ -16,6 +17,7 @@ import atwandaddon.weapon.nbt.GunNbtBuilder;
 import atwandaddon.weapon.nbt.NbtEventTags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -61,8 +63,12 @@ public class RotaryMachineGun extends BasicRangedWeapon
             .maxSpeed(6.0)                      // 最大弹丸飞行速度（方块/秒）
             .gravity(false)                     // 弹道重力（true=受重力影响，false=无重力直线弹道）
             .penetrate(false)                   // 子弹穿透（命中后销毁，不可贯穿多个目标）
-            .allowedAmmo(Arrays.asList(
-                MachineGunMagazine.AMMO_NAME))
+            .allowedAmmo(Arrays.asList(  
+                ((BasicItem) Item.itemsList[12301]).internal_name,
+                ((BasicItem) Item.itemsList[12302]).internal_name,
+                ((BasicItem) Item.itemsList[12311]).internal_name,
+                MachineGunMagazine.AMMO_NAME
+                ))
             .build());
     }
 
