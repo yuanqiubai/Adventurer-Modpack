@@ -16,6 +16,7 @@ import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
 
 import atwandaddon.entity.EntitySniperBullet;
+import atwandaddon.weapon.ammo.LeadBulletMod;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
 import atwandaddon.weapon.nbt.NbtEventTags;
 
@@ -57,7 +58,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
     {
         super(GunNbtBuilder.create(_id, "boltActionRifle_2")
             // ---- 基础属性 ----
-            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配枪魂配件:刺刀\\n提升了作战能力且能够近战恢复枪魂\\n在开启模式下,作战能力大幅提升,但会增加枪魂消耗")
+            .description("步枪\\n支持的弹种较少,但单发威力较高\\n同时具有极其优秀射程的步枪\\n装配枪魂配件:刺刀\\n提升了作战能力且能够近战恢复枪魂\\n开启模式下,作战能力大幅提升,但增加枪魂消耗")
             .icon("bolt_action_rifle_2")
             .maxStack(1)
             .durability(13)
@@ -68,7 +69,7 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
             .chargeIcons(Arrays.asList("bolt_action_rifle_2"))
             // ---- 伤害 ----
             .basicDamage(2.0)
-            .iceDamage(18.0)
+            .iceDamage(14.0)
             .knockback(0.0)
             // ---- 射击参数 ----
             .shootMode(ShootMode.SEMI)
@@ -83,12 +84,13 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
             .penetrate(false)
             // ---- 弹药 ----
             .allowedAmmo(Arrays.asList(
+                LeadBulletMod.AMMO_NAME,
                 ((BasicItem) Item.itemsList[12273]).internal_name,  // 铅弹
                 ((BasicItem) Item.itemsList[12277]).internal_name,  // 穿甲弹
                 ((BasicItem) Item.itemsList[12293]).internal_name)) // 狙击弹
-            // ---- 命中效果：流血 DOT (PotionBleed, ID=30, 100% 触发, 10秒) ----
-            .effectWounded(new int[]{30, 200, 5})
-            .probWounded(new float[]{1.0F})
+            // ---- 命中效果：流血 DOT (PotionBleed, ID=30, 30% 触发, 10秒) ----
+            .effectWounded(new int[]{30, 30, 1})
+            .probWounded(new float[]{0.70F})
             .build());
     }
 
@@ -220,11 +222,11 @@ public class BoltActionRifle_2 extends BasicRangedWeapon
         result.iceDamage   *= chargeRatio;
         result.bulletSpeed  = _ammo.entity_speed * chargeRatio;
 
-        // ---- 耐久消耗 ----
-        _item.damageItem(1, _player);
-
         // ---- 弹丸数量 = shoot_number × entity_num ----
         result.bulletCount = this.shoot_number * _ammo.entity_num;
+
+        // ---- 耐久消耗 ----
+        _item.damageItem(2, _player);
 
         // ---- 解析弹幕渲染图标 ----
         String entityModel = _ammo.entity_model;

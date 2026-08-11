@@ -17,7 +17,7 @@ public class SnowEagleAP extends BasicAmmo {
     public static final String AMMO_NAME = "snowEagleAP";
 
     /** 每发射击消耗的枪魂点数 */
-    public static final int COST = 4;
+    public static final int COST = 3;
 
     /**
      * @param _id             物品数字 ID（逻辑 ID）
@@ -33,7 +33,7 @@ public class SnowEagleAP extends BasicAmmo {
             // ---- 基础属性 ----
             .icon("snow_eagle_ap")
             .description("能够冻结敌人同时有概率造成高毁灭性伤害")
-            .maxStack(64)
+            .maxStack(12)
             // ---- 伤害 ----
             .basicDamage(8.0)   // 基础伤害（护甲计算）
             .iceDamage(16.0)     // 冰穿甲伤害
@@ -51,19 +51,19 @@ public class SnowEagleAP extends BasicAmmo {
             .chargeTime(40)     // 蓄力时间（tick）
             .accuracy(0.95)     // 精度
             .knockback(0.5)     // 击退
-            .shootSound("4ld")
+            .shootSound("bow_gt")
             .maxRange(48.0)     // 最大射程（方块数）
-            .maxSpeed(6.0)      // 最大弹丸飞行速度（方块/秒）
+            .maxSpeed(7.0)      // 最大弹丸飞行速度（方块/秒）
             // ---- 特殊效果 ----
             .penetrate(true)    // 穿透目标
             .noeff(false)       // 是否无击中效果（true=无击中效果，false=有击中效果）
             // ---- 击中异常 ----
             // 格式: {效果ID, 持续tick, 等级, 效果ID, 持续tick, 等级, ...}
-            //   2=缓慢, 18=虚弱(抗性降低)
+            //   2=缓慢, 11=虚弱(抗性降低)
             //   effect_wounded 的效果等级: 0=I, 1=II, ...
             .effectWounded(new int[]{2, 40, 3, 11, 60, -1})
             // 格式: {效果0概率, 效果1概率, ...}  1.0=100%触发
-            .probWounded(new float[]{1.0f, 0.5f})
+            .probWounded(new float[]{1f, 0.65f})
             // ---- 构建 NBT ----
             .build());
     }

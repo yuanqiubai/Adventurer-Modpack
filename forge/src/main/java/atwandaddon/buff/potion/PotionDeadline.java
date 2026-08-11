@@ -37,8 +37,14 @@ public class PotionDeadline extends Potion
     /** 默认持续时长（tick），20 tick = 1 秒，默认 10 秒 */
     public static final int DEFAULT_DURATION = 200;
 
+    // ===== 新代码 =====
+    /** 爆发时额外扣减敌人当前生命值的比例（2%），用于"敌人当前生命值扣减"玩法 */
+    public static final float MAX_HP_DAMAGE = 0.02F;
+    /** 额外扣减敌人当前生命值的比例（3%），保留备用 */
+    public static final float CURRENT_HP_DAMAGE = 0.05F;
+
     /** 爆发伤害系数：爆发 = 1 + 累积伤害 × RATIO × (amplifier + 1) */
-    public static final float DAMAGE_RATIO = 0.1F;
+    public static final float DAMAGE_RATIO = 0.15F;
 
     /** 静态实例，供 {@code EntityBuffListener} 通过 {@link net.minecraft.entity.EntityLivingBase#getActivePotionEffect(Potion)} 查询 */
     public static PotionDeadline instance;

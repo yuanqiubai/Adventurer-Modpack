@@ -109,11 +109,11 @@ public class RotaryMachineGun extends BasicRangedWeapon
             boolean isUsing = player.getItemInUse() == _stack;
             String ammoTag = nbt.hasKey(CURRENT_AMMO) ? nbt.getString(CURRENT_AMMO) : "none";
             int curDelay = nbt.hasKey(TAG_CURRENT_DELAY) ? nbt.getInteger(TAG_CURRENT_DELAY) : -1;
-            System.out.println("[RMG] tick=" + debugTick
-                + " isUsing=" + isUsing
-                + " remote=" + _world.isRemote
-                + " ammo=" + ammoTag
-                + " delay=" + curDelay);
+            // System.out.println("[RMG] tick=" + debugTick
+            //     + " isUsing=" + isUsing
+            //     + " remote=" + _world.isRemote
+            //     + " ammo=" + ammoTag
+            //     + " delay=" + curDelay);
         }
 
         // 仅在服务端处理（客户端提前返回不修改 NBT）

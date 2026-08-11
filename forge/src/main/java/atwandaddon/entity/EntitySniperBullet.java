@@ -24,6 +24,21 @@ import net.minecraft.world.World;
  */
 public class EntitySniperBullet extends EntityBulletModelItem
 {
+    // ================================================================
+    //  距离缩放系统 — 命中伤害随飞行距离动态增长
+    // ================================================================
+
+    /** 是否启用距离缩放（true = 每 tick 根据飞行距离重新计算伤害） */
+    private boolean useDistanceScaling = false;
+    /** 未缩放的基础伤害值，在 {@link #enableDistanceScaling} 时保存 */
+    private double baseDamage = 0.0D;
+    /** 未缩放的基础冰穿甲伤害值 */
+    private double baseIceDamage = 0.0D;
+    /** 距离除数（maxRange），距离/除数 = 伤害倍率增量 */
+    private double distanceDivisor = 28.0D;
+    /** 射击者引用，用于计算弹丸飞行距离 */
+    private EntityLivingBase savedShooter;
+
     /** 无参构造器 — 供 Forge EntityRegistry 反射创建实体用 */
     public EntitySniperBullet(World _world)
     {
@@ -62,6 +77,9 @@ public class EntitySniperBullet extends EntityBulletModelItem
         // accuracy=1.0F → disturVector 不执行（条件为 accuracy < 1.0）
         // super 设置 spawn 位置（含 eyeHeight + 后退偏移）和实体数据
         super(_world, _shooter, _speed, 1.0F);
+
+        // 保存射击者引用，供 onUpdate() 距离缩放计算使用
+        this.savedShooter = _shooter;
 
         // ── 角度转弧度 ──
         // 强转为 Entity：javac 对 _shooter.rotationYaw（声明类型 EntityLivingBase）
@@ -128,5 +146,71 @@ public class EntitySniperBullet extends EntityBulletModelItem
         // 字节码 fieldref owner = EntitySniperBullet，需在 mcp2srg.srg
         // 中添加 FD: nn/ah atwandaddon/entity/EntitySniperBullet/dataWatcher
         this.dataWatcher.updateObject(16, Integer.valueOf(_id));
+    }
+
+    // ================================================================
+    //  距离缩放 API
+    // ================================================================
+
+    /**
+     * 启用距离缩放伤害机制。
+     *
+     * <p>启用后，每 tick 在 {@link #onUpdate()} 中根据弹丸与射击者之间的
+     * 欧几里得距离动态调整伤害：</p>
+     * <pre>damage = baseDamage × (1 + distance / divisor)</pre>
+     *
+     * <p>调用时机：在 {@code setDamage()} 和 {@code setIceDamage()} 之后，
+     * {@code spawnEntityInWorld()} 之前调用。</p>
+     *
+     * @param _baseDamage     基础伤害（与 setDamage 传入的值相同）
+     * @param _baseIceDamage  基础冰穿甲伤害
+     * @param _divisor        距离除数（通常为枪械的 maxRange 值）
+     */
+    public void enableDistanceScaling(double _baseDamage, double _baseIceDamage, double _divisor)
+    {
+        this.useDistanceScaling = true;
+        this.baseDamage = _baseDamage;
+        this.baseIceDamage = _baseIceDamage;
+        this.distanceDivisor = _divisor;
+    }
+
+    // ================================================================
+    //  每 tick 更新 — 注入距离缩放
+    // ================================================================
+
+    /**
+     * 覆写实体更新方法，在引擎碰撞检测前注入距离缩放伤害。
+     *
+     * <p>原理：引擎父类 {@code EntityBulletGeneral.onUpdate()} 在同一 tick 内
+     * 完成移动 + 碰撞检测 + 伤害应用。本覆写在调用 {@code super.onUpdate()}
+     * 之前，根据当前弹丸位置与射击者位置计算飞行距离，并用距离缩放公式
+     * 更新 {@code damage} 和 {@code iceDamage} 字段。</p>
+     *
+     * <p>伤害公式：{@code effectiveDamage = baseDamage × (1 + distance / divisor)}</p>
+     *
+     * <p>未命中时：下一 tick 重新计算，值随飞行距离增长。</p>
+     */
+    @Override
+    public void onUpdate()
+    {
+        // 仅在启用缩放且有有效射击者时执行
+        if (this.useDistanceScaling && this.savedShooter != null)
+        {
+            // 计算弹丸到射击者的欧几里得距离
+            double dx = this.posX - this.savedShooter.posX;
+            double dy = this.posY - this.savedShooter.posY;
+            double dz = this.posZ - this.savedShooter.posZ;
+            double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            // 伤害倍率 = 1 + 距离/除数（maxRange=28 → 最远距离时伤害×2）
+            double multiplier = 1.0D + dist / this.distanceDivisor;
+
+            // 写入缩放后的伤害值（父类 setDamage/setIceDamage 是 public 方法）
+            setDamage(this.baseDamage * multiplier);
+            setIceDamage(this.baseIceDamage * multiplier);
+        }
+
+        // 委托父类完成移动、碰撞检测和伤害应用
+        super.onUpdate();
     }
 }

@@ -134,7 +134,14 @@ public final class NbtEventTags
     /** 散弹类：中速恢复（5 秒 / 点），满耐久扣减3点耐久后锁住，额外消耗 1，近战回 2 */
     public static final Preset PRESET_SHOTGUN = new Preset(100, 3, 1, -2);
 
-      public static final Preset PRESET_MACHINEGUN = new Preset(10, 140, 0, 0);
+    /**蓝火转轮 */
+    public static final Preset PRESET_MACHINEGUN = new Preset(10, 140, 0, 0);
+
+    /** 孤骑 */
+    public static final Preset PRESET_MAVERICK = new Preset(140, 10, 0, -1);
+
+    /** 游骑兵 */
+    public static final Preset PRESET_RANGER_K = new Preset(140, 7, 0, -2);
 
     // ============================
     // 写入方法

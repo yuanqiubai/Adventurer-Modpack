@@ -35,7 +35,7 @@ public class PotionVulnerable extends Potion
     {
         super(ID, true, 0x800080);  // 负面效果，紫色
         this.setPotionName("potion.vulnerable");
-        this.setIconIndex(5, 2);    // UV 坐标 (5, 2) = 像素(90, 36)，位于 Deadline(4,2) 右侧
+        this.setIconIndex(3, 1);    // UV 坐标 (1, 3) = 像素(90, 36)
         instance = this;
     }
 

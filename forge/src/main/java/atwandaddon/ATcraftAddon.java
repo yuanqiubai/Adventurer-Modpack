@@ -33,6 +33,12 @@ import atwandaddon.weapon.BulletEntity.ProjectileEntity;    // 弹丸-实体
 import atwandaddon.weapon.BulletEntity.BrandRoundEntity;    // 刻印弹-实体
 import atwandaddon.weapon.BulletEntity.SnowEagleAPEntity;   // 雪鹰穿甲弹-实体
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import cpw.mods.fml.common.FMLLog;
+import net.minecraft.potion.Potion;
+
 import atwandaddon.buff.BuffDef;
 import atwandaddon.buff.BuffMonitor;
 import atwandaddon.buff.BuffRegistry;
@@ -135,6 +141,11 @@ public class ATcraftAddon {
      */
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent _event) {
+        // ============================================= 扩展 Potion 数组 ============================================
+        // MC 1.6.4 的 Potion.potionTypes 数组只有 32 个槽位 (new Potion[32])。
+        // 通过反射移除 final 修饰符后替换为 256 槽位的大数组，以支持自定义 Potion ID 30+。
+        expandPotionArray();
+
         tabAddon = new CreativeTabs(CreativeTabs.creativeTabArray.length, MODID) {
             @Override
             public Item getTabIconItem() {
@@ -399,5 +410,66 @@ public class ATcraftAddon {
         MinecraftForge.EVENT_BUS.register(entityListener);
 
         proxy.registerRenderers();
+    }
+
+    /**
+     * 确保 {@link Potion#potionTypes} 数组足够大以容纳自定义 Potion ID。
+     *
+     * <p>MC 1.6.4 原版 Potion.potionTypes 仅 32 槽位。其他 coremod（如 adventurer_core）
+     * 可能已提前扩展。本方法检查当前数组大小，仅在不足时扩展到 {@code max(当前大小, 256)}。</p>
+     */
+    private static void expandPotionArray()
+    {
+        try
+        {
+            // 按类型查找 Potion.potionTypes 字段（运行时字段名为 SRG，不用硬编码字符串）
+            Field potionTypesField = null;
+            for (Field _f : Potion.class.getDeclaredFields())
+            {
+                if (_f.getType() == Potion[].class
+                    && java.lang.reflect.Modifier.isStatic(_f.getModifiers()))
+                {
+                    potionTypesField = _f;
+                    break;
+                }
+            }
+
+            if (potionTypesField == null)
+            {
+                throw new NoSuchFieldException(
+                    "Cannot find static Potion[] field in Potion class");
+            }
+
+            potionTypesField.setAccessible(true);
+            Potion[] oldArray = (Potion[]) potionTypesField.get(null);
+
+            // 数组已足够大（> 50），无需扩展。adventurer_core 等 coremod 可能已提前扩展。
+            if (oldArray.length > 50)
+            {
+                FMLLog.info("[ATcraftAddon] Potion.potionTypes already %d slots, skip expand",
+                    Integer.valueOf(oldArray.length));
+                return;
+            }
+
+            // 移除 final 修饰符
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(potionTypesField,
+                potionTypesField.getModifiers() & ~Modifier.FINAL);
+
+            // 扩展到 256 槽位
+            Potion[] newArray = new Potion[256];
+            System.arraycopy(oldArray, 0, newArray, 0, oldArray.length);
+            potionTypesField.set(null, newArray);
+
+            FMLLog.info("[ATcraftAddon] Potion.potionTypes expanded: %d → %d slots",
+                Integer.valueOf(oldArray.length), Integer.valueOf(newArray.length));
+        }
+        catch (Exception _e)
+        {
+            FMLLog.severe("[ATcraftAddon] Failed to expand Potion.potionTypes!", _e);
+            throw new RuntimeException(
+                "Cannot register custom potions — potionTypes expansion failed", _e);
+        }
     }
 }

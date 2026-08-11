@@ -32,7 +32,7 @@ public class MachineGunMagazine extends BasicAmmo {
             .shootDelay(103)     // 射击间隔（tick），预热加速初始值：(103-3)/1=100tick=5秒满速
             .chargeTime(72000)   // 蓄力时间（tick），设大值配合机枪预热；弹药装填会覆盖枪的此值
             .accuracy(0.75)     // 精度
-            .knockback(0.1)     // 击退
+            .knockback(0.0)     // 击退
             .shootSound("3gt")
             .maxRange(32.0)     // 最大射程（方块数）
             .maxSpeed(6.0)      // 最大弹丸飞行速度（方块/秒）

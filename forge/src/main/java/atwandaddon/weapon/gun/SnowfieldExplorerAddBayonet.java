@@ -34,13 +34,13 @@ public class SnowfieldExplorerAddBayonet extends BasicRangedWeapon
     {
         super(GunNbtBuilder.create(_id, "snowfieldExplorerAddBayonet")
             // ---- 基础属性 ----
-            .description("轨道炮\\n可造成毁灭性伤害,但不具备枪魂且枪身沉重\\n消耗特殊子弹时,会大幅消耗能量\\n每次用尽能量都需要长时间等待恢复\\n装备枪魂配件:刺刀后,获得一定的近战能力")
+            .description("轨道炮\\n可造成毁灭性伤害,但不具备枪魂且枪身沉重\\n消耗特殊子弹时,会大幅消耗能量\\n每次用尽能量都需要长时间等待恢复\\n装备枪魂配件:刺刀\\n有一定近战能力")
             .icon("snowfield_explorer_1")
             .maxStack(1)        // 最大堆叠数
             .durability(16)     // 耐久
             .unbreakable(false) // 是否无耐久
             .chargeStage(3)     // 1=单阶段蓄力，2=双阶段蓄力
-            .chargeTime(20)     // 蓄力时间（tick）
+            .chargeTime(15)     // 蓄力时间（tick）
             .chargeIcons(Arrays.asList("snowfield_explorer_1"))
             .basicDamage(5.0)   // 基础伤害（护甲计算）
             .iceDamage(40.0)    // 冰穿甲伤害

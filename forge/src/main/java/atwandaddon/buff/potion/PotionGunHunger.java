@@ -25,7 +25,7 @@ import net.minecraft.potion.PotionEffect;
 public class PotionGunHunger extends Potion
 {
     /** Potion ID，注册在 {@code ATcraftAddon.preInit()} */
-    public static final int ID = 33;
+    public static final int ID = 37;
 
     /** 静态实例，供外部类通过 {@link EntityLivingBase#getActivePotionEffect(Potion)} 查询 */
     public static PotionGunHunger instance;
@@ -34,7 +34,7 @@ public class PotionGunHunger extends Potion
     {
         super(ID, false, 0xCC3333);  // 增益效果（isBadEffect=false），暗红色
         this.setPotionName("potion.gunHunger");
-        this.setIconIndex(5, 2);     // UV 坐标 (5, 2)
+        this.setIconIndex(6, 2);     // UV 坐标 (5, 2)
         instance = this;
     }
 

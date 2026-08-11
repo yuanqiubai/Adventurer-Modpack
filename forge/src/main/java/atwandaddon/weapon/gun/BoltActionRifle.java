@@ -16,6 +16,7 @@ import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 import com.adventurer_engine.common.items.blank.ranged_weapon.ShootMode;
 
 import atwandaddon.entity.EntitySniperBullet;
+import atwandaddon.weapon.ammo.LeadBulletMod;
 import atwandaddon.weapon.nbt.GunNbtBuilder;
 import atwandaddon.weapon.nbt.NbtEventTags;
 
@@ -33,7 +34,7 @@ public class BoltActionRifle extends BasicRangedWeapon
             .chargeTime(0)      // 蓄力时间（tick）
             .chargeIcons(Arrays.asList("bolt_action_rifle"))
             .basicDamage(2.0)   // 基础伤害（护甲计算）
-            .iceDamage(18.0)    // 冰穿甲伤害
+            .iceDamage(25.0)    // 冰穿甲伤害
             .knockback(0.0)     // 击退
             .shootMode(ShootMode.SEMI)
             .shootNumber(1)     // 最大发射的弹丸数（由弹药 entity_num 决定实际数量）
@@ -45,12 +46,10 @@ public class BoltActionRifle extends BasicRangedWeapon
             .gravity(false)
             .penetrate(false)
             .allowedAmmo(Arrays.asList(
+                LeadBulletMod.AMMO_NAME,
                 ((BasicItem) Item.itemsList[12273]).internal_name,
                 ((BasicItem) Item.itemsList[12277]).internal_name,
                 ((BasicItem) Item.itemsList[12293]).internal_name))
-            // 悬赏·死线：命中后施加 ID=31，200 tick (10秒)，等级 0 (I级)
-            .effectWounded(new int[]{31, 200, 0})
-            .probWounded(new float[]{1.0F})     // 100% 触发
             .build());
     }
 
