@@ -25,6 +25,7 @@ import com.adventurer_engine.common.items.blank.ranged_weapon.BasicRangedWeapon;
 
 import atwandaddon.buff.potion.PotionBleed;
 import atwandaddon.buff.potion.PotionDeadline;
+import atwandaddon.buff.potion.PotionGunHunger;
 import atwandaddon.weapon.nbt.NbtAttributeHelper;
 
 /**
@@ -183,6 +184,16 @@ public class EntityBuffListener
             BasicRangedWeapon rw = (BasicRangedWeapon) item;
             weaponBasicDmg = rw.basic_damage;
             weaponIceDmg   = rw.ice_damage;
+
+            // ---- 枪之饥 Buff：攻击者持有此 Buff 时，每颗子弹命中回复 HP ----
+            // 回血公式：1.0 × (amplifier + 1)，amplifier 0 = I 级(回 1 HP)
+            if (player.isPotionActive(PotionGunHunger.ID))
+            {
+                PotionEffect gunHungerEffect = player.getActivePotionEffect(PotionGunHunger.instance);
+                int amp = (gunHungerEffect != null) ? gunHungerEffect.getAmplifier() : 0;
+                // 每颗子弹造成伤害 → 回血 1 × 等级（amplifier + 1）
+                player.heal(1.0F * (float)(amp + 1));
+            }
         }
         else if (item instanceof BasicItem)
         {
@@ -229,10 +240,10 @@ public class EntityBuffListener
         rec.totalPanelDamage = totalPanelDamage;
         rec.attackerEntityId = player.entityId;
 
-        // ===== DEBUG: 面板伤害存储日志 =====
-        FMLLog.info("[BleedDebug] onLivingHurt | entityId=%d | weapon=%s | totalPanelDamage=%.2f",
-            Integer.valueOf(entityId), item.getClass().getSimpleName(),
-            Float.valueOf(totalPanelDamage));
+        // ===== DEBUG: 面板伤害存储日志 ===== 禁止删除
+        // FMLLog.info("[BleedDebug] onLivingHurt | entityId=%d | weapon=%s | totalPanelDamage=%.2f",
+        //     Integer.valueOf(entityId), item.getClass().getSimpleName(),
+        //     Float.valueOf(totalPanelDamage));
         // ===== END DEBUG =====
 
         // ---- 死线伤害累积 ----
@@ -321,9 +332,12 @@ public class EntityBuffListener
                 float burstDamage = 1F + rec.deadlineAccumulatedDamage
                                   * PotionDeadline.DAMAGE_RATIO
                                   * (float)(rec.deadlineAmplifier + 1);
-
-                entity.attackEntityFrom(DamageSource.generic, burstDamage);
-
+                float tempDamage = burstDamage / 2;
+                entity.attackEntityFrom(DamageSource.generic, tempDamage);
+                // 敌人当前生命值扣减玩法：爆发后额外扣除当前生命值的 5%（CURRENT_HP_DAMAGE）
+                // 注意: setHealth 直接设置生命值, 必须传"扣减后的值" (getHealth() - 百分比×getHealth()),
+                //       不能传 0.05×getHealth()（那会把血量设置为原来的5%）
+                entity.setHealth(entity.getHealth() - PotionDeadline.CURRENT_HP_DAMAGE * entity.getHealth() - tempDamage);
                 // 重置受伤无敌帧，确保后续伤害不被 MC 的 hurtResistantTime 阻挡
                 ((Entity)entity).hurtResistantTime = 0;
 

@@ -18799,98 +18799,175 @@ MD: zz/a ()I net/minecraft/item/crafting/RecipeFireworks/getRecipeSize ()I
 MD: zz/a (Lvk;)Lye; net/minecraft/item/crafting/RecipeFireworks/getCraftingResult (Lnet/minecraft/inventory/InventoryCrafting;)Lnet/minecraft/item/ItemStack;
 MD: zz/a (Lvk;Labw;)Z net/minecraft/item/crafting/RecipeFireworks/matches (Lnet/minecraft/inventory/InventoryCrafting;Lnet/minecraft/world/World;)Z
 MD: zz/b ()Lye; net/minecraft/item/crafting/RecipeFireworks/getRecipeOutput ()Lnet/minecraft/item/ItemStack;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/HeavySword/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/LeadBulletMod/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/SnowEagleAP/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/MachineGunMagazine/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+
+# ===================================================================
+#  ATcraftAddon Mod — 自定义 SRG 映射 (去重 · 归类 · 2026-08-06)
+# ===================================================================
+#  每当你覆写 MC/Forge/Engine 的方法 → 必须在此追加 MD 条目 (Pitfall #10)
+#  每当你调用继承方法（如 setCreativeTab）→ 必须在此追加 MD 条目 (Pitfall #4)
+#  每当你访问父类字段且 javac 按声明类型生成 fieldref → 追加 FD 条目
+#
+#  SRG 速查:
+#    yc = Item        ye = ItemStack    nn = Entity      uf = EntityPlayer
+#    of = EntityLivingBase             abw = World       ww = CreativeTabs
+#    ni = Potion      uq = EntityThrowable
+#  ==================================================================
+
+# ===================================================================
+#  S1 — adventurer_engine 父类映射 (所有子类的 super.xxx() 共享)
+# ===================================================================
+MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+MD: yc/a (Lye;Labw;Luf;I)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+
+# ===================================================================
+#  S2 — 实体映射 (Entity)
+# ===================================================================
+
+# --- EntityFlameBall (烈焰弹) ---
 FD: nn/q atwandaddon/entity/EntityFlameBall/worldObj
 FD: nn/u atwandaddon/entity/EntityFlameBall/posX
 FD: nn/v atwandaddon/entity/EntityFlameBall/posY
 FD: nn/w atwandaddon/entity/EntityFlameBall/posZ
 MD: nn/x ()V atwandaddon/entity/EntityFlameBall/setDead ()V
 MD: uq/h ()Lof; atwandaddon/entity/EntityFlameBall/getThrower ()Lnet/minecraft/entity/EntityLivingBase;
-# EntitySniperBullet — 访问 Entity 继承字段需要显式 FD 映射
+
+# --- EntitySniperBullet (狙击弹 - 距离缩放伤害) ---
 FD: nn/ah atwandaddon/entity/EntitySniperBullet/dataWatcher
 FD: nn/q atwandaddon/entity/EntitySniperBullet/worldObj
-# === RechargeHandler 中实体 worldObj 访问 ===
-# javac 为 _event.entityLiving.worldObj 生成的 fieldref owner 可能是 EntityLivingBase 或 EntityPlayer
-FD: of/q net/minecraft/entity/EntityLivingBase/worldObj
-FD: uf/q net/minecraft/entity/player/EntityPlayer/worldObj
 FD: nn/Q atwandaddon/entity/EntitySniperBullet/ticksExisted
 FD: nn/E atwandaddon/entity/EntitySniperBullet/isDead
+FD: nn/M atwandaddon/entity/EntitySniperBullet/isDead
 FD: nn/R atwandaddon/entity/EntitySniperBullet/rand
+FD: nn/u atwandaddon/entity/EntitySniperBullet/posX
+FD: nn/v atwandaddon/entity/EntitySniperBullet/posY
+FD: nn/w atwandaddon/entity/EntitySniperBullet/posZ
 MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/setDead ()V
-FD: yc/cv atwandaddon/weapon/ammo/LeadBulletMod/itemID
+MD: nn/l_ ()V atwandaddon/entity/EntitySniperBullet/onUpdate ()V
+MD: nn/l_ ()V com/adventurer_engine/common/entity/projectiles/EntityBulletGeneral/onUpdate ()V
+MD: com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/func_70071_h_ ()V com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/onUpdate ()V
+# javac 按声明类型生成的悬挂 fieldref (savedShooter->EntityLivingBase, player->EntityPlayer)
+FD: of/u net/minecraft/entity/EntityLivingBase/posX
+FD: of/v net/minecraft/entity/EntityLivingBase/posY
+FD: of/w net/minecraft/entity/EntityLivingBase/posZ
+FD: of/q net/minecraft/entity/EntityLivingBase/worldObj
+FD: of/k net/minecraft/entity/EntityLivingBase/entityId
+FD: uf/q net/minecraft/entity/player/EntityPlayer/worldObj
+FD: uf/k net/minecraft/entity/player/EntityPlayer/entityId
+
+# ===================================================================
+#  S3 — 枪械映射 (weapon/gun)
+# ===================================================================
+
+# --- BoltActionRifle (基础步枪) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+
+# --- BoltActionRifle_2 (步枪·刺刀版) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle_2/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+
+# --- Maverick (孤骑·步枪) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/Maverick/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/Maverick/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/Maverick/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+
+# --- Ranger_K (游骑兵·散弹枪) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/Ranger_K/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/Ranger_K/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/Ranger_K/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+
+# --- RotaryMachineGun (转轮机枪) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/RotaryMachineGun/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/RotaryMachineGun/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
+
+# --- SnowfieldExplorer (雪原探索者·轨道炮) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorer/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/SnowfieldExplorer/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
 MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/SnowfieldExplorer/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
-MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
-MD: yc/a (Lye;Labw;Lnn;IZ)V atwandaddon/weapon/gun/RotaryMachineGun/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/RotaryMachineGun/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/RotaryMachineGun/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
-MD: yc/a (Lye;Labw;Luf;I)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
-MD: yc/a (Lye;Labw;Lnn;IZ)V com/adventurer_engine/common/items/blank/ranged_weapon/BasicRangedWeapon/onUpdate (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;IZ)V
 
-# === BoltActionRifle / BoltActionRifle_2 继承方法映射 ===
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle_2/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
-
-# === SnowfieldExplorerAddBayonet / Bayonet / Bayonet_2 ===
+# --- SnowfieldExplorerAddBayonet (雪原探索者·刺刀版) ---
 MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
 MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# ===================================================================
+#  S4 — 近战武器映射 (weapon/melee)
+# ===================================================================
+
+# --- Bayonet (刺刀) ---
 MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
 MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# --- Bayonet_2 (刺刀·改) ---
 MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
 MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 
-# === EntitySniperBullet onUpdate 覆写 ===
-MD: nn/x ()V atwandaddon/entity/EntitySniperBullet/onUpdate ()V
-FD: nn/M atwandaddon/entity/EntitySniperBullet/isDead
-FD: of/q atwandaddon/entity/EntitySniperBullet/worldObj
-MD: com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/func_70071_h_ ()V com/adventurer_engine/common/entity/projectiles/EntityBulletModelItem/onUpdate ()V
+# --- HeavySword (重剑) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/HeavySword/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/HeavySword/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 
-# === BoltActionRifle / BoltActionRifle_2 ===
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/BoltActionRifle_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/a (Lye;Labw;Luf;I)V atwandaddon/weapon/gun/BoltActionRifle_2/onPlayerStoppedUsing (Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/player/EntityPlayer;I)V
+# ===================================================================
+#  S5 — 弹药映射 (weapon/ammo)
+# ===================================================================
 
-# === SnowfieldExplorerAddBayonet / Bayonet / Bayonet_2 ===
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/gun/SnowfieldExplorerAddBayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
-MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
-MD: yc/a (Lww;)Lyc; atwandaddon/weapon/melee/Bayonet_2/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+# --- BrandRoundBullet (刻印弹) ---
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/BrandRoundBullet/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
 
-# === PotionBleed — override vanilla Potion methods (Pitfall #10) ===
+# --- LeadBulletMod (铅弹改) ---
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/LeadBulletMod/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+FD: yc/cv atwandaddon/weapon/ammo/LeadBulletMod/itemID
+
+# --- MachineGunMagazine (机枪弹匣) ---
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/MachineGunMagazine/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# --- SnowEagleAP (雪鹰穿甲弹) ---
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/ammo/SnowEagleAP/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# ===================================================================
+#  S6 — 弹幕实体物品映射 (weapon/BulletEntity)
+# ===================================================================
+
+# --- BrandRoundEntity (刻印弹实体物品) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/BrandRoundEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/BrandRoundEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/BrandRoundEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# --- LeadBulletModEntity (铅弹改实体物品) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/LeadBulletModEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# --- ProjectileEntity (抛射物实体物品) ---
+MD: yc/b (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setUnlocalizedName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/d (Ljava/lang/String;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setTextureName (Ljava/lang/String;)Lnet/minecraft/item/Item;
+MD: yc/a (Lww;)Lyc; atwandaddon/weapon/BulletEntity/ProjectileEntity/setCreativeTab (Lnet/minecraft/creativetab/CreativeTabs;)Lnet/minecraft/item/Item;
+
+# ===================================================================
+#  S7 — Buff / Potion 映射 (buff/potion)
+# ===================================================================
+
+# --- PotionBleed (流血) ---
 MD: ni/a (II)Z atwandaddon/buff/potion/PotionBleed/isReady (II)Z
 MD: ni/a (Lof;I)V atwandaddon/buff/potion/PotionBleed/performEffect (Lnet/minecraft/entity/EntityLivingBase;I)V
 
-# === PotionDeadline — override vanilla Potion methods (Pitfall #10) ===
+# --- PotionDeadline (死线) ---
 MD: ni/a (II)Z atwandaddon/buff/potion/PotionDeadline/isReady (II)Z
 MD: ni/a (Lof;I)V atwandaddon/buff/potion/PotionDeadline/performEffect (Lnet/minecraft/entity/EntityLivingBase;I)V
 
-# === EntityLivingBase(entityId) — javac emits fieldref owner=of for _event.entityLiving.entityId ===
-# entityId is defined on Entity(nn) but javac uses the variable's declared type EntityLivingBase(of)
-FD: of/k net/minecraft/entity/EntityLivingBase/entityId
-# === EntityPlayer(entityId) — javac emits fieldref owner=uf for player.entityId ===
-# Same root cause: entityId defined on Entity(nn), but variable type is EntityPlayer(uf)
-FD: uf/k net/minecraft/entity/player/EntityPlayer/entityId
+# --- PotionGunHunger (枪之饥) ---
+MD: ni/a (II)Z atwandaddon/buff/potion/PotionGunHunger/isReady (II)Z
+MD: ni/a (Lof;I)V atwandaddon/buff/potion/PotionGunHunger/performEffect (Lnet/minecraft/entity/EntityLivingBase;I)V
+
+# --- EntityBuffListener 中调用的 EntityPlayer 方法 (javac 按 EntityPlayer 生成 owner) ---
+# isPotionActive(int) — 定义在 EntityLivingBase，调用方 bytecode owner 是 EntityPlayer
+MD: of/i (I)Z net/minecraft/entity/player/EntityPlayer/isPotionActive (I)Z
+# getActivePotionEffect(Potion) → PotionEffect
+MD: of/b (Lni;)Lnj; net/minecraft/entity/player/EntityPlayer/getActivePotionEffect (Lnet/minecraft/potion/Potion;)Lnet/minecraft/potion/PotionEffect;
+# heal(float) — 回血
+MD: of/f (F)V net/minecraft/entity/player/EntityPlayer/heal (F)V

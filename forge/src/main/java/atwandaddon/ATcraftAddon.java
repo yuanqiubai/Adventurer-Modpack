@@ -20,13 +20,18 @@ import atwandaddon.weapon.gun.BoltActionRifle_2;            // 栓动式步枪-�
 import atwandaddon.weapon.gun.RotaryMachineGun;             // 蓝火转轮机枪
 import atwandaddon.weapon.gun.SnowfieldExplorer;            // 雪原探索者
 import atwandaddon.weapon.gun.SnowfieldExplorerAddBayonet;  // 雪原探索者-寒锋
+import atwandaddon.weapon.gun.Ranger_K;                     // 游骑兵
+import atwandaddon.weapon.gun.Maverick;                     // 孤骑
 // ============================= 导入自定义弹药类 ============================================
 import atwandaddon.weapon.ammo.LeadBulletMod;               // 铅弹改
 import atwandaddon.weapon.ammo.SnowEagleAP;                 // 雪鹰穿甲弹
 import atwandaddon.weapon.ammo.MachineGunMagazine;          // 蓝火弹夹
+import atwandaddon.weapon.ammo.BrandRoundBullet;            // 刻印弹
 // ============================= 导入自定义纯物品（弹幕图标用）===================================
 import atwandaddon.weapon.BulletEntity.LeadBulletModEntity; // 铅弹改-实体
-import atwandaddon.weapon.BulletEntity.ProjectileEntity;    // 弹丸实体
+import atwandaddon.weapon.BulletEntity.ProjectileEntity;    // 弹丸-实体
+import atwandaddon.weapon.BulletEntity.BrandRoundEntity;    // 刻印弹-实体
+import atwandaddon.weapon.BulletEntity.SnowEagleAPEntity;   // 雪鹰穿甲弹-实体
 
 import atwandaddon.buff.BuffDef;
 import atwandaddon.buff.BuffMonitor;
@@ -35,6 +40,7 @@ import atwandaddon.buff.EntityBuffListener;
 import atwandaddon.buff.NbtDamageListener;
 import atwandaddon.buff.potion.PotionBleed;
 import atwandaddon.buff.potion.PotionDeadline;
+import atwandaddon.buff.potion.PotionGunHunger;
 import atwandaddon.buff.potion.PotionVulnerable;
 
 import atwandaddon.entity.EntitySniperBullet;
@@ -82,6 +88,7 @@ public class ATcraftAddon {
     public static CreativeTabs tabOtherWeapons;
 
     // ============================ 自定义武器实例 ============================================
+    public static Ranger_K ranger_k;                            // 游骑兵
     public static BoltActionRifle boltActionRifle;              // 栓动式步枪-猎魂
     public static BoltActionRifle_2 boltActionRifle_2;          // 栓动式步枪-猎魂-A
     public static RotaryMachineGun rotaryMachineGun;            // 转轮机枪
@@ -93,6 +100,8 @@ public class ATcraftAddon {
     public static SnowfieldExplorerAddBayonet snowfieldExplorerAddBayonet;  // 雪原探索者-寒锋
     public static Bayonet bayonet;                              // 刺刀
     public static Bayonet_2 bayonet_2;                          // 刺刀2
+    public static Maverick maverick;                            // 孤骑
+
     // ============================ 其它武器实例 (sword_1 ~ sword_12) ====================================
     public static HeavySword sword_1;   // 其它武器 sword_1
     public static HeavySword sword_2;   // 其它武器 sword_2
@@ -109,10 +118,13 @@ public class ATcraftAddon {
     // ============================ 自定义弹药实例 ============================================
     public static SnowEagleAP snowEagleAP;                  // 雪鹰穿甲弹
     public static LeadBulletMod leadBulletMod;              // 铅弹改
-    public static MachineGunMagazine machineGunMagazine;    // 风暴弹夹
+    public static MachineGunMagazine machineGunMagazine;    // 蓝火弹夹
+    public static BrandRoundBullet brandRoundBullet;        // 刻印弹
     // ============================ 自定义弹药实体实例 ============================================
     public static LeadBulletModEntity leadBulletModEntity;  // 铅弹改实体
     public static ProjectileEntity projectileEntity;        // 弹丸实体
+    public static BrandRoundEntity brandRoundEntity;        // 刻印弹实体
+    public static SnowEagleAPEntity snowEagleAPEntity;      // 雪鹰穿甲弹实体
 
     /**
      * 预初始化阶段
@@ -163,13 +175,17 @@ public class ATcraftAddon {
             .setCreativeTab(tabAddon);
         GameRegistry.registerItem(boltActionRifle_2, "boltActionRifle_2");
 
-        // ID 25258 — 占位
-        placeholder3 = new Item(25002).setUnlocalizedName("placeholder3");
-        GameRegistry.registerItem(placeholder3, "placeholder3");
+        // ID 25258 — 游骑兵
+        ranger_k = (Ranger_K) new Ranger_K(25002)
+            .setUnlocalizedName("ranger_k")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(ranger_k, "ranger_k");
 
-        // ID 25259 — 占位
-        placeholder4 = new Item(25003).setUnlocalizedName("placeholder4");
-        GameRegistry.registerItem(placeholder4, "placeholder4");
+        // ID 25259 — 孤骑
+        maverick = (Maverick) new Maverick(25003)
+            .setUnlocalizedName("maverick")
+            .setCreativeTab(tabAddon);
+        GameRegistry.registerItem(maverick, "maverick");
 
         // ID 25260 — 占位
         placeholder5 = new Item(25004).setUnlocalizedName("placeholder5");
@@ -226,15 +242,27 @@ public class ATcraftAddon {
             .setCreativeTab(tabEntity);
         GameRegistry.registerItem(projectileEntity, "projectileEntity");
 
+        // 刻印弹物品-实体
+        brandRoundEntity = (BrandRoundEntity) new BrandRoundEntity(26502)
+            .setUnlocalizedName("brandRoundEntity")
+            .setTextureName("adventurer_engine:brand_round_bullet_entity")
+            .setCreativeTab(tabEntity);
+        GameRegistry.registerItem(brandRoundEntity, "brandRoundEntity");
+
+                // 雪鹰穿甲弹实体
+        snowEagleAPEntity = (SnowEagleAPEntity) new SnowEagleAPEntity(26503)
+            .setUnlocalizedName("snowEagleAPEntity")
+            .setTextureName("adventurer_engine:snow_eagle_ap_entity")
+            .setCreativeTab(tabEntity);
+        GameRegistry.registerItem(snowEagleAPEntity, "snowEagleAPEntity");
+
         // ============================================= 注册自定义弹药 ============================================
-        leadBulletMod = (LeadBulletMod) new LeadBulletMod(26000)
+        leadBulletMod = (LeadBulletMod) new LeadBulletMod(26000, leadBulletModEntity.itemID)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(leadBulletMod, "leadBulletMod");
 
         // ID 26267 — 雪鹰穿甲弹（NBT 路径，自动注册 ammoItem）
-        // 传入 leadBulletModEntity.itemID（shiftedIndex = 26256），
-        // 确保 entity_model 中的 renderItemID 与 Item.itemsList 索引一致
-        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001, leadBulletModEntity.itemID)
+        snowEagleAP = (SnowEagleAP) new SnowEagleAP(26001, snowEagleAPEntity.itemID)
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(snowEagleAP, "snowEagleAP");
 
@@ -243,7 +271,14 @@ public class ATcraftAddon {
             .setCreativeTab(tabAmmo);
         GameRegistry.registerItem(machineGunMagazine, "machineGunMagazine");
 
-        // 注册自定义弹丸实体
+        // 刻印弹
+        brandRoundBullet = (BrandRoundBullet) new BrandRoundBullet(26003, brandRoundEntity.itemID)
+            .setCreativeTab(tabAmmo);
+        GameRegistry.registerItem(brandRoundBullet, "brandRoundBullet");
+
+
+
+        // 弹丸实体
         // trackingRange=64, updateFrequency=1, sendsVelocityUpdates=true
         EntityRegistry.registerModEntity(EntitySniperBullet.class, "SniperBullet",
             250, instance, 64, 1, true);
@@ -334,6 +369,13 @@ public class ATcraftAddon {
         PotionVulnerable vulnerable = new PotionVulnerable();
 
         BuffRegistry.register(new BuffDef(PotionVulnerable.ID, 200, 0)
+            .tickInterval(0L));
+
+        // 注册自定义 Potion（枪之饥 — 吸血增益，每颗子弹命中回复 HP）
+        // 纯被动 Buff，回血逻辑在 EntityBuffListener.onLivingHurt 中
+        PotionGunHunger gunHunger = new PotionGunHunger();
+
+        BuffRegistry.register(new BuffDef(PotionGunHunger.ID, 200, 0)
             .tickInterval(0L));
 
         // BuffMonitor 接管 LivingHurtEvent 监听（解耦武器与 buff）

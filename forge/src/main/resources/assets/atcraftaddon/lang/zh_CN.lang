@@ -1,6 +1,8 @@
 # ATcraft Addon — 中文译名
 
 # 武器
+item.ranger_k.name=游骑兵
+item.maverick.name=孤骑
 item.boltActionRifle.name=栓动式步枪-猎魂
 item.boltActionRifle_2.name=栓动式步枪-猎魂-A
 item.heavySword.name=重剑
@@ -14,11 +16,15 @@ item.rotaryMachineGun.name=蓝火转轮机枪
 item.leadBulletMod.name=铅弹改
 item.snowEagleAP.name=雪鹰穿甲弹
 item.machineGunMagazine.name=蓝火弹夹
+item.brandRoundBullet.name=刻印弹
 
 # 纯物品（弹幕图标）
 item.leadBulletModEntity.name=铅弹改
 item.projectileEntity.name=弹丸
+item.brandRoundEntity.name=刻印弹标记
+item.snowEagleAPEntity.name=雪之精
 
 # 药水buff
 potion.bleed=流血
 potion.deadline=悬赏·死线
+potion.gunHunger=枪之饥
