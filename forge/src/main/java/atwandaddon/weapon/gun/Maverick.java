@@ -47,9 +47,9 @@ public class Maverick extends BasicRangedWeapon
             .shootMode(ShootMode.SEMI)
             .shootNumber(1)
             .shootDelay(10)
-            .accuracy(0.95)
+            .accuracy(1)
             .shootSound("bow_zx")
-            .maxRange(36.0)
+            .maxRange(40.0)
             .maxSpeed(6.0)
             // ---- 弹道 ----
             .gravity(false)
@@ -240,9 +240,9 @@ public class Maverick extends BasicRangedWeapon
             bullet.setIceDamage(_power.iceDamage);
 
             // 启用距离缩放伤害：弹丸飞行距离越远，命中伤害越高
-            // 公式：effectiveDamage = baseDamage × (1 + distance / 28.0)
-            // 最大射程 10 格处伤害 = 基础伤害 × 2
-            bullet.enableDistanceScaling(_power.basicDamage, _power.iceDamage, 7.0D);
+            // 公式：effectiveDamage = baseDamage × (1 + distance / 5.0)
+            // 最大射程 5 格处伤害 = 基础伤害 × 2
+            bullet.enableDistanceScaling(_power.basicDamage, _power.iceDamage, 6.0D);
 
             // 注入弹药弹道属性
             bullet.setKnockbackStrength(_ammo.knockback);

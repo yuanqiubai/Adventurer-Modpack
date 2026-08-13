@@ -202,7 +202,7 @@ public class EntitySniperBullet extends EntityBulletModelItem
             double dz = this.posZ - this.savedShooter.posZ;
             double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-            // 伤害倍率 = 1 + 距离/除数（maxRange=28 → 最远距离时伤害×2）
+            // 伤害倍率 = 1 + 距离/除数（maxRange=5 → 最远距离时伤害×2）
             double multiplier = 1.0D + dist / this.distanceDivisor;
 
             // 写入缩放后的伤害值（父类 setDamage/setIceDamage 是 public 方法）

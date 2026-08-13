@@ -38,7 +38,7 @@ public class LeadBulletMod extends BasicAmmo {
             .accuracy(0.90)     // 精度
             .knockback(0.1)     // 击退
             .shootSound("4ld")
-            .maxRange(36.0)     // 最大射程（方块数）
+            .maxRange(40.0)     // 最大射程（方块数）
             .maxSpeed(5.0)      // 最大弹丸飞行速度（方块/秒）
             // ---- 特殊效果 ----
             .penetrate(false)   // 穿透目标
