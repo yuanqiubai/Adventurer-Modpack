@@ -38,7 +38,7 @@ public class PotionDeadline extends Potion
     public static final int DEFAULT_DURATION = 200;
 
     // ===== 新代码 =====
-    /** 爆发时额外扣减敌人当前生命值的比例（2%），用于"敌人当前生命值扣减"玩法 */
+    /** 爆发时额外扣减敌人最大生命值的比例（2%），用于"敌人当前生命值扣减"玩法 */
     public static final float MAX_HP_DAMAGE = 0.02F;
     /** 额外扣减敌人当前生命值的比例（3%），保留备用 */
     public static final float CURRENT_HP_DAMAGE = 0.05F;

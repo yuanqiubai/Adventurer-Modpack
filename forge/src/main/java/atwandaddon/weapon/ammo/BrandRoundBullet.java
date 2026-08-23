@@ -37,7 +37,7 @@ public class BrandRoundBullet extends BasicAmmo
             .maxSpeed(5.0)      // 最大弹丸飞行速度（方块/秒）
             .penetrate(false)   // 子弹穿透（命中后销毁，不可贯穿多个目标）
             .noeff(true)        // 禁止击退（true=命中不施加击退，即使 knockback>0）
-            .effectWounded(new int[]{31, 140, 2})   // buff:悬赏死线
+            .effectWounded(new int[]{31, 140, 3})   // buff:悬赏死线
             .probWounded(new float[]{1.0f})         // 概率
             .build());
     }
